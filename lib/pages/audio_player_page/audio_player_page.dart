@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_media_metadata/flutter_media_metadata.dart';
+import 'package:get/get.dart';
 import '../../domain/domain.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rxdart; 
@@ -14,7 +18,8 @@ class AudioPlayerPage extends StatefulWidget {
 
 class _AudioPlayerPageState extends State<AudioPlayerPage> {
   AudioPlayer audioPlayer = AudioPlayer(); 
-  Song song = Song.songs[0]; 
+  Song song = Get.arguments; 
+  late Future<Metadata> metadata = song.metadata; 
 
   @override
   void initState() {
@@ -57,13 +62,22 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
       body: Stack(
         fit: StackFit.expand, 
         children: [
-          Image.asset(
-            song.coverUrl, 
-            fit: BoxFit.cover, 
+          FutureBuilder(
+            future: metadata,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Metadata? data; 
+                data = snapshot.data; 
+                return AlbumArt(
+                  imageData: data?.albumArt,
+                );
+              }
+              return const Placeholder(); 
+            },
           ), 
           const _BackgroundFilter(), 
           _AudioPlayer(
-            // song: song, 
+            song: song, 
             seekBarDataStream: _seekBarDataStream, 
             audioPlayer: audioPlayer
           )
@@ -76,13 +90,13 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
 class _AudioPlayer extends StatelessWidget {
   const _AudioPlayer({
     Key? key, 
-    // required this.song, 
+    required this.song, 
     required Stream<SeekBarData> seekBarDataStream,
     required this.audioPlayer,
   }) : _seekBarDataStream = seekBarDataStream, 
         super(key: key);
 
-  // final Song song; 
+  final Song song; 
   final Stream<SeekBarData> _seekBarDataStream;
   final AudioPlayer audioPlayer;
 
@@ -97,16 +111,23 @@ class _AudioPlayer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end, 
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(
-          //   song.title, 
-          //   style: Theme.of(context)
-          //   .textTheme
-          //   .headlineSmall!.copyWith(
-          //     color: Colors.white, 
-          //     fontWeight: FontWeight.bold, 
-          //   ),
-          // ),
-          // const SizedBox(height: 30), 
+          FutureBuilder(
+            future: song.getMetadata(),
+            builder: (context, snapshot) {
+              Metadata? data = snapshot.data; 
+              String albumArtistName = data!.albumArtistName ?? "Missing Name"; 
+              return Text(
+                 albumArtistName, 
+                style: Theme.of(context)
+                .textTheme
+                .headlineSmall!.copyWith(
+                  color: Colors.white, 
+                  fontWeight: FontWeight.bold, 
+                ),
+              );
+            }
+          ),
+          const SizedBox(height: 30), 
           StreamBuilder(
             stream: _seekBarDataStream,
             builder: 
