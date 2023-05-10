@@ -5,9 +5,12 @@ import 'package:get/get.dart';
 
 import 'audio_player.dart';
 
-Future<Directory> pickFolderDirectory() async {
+Future<Directory?> pickFolderDirectory() async {
   final String? path = await FilePicker.platform.getDirectoryPath(); 
-  return Directory(path!); 
+  if (path == null) {
+    return null; 
+  }
+  return Directory(path); 
 }
 
 List<FileSystemEntity> getFilesFromDirectory(Directory directory) {

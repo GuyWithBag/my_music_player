@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../domain/domain.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rxdart; 
+import 'package:path/path.dart'; 
 
 import 'widgets/widgets.dart'; 
 
@@ -13,27 +14,28 @@ class AudioPlayerPage extends StatefulWidget {
   const AudioPlayerPage({Key? key}) : super(key: key);
 
   @override
-  State<AudioPlayerPage> createState() => _AudioPlayerPageState();
+  State<AudioPlayerPage> createState() => _ControlsPageState();
 }
 
-class _AudioPlayerPageState extends State<AudioPlayerPage> {
+class _ControlsPageState extends State<AudioPlayerPage> {
   AudioPlayer audioPlayer = AudioPlayer(); 
-  Song song = Get.arguments; 
-  late Future<Metadata> metadata = song.metadata; 
+  Song? song = Get.arguments; 
 
   @override
   void initState() {
     super.initState(); 
-
+    if (song == null) {
+      return; 
+    }
     audioPlayer.setAudioSource(
       ConcatenatingAudioSource(
         children: [
-          AudioSource.uri(
-            Uri.parse('asset:///${song.url}')
+          AudioSource.file(
+            song!.file.path
           ),
         ],
       ),
-    ); 
+    );
   }
 
   @override
@@ -63,11 +65,10 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
         fit: StackFit.expand, 
         children: [
           FutureBuilder(
-            future: metadata,
+            future: song == null ? null : song!.getMetadata(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                Metadata? data; 
-                data = snapshot.data; 
+                Metadata? data = snapshot.data; 
                 return AlbumArt(
                   imageData: data?.albumArt,
                 );
@@ -76,7 +77,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             },
           ), 
           const _BackgroundFilter(), 
-          _AudioPlayer(
+          _Controls(
             song: song, 
             seekBarDataStream: _seekBarDataStream, 
             audioPlayer: audioPlayer
@@ -87,8 +88,8 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
   }
 }
 
-class _AudioPlayer extends StatelessWidget {
-  const _AudioPlayer({
+class _Controls extends StatelessWidget {
+  const _Controls({
     Key? key, 
     required this.song, 
     required Stream<SeekBarData> seekBarDataStream,
@@ -96,7 +97,7 @@ class _AudioPlayer extends StatelessWidget {
   }) : _seekBarDataStream = seekBarDataStream, 
         super(key: key);
 
-  final Song song; 
+  final Song? song; 
   final Stream<SeekBarData> _seekBarDataStream;
   final AudioPlayer audioPlayer;
 
@@ -112,19 +113,24 @@ class _AudioPlayer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FutureBuilder(
-            future: song.getMetadata(),
+            future: song == null ? null : song!.getMetadata(),
             builder: (context, snapshot) {
-              Metadata? data = snapshot.data; 
-              String albumArtistName = data!.albumArtistName ?? "Missing Name"; 
-              return Text(
-                 albumArtistName, 
-                style: Theme.of(context)
-                .textTheme
-                .headlineSmall!.copyWith(
-                  color: Colors.white, 
-                  fontWeight: FontWeight.bold, 
-                ),
-              );
+              if (snapshot.hasData) {
+                Metadata data = snapshot.data!; 
+                String? fileName = basenameWithoutExtension(song!.file.path) ?? "Missing Name"; 
+
+                return Text(
+                  fileName, 
+                  style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall!.copyWith(
+                    color: Colors.white, 
+                    fontWeight: FontWeight.bold, 
+                  ),
+                );
+              } else {
+                return const Placeholder(); 
+              }
             }
           ),
           const SizedBox(height: 30), 

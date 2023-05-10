@@ -33,7 +33,7 @@ class PlayerButtons extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final playerState = snapshot.data;  
-              final processingState = (playerState! as PlayerState).processingState; 
+              final processingState = playerState!.processingState; 
 
               if (processingState == ProcessingState.loading || 
                 processingState == ProcessingState.buffering) {

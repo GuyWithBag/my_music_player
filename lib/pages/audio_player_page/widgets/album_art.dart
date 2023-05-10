@@ -13,11 +13,25 @@ class AlbumArt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.memory(
-      imageData!, 
-      height: 256, 
-      width: 256,
-    ); 
+    if (imageData != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.memory(
+          imageData! 
+        ),
+      ); 
+    } else {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          color: Colors.grey, 
+          alignment: Alignment.center,
+          child: const Icon(
+            Icons.hourglass_empty
+          )
+        ),
+      ); 
+    }
   }
 }
 
