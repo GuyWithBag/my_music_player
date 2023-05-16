@@ -19,7 +19,8 @@ class AudioPlayerPage extends StatefulWidget {
 
 class _ControlsPageState extends State<AudioPlayerPage> {
   AudioPlayer audioPlayer = AudioPlayer(); 
-  Song? song = Get.arguments; 
+  dynamic getArguments = Get.arguments; 
+  late Song? song = getArguments; 
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _ControlsPageState extends State<AudioPlayerPage> {
       ConcatenatingAudioSource(
         children: [
           AudioSource.file(
-            song!.file.path
+            song!.url
           ),
         ],
       ),
@@ -116,8 +117,7 @@ class _Controls extends StatelessWidget {
             future: song == null ? null : song!.getMetadata(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                Metadata data = snapshot.data!; 
-                String? fileName = basenameWithoutExtension(song!.file.path) ?? "Missing Name"; 
+                String? fileName = basenameWithoutExtension(song!.url); 
 
                 return Text(
                   fileName, 

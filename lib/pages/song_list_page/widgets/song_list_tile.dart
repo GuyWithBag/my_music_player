@@ -44,7 +44,7 @@ class SongListTile extends StatelessWidget {
         Get.toNamed('/AudioPlayer', arguments: song); 
       },
       child: FutureBuilder(
-        future: song.metadata,
+        future: song.getMetadata(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Metadata data = snapshot.data!; 
@@ -72,7 +72,7 @@ class SongListTile extends StatelessWidget {
                           width: 300, 
                           padding: const EdgeInsets.only(bottom: 5),
                           child: Text(
-                            basenameWithoutExtension(song.file.path),
+                            basenameWithoutExtension(song.url),
                             maxLines: 2, 
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
