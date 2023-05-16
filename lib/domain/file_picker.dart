@@ -27,7 +27,7 @@ List<Song> getSongsFromDirectory(Directory directory) {
       print("Not audio"); 
       continue; 
     }
-    songs.add(Song(file.path)); 
+    songs.add(Song(file)); 
     // print(file.path); 
   }
   return songs; 

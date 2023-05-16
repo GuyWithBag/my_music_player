@@ -1,40 +1,23 @@
 import 'dart:io';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:hive/hive.dart'; 
-import 'package:path/path.dart'; 
 
-// part 'audio_player.g.dart'; 
+part 'audio_player.g.dart'; 
 
-@HiveType(typeId: 0)
-class Song extends HiveObject {
+@HiveType(typeId: 1)
+class Song {
   @HiveField(0)
-  final String url; 
+  final FileSystemEntity file; 
   @HiveField(1)
-  late final String name = basenameWithoutExtension(url); 
+  late final Future<Metadata> metadata = getMetadata(); 
 
-  Song(this.url); 
+  Song(this.file,); 
 
   Future<Metadata> getMetadata() async {
-    Metadata metadata = await MetadataRetriever.fromFile(File(url)); 
+    Metadata metadata = await MetadataRetriever.fromFile(File(file.path)); 
     return metadata; 
   }
 }
 
-@HiveType(typeId: 1)
-class SongPlaylist extends HiveObject  {
-
-  @HiveField(0)
-  final List<Song> songs; 
-  SongPlaylist(this.songs); 
-
-}
-
-class AudioPlayerArguments {
-
-  int indexToPlay = 0; 
-  List<Song> songs = []; 
-
-}
-
-// Box songsBox = Hive.box("allSongs"); 
+Box songsBox = Hive.box("allSongs"); 
 

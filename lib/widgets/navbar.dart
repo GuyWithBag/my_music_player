@@ -22,20 +22,6 @@ class _NavBarState extends State<NavBar> {
     return GetBuilder<NavBarController>(
       builder: (context) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text("MusicPlayer"), 
-            actions: <Widget>[
-              IconButton.filled(
-                onPressed: () {}, 
-                icon: const Icon(Icons.search),  
-              ), 
-              IconButton.filled(
-                onPressed: () {}, 
-                icon: const Icon(Icons.more_vert), 
-              ), 
-              const SizedBox(width: 10)
-            ],
-          ),
           body: IndexedStack(
             index: controller.tabIndex, 
             children: const [
@@ -44,8 +30,8 @@ class _NavBarState extends State<NavBar> {
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.purple, 
-            unselectedItemColor: Colors.grey,
+            selectedItemColor: Colors.white, 
+            unselectedItemColor: Colors.purple,
             currentIndex: controller.tabIndex, 
             onTap: controller.changeTabIndex,
             items: [
