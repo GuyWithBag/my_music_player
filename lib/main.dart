@@ -8,9 +8,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 late Box box; 
 
 void main() async {
-  await Hive.initFlutter(); 
-  box = await Hive.openBox("allSongs"); 
-  Hive.registerAdapter(SongAdapter()); 
+  // await Hive.initFlutter(); 
+  // Hive.registerAdapter(SongAdapter()); 
+  // box = await Hive.openBox("allSongs"); 
 
   WidgetsFlutterBinding.ensureInitialized(); 
   await EasyLocalization.ensureInitialized(); 
