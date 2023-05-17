@@ -5,14 +5,23 @@ import '../domain/audio_player.dart';
 class Database {
   
   List<Song> songs = []; 
-  final Box<List> myBox = Hive.box("songsBox"); 
+  final List<Song> placeholderSongs = [
+    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+  ]; 
 
-  void loadData() { 
-    songs = myBox.get("allSongs", defaultValue: [])!.cast<Song>(); 
-  }
+  // final Box<List> myBox = Hive.box("songsBox"); 
 
-  void updateDatabase() {
-    myBox.put("allSongs", songs); 
-  }
+  // void loadData() { 
+  //   songs = myBox.get("allSongs", defaultValue: [])!.cast<Song>(); 
+  // }
+
+  // void updateDatabase() {
+  //   myBox.put("allSongs", songs); 
+  // }
 }
 

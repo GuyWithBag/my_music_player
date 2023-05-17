@@ -5,6 +5,7 @@ import 'dart:io';
 import 'widgets/widgets.dart';
 import 'package:collection/collection.dart'; 
 import 'pages/pages.dart'; 
+import '../../data/database.dart'; 
 
 class SongListPage extends StatefulWidget {
   const SongListPage({Key? key}) : super(key: key);
@@ -14,6 +15,9 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
+  Database db = Database(); 
+  late List<Song> placeholderSongs = db.placeholderSongs; 
+  
   String? _songsPath; 
 
   final PageController _pageController = PageController(initialPage: 0); 
@@ -21,10 +25,10 @@ class _SongListPageState extends State<SongListPage> {
 
   List<FileSystemEntity> _files = []; 
   List<Song> _songs = []; 
-  final List<Widget> _pages = const <Widget>[
-    AllSongsPage(), 
-    SongsPlaylistPage(), 
-    AlbumsPage(), 
+  late final List<Widget> _pages = <Widget>[
+    AllSongsPage(songs: placeholderSongs,), 
+    const SongsPlaylistPage(), 
+    const AlbumsPage(), 
   ]; 
 
   final List<String> _pagesTab = const <String>[
@@ -62,49 +66,53 @@ class _SongListPageState extends State<SongListPage> {
   // @override
   // void initState() {
   //   super.initState();
-  //   if (songsBox.isNotEmpty) {
-  //     clearSongs(); 
-  //     for (Song song in songsBox.values) {
-  //       addSong(song); 
-  //     }
+  //   // if (songsBox.isNotEmpty) {
+  //   //   clearSongs(); 
+  //   //   for (Song song in songsBox.values) {
+  //   //     addSong(song); 
+  //   //   }
   //   }
   // }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           height: 30,
           color: Colors.blue,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List<Widget>.generate(
-                _pages.length, 
-                (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: InkWell(
-                    onTap: () {
-                      _pageController.animateToPage(
-                        index, 
-                        duration: const Duration(milliseconds: 300), 
-                        curve: Curves.easeIn, 
-                      ); 
-                    },
-                    child: Text(
-                      _pagesTab[index], 
-                      style: _activePage == index ? 
-                        const TextStyle(
-
-                          fontWeight: FontWeight.bold, 
-                        ) : 
-                        const TextStyle()
-                      ,
+            child: Expanded(
+              child: Row(
+                children: List<Widget>.generate(
+                  _pages.length, 
+                  (index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                      onTap: () {
+                        _pageController.animateToPage(
+                          index, 
+                          duration: const Duration(milliseconds: 300), 
+                          curve: Curves.easeIn, 
+                        ); 
+                      },
+                      child: Text(
+                        _pagesTab[index], 
+                        style: _activePage == index ? 
+                          const TextStyle(
+            
+                            fontWeight: FontWeight.bold, 
+                          ) : 
+                          const TextStyle()
+                        ,
+                      ),
                     ),
-                  ),
+                  )
                 )
-              )
+              ),
             ),
           ),
         ), 
