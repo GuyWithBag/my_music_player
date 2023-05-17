@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../domain/domain.dart'; 
 import 'dart:io'; 
@@ -26,7 +27,11 @@ class _SongListPageState extends State<SongListPage> {
     AlbumsPage(), 
   ]; 
 
-
+  final List<String> _pagesTab = const <String>[
+    "All Songs", 
+    "Playlist", 
+    "Albums", 
+  ];
   void pickFolderAndAddSongs() async {
     Directory? dir = await pickFolderDirectory(); 
     if (dir == null) { 
@@ -67,24 +72,64 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          PageView(
+    return Column(
+      children: [
+        Container(
+          height: 30,
+          color: Colors.blue,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List<Widget>.generate(
+                _pages.length, 
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: InkWell(
+                    onTap: () {
+                      _pageController.animateToPage(
+                        index, 
+                        duration: const Duration(milliseconds: 300), 
+                        curve: Curves.easeIn, 
+                      ); 
+                    },
+                    child: Text(
+                      _pagesTab[index], 
+                      style: _activePage == index ? 
+                        const TextStyle(
+
+                          fontWeight: FontWeight.bold, 
+                        ) : 
+                        const TextStyle()
+                      ,
+                    ),
+                  ),
+                )
+              )
+            ),
+          ),
+        ), 
+        Expanded(
+          child: PageView(
+            scrollBehavior: AppScrollBehavior(),
             controller: _pageController,
             onPageChanged: (int page) {
               setState(() {
                 _activePage = page; 
-                print("hihi"); 
               });
             },
             children: _pages,
-          )
-        ]
-      ),
+          ),
+        ),
+      ]
     );
   }
 }
 
-
-
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+      };
+}

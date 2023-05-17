@@ -5,6 +5,8 @@ class AllSongsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(color: Colors.green,);
+    return Container(
+      color: Colors.green,
+    );
   }
 }

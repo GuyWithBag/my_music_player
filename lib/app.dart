@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:my_music_player/widgets/navbar.dart'; 
 import 'pages/pages.dart'; 
-import 'widgets/widgets.dart'; 
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

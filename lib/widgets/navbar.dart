@@ -23,13 +23,13 @@ class _NavBarState extends State<NavBar> {
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("MusicPlayer"), 
+            title: const Text("Music Player"), 
             actions: <Widget>[
-              IconButton.filled(
+              IconButton(
                 onPressed: () {}, 
                 icon: const Icon(Icons.search),  
               ), 
-              IconButton.filled(
+              IconButton(
                 onPressed: () {}, 
                 icon: const Icon(Icons.more_vert), 
               ), 
