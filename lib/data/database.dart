@@ -14,6 +14,14 @@ class Database {
     Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
   ]; 
 
+  late final List<SongPlaylist> placeholderPlaylists = [
+    SongPlaylist(songs: songs), 
+    SongPlaylist(songs: songs), 
+    SongPlaylist(songs: songs), 
+    SongPlaylist(songs: songs), 
+    SongPlaylist(songs: songs), 
+  ]; 
+
   // final Box<List> myBox = Hive.box("songsBox"); 
 
   // void loadData() { 

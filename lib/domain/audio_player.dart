@@ -24,8 +24,19 @@ class Song extends HiveObject {
 class SongPlaylist extends HiveObject  {
 
   @HiveField(0)
-  final List<Song> songs; 
-  SongPlaylist(this.songs); 
+  List<Song>? songs; 
+
+  @HiveField(1)
+  late String? name; 
+
+  @HiveField(2)
+  late String? thumbnail; 
+
+  SongPlaylist({
+    this.songs, 
+    this.name, 
+    this.thumbnail, 
+  }); 
 
 }
 

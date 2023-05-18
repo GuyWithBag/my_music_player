@@ -12,14 +12,12 @@ class SongList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            for (Song song in songs) 
-              SongListTile(song: song)
-          ]
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          for (Song song in songs) 
+            SongListTile(song: song)
+        ]
       ),
     );
   }

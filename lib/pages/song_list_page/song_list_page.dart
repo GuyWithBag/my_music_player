@@ -17,6 +17,7 @@ class SongListPage extends StatefulWidget {
 class _SongListPageState extends State<SongListPage> {
   Database db = Database(); 
   late List<Song> placeholderSongs = db.placeholderSongs; 
+  late List<SongPlaylist> placeholderPlaylists = db.placeholderPlaylists; 
   
   String? _songsPath; 
 
@@ -27,7 +28,7 @@ class _SongListPageState extends State<SongListPage> {
   List<Song> _songs = []; 
   late final List<Widget> _pages = <Widget>[
     AllSongsPage(songs: placeholderSongs,), 
-    const SongsPlaylistPage(), 
+    SongsPlaylistPage(songPlaylists: placeholderPlaylists,), 
     const AlbumsPage(), 
   ]; 
 
@@ -85,34 +86,32 @@ class _SongListPageState extends State<SongListPage> {
           color: Colors.blue,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Expanded(
-              child: Row(
-                children: List<Widget>.generate(
-                  _pages.length, 
-                  (index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: InkWell(
-                      onTap: () {
-                        _pageController.animateToPage(
-                          index, 
-                          duration: const Duration(milliseconds: 300), 
-                          curve: Curves.easeIn, 
-                        ); 
-                      },
-                      child: Text(
-                        _pagesTab[index], 
-                        style: _activePage == index ? 
-                          const TextStyle(
+            child: Row(
+              children: List<Widget>.generate(
+                _pages.length, 
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: InkWell(
+                    onTap: () {
+                      _pageController.animateToPage(
+                        index, 
+                        duration: const Duration(milliseconds: 300), 
+                        curve: Curves.easeIn, 
+                      ); 
+                    },
+                    child: Text(
+                      _pagesTab[index], 
+                      style: _activePage == index ? 
+                        const TextStyle(
             
-                            fontWeight: FontWeight.bold, 
-                          ) : 
-                          const TextStyle()
-                        ,
-                      ),
+                          fontWeight: FontWeight.bold, 
+                        ) : 
+                        const TextStyle()
+                      ,
                     ),
-                  )
+                  ),
                 )
-              ),
+              )
             ),
           ),
         ), 
