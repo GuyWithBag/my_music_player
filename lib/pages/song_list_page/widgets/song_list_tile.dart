@@ -9,12 +9,12 @@ import '../../../domain/audio_player.dart';
 import 'package:path/path.dart'; 
 
 class SongListTile extends StatelessWidget {
-  final Song song; 
   const SongListTile({
     Key? key, 
     required this.song, 
   }) : super(key: key);
 
+  final Song song; 
   final double thumbnailSize = 60; 
   final double thumbnailBorderRadius = 8; 
 
@@ -43,7 +43,7 @@ class SongListTile extends StatelessWidget {
               Get.toNamed('/AudioPlayer', arguments: song); 
             },
             header: basenameWithoutExtension(song.url),
-            subHeader: data.albumArtistName ?? "Unknown Artist", 
+            subHeader: data.authorName ?? "Unknown Artist", 
             thumbnail: _songAlbumArt(data), 
             thumbnailSize: thumbnailSize,
             thumbnailBorderRadius: thumbnailBorderRadius,

@@ -10,7 +10,8 @@ class SongPlaylistTile extends StatelessWidget {
   });
 
   final double playlistThumbnailSize = 67;
-  final double playlistThumbnailBorderRadius = 8;
+  final double playlistThumbnailBorderRadius = 8; 
+  final double containerHeight = 80; 
   final SongPlaylist songPlaylist;
 
   @override
@@ -21,7 +22,7 @@ class SongPlaylistTile extends StatelessWidget {
       subHeader: "${songPlaylist.songs?.length} songs", 
       thumbnail: const Icon(Icons.hourglass_empty),
       thumbnailSize: playlistThumbnailSize,
-      thumbnailBorderRadius: 8, 
+      thumbnailBorderRadius: playlistThumbnailBorderRadius, 
       containerHeight: 80,
     ); 
   }

@@ -15,7 +15,8 @@ class Song extends HiveObject {
   Song(this.url); 
 
   Future<Metadata> getMetadata() async {
-    Metadata metadata = await MetadataRetriever.fromFile(File(url)); 
+    File file = File(url); 
+    Metadata metadata = await MetadataRetriever.fromFile(file); 
     return metadata; 
   }
 }
@@ -36,6 +37,27 @@ class SongPlaylist extends HiveObject  {
     this.songs, 
     this.name, 
     this.thumbnail, 
+  }); 
+
+}
+
+@HiveType(typeId: 2)
+class SongAlbum extends HiveObject {
+  @HiveField(0)
+  List<Song> songs; 
+
+  @HiveField(1)
+  late String name; 
+
+  @HiveField(2)
+  late String artistName; 
+
+  @HiveField(3)
+  late String? thumbnail; 
+
+  SongAlbum({
+    required this.songs, 
+    required this.name, 
   }); 
 
 }
