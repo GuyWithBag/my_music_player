@@ -18,9 +18,11 @@ class SongAlbumTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SongTile(
+      onTap: () {},
       header: songAlbum.name,
-      subHeader: "${songAlbum.artistName}",
+      subHeader: "${songAlbum.artistName} - ${songAlbum.songs.length} songs",
       containerHeight: containerHeight,
+      thumbnail: const Icon(Icons.hourglass_empty),
       thumbnailSize: thumbnailSize, 
       thumbnailBorderRadius: thumbnailBorderRadius,
     );

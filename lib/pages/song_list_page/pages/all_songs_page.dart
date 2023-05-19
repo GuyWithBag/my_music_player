@@ -8,7 +8,6 @@ class AllSongsPage extends StatelessWidget {
 
   final List<Song> songs; 
 
-
   @override
   Widget build(BuildContext context) {
     return Container(

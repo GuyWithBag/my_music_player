@@ -12,6 +12,7 @@ class SongPlaylistTile extends StatelessWidget {
   final double playlistThumbnailSize = 67;
   final double playlistThumbnailBorderRadius = 8; 
   final double containerHeight = 80; 
+  
   final SongPlaylist songPlaylist;
 
   @override

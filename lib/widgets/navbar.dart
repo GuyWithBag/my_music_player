@@ -10,6 +10,10 @@ class NavBar extends StatefulWidget {
   State<NavBar> createState() => _NavBarState();
 }
 
+  enum _popupMenuValues {
+    settings, 
+  }
+
 class _NavBarState extends State<NavBar> {
   final NavBarController controller = Get.put(NavBarController()); 
 
@@ -17,21 +21,34 @@ class _NavBarState extends State<NavBar> {
     return BottomNavigationBarItem(icon: Icon(icon), label: label); 
   }
 
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NavBarController>(
-      builder: (context) {
+      builder: (NavBarController navBarController) {
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
             title: const Text("Music Player"), 
             actions: <Widget>[
               IconButton(
                 onPressed: () {}, 
                 icon: const Icon(Icons.search),  
               ), 
-              IconButton(
-                onPressed: () {}, 
+              PopupMenuButton(
                 icon: const Icon(Icons.more_vert), 
+                itemBuilder: (context) => const [
+                  PopupMenuItem(
+                    child: Text("Settings"), 
+                    value: _popupMenuValues.settings,
+                  )
+                ],
+                onSelected: (value) {
+                  switch (value) {
+                    case _popupMenuValues.settings: 
+                      Get.toNamed('/Settings'); 
+                  }
+                },
               ), 
               const SizedBox(width: 10)
             ],

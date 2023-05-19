@@ -8,7 +8,9 @@ import 'theme/theme.dart';
 ThemeManager _themeManager = ThemeManager(); 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    Key? key
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -16,13 +18,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: Theme.of(context).textTheme.apply(
-          bodyColor: Colors.white, 
-          displayColor: Colors.white, 
-        )
-      ),
+      themeMode: ThemeMode.light,
+      theme: defaultTheme, 
+      darkTheme: darkTheme,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
@@ -30,7 +28,8 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => const NavBar()), 
         GetPage(name: '/SongsListPage', page: () => const SongListPage()), 
-        GetPage(name: '/AudioPlayer', page: () => const AudioPlayerPage())
+        GetPage(name: '/AudioPlayer', page: () => const AudioPlayerPage()), 
+        GetPage(name: "/Settings", page: () => const SettingsPage()), 
       ],
     );
   }
