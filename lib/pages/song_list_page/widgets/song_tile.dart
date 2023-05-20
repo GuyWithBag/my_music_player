@@ -33,7 +33,7 @@ class SongTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10), 
         padding: const EdgeInsets.symmetric(horizontal: 20), 
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.5), 
+          color: Colors.blue.withOpacity(0), 
         ), 
         child: Row(
           children: [
@@ -68,15 +68,15 @@ class _SongThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey, 
-      alignment: Alignment.center, 
-      height: thumbnailSize,
-      width: thumbnailSize, 
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(thumbnailBorderRadius),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(thumbnailBorderRadius), 
+      child: Container(
+        color: Colors.grey, 
+        alignment: Alignment.center, 
+        height: thumbnailSize,
+        width: thumbnailSize, 
         child: thumbnail
-      )
+      ),
     );
   }
 }

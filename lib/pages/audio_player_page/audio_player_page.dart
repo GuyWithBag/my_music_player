@@ -116,13 +116,11 @@ class _Controls extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 String? fileName = basenameWithoutExtension(song!.url); 
-
                 return Text(
                   fileName, 
                   style: Theme.of(context)
                   .textTheme
                   .headlineSmall!.copyWith(
-                    color: Colors.white, 
                     fontWeight: FontWeight.bold, 
                   ),
                 );

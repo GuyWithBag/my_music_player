@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart'; 
 import '../../../domain/domain.dart'; 
 import '../widgets/widgets.dart'; 
+import '../../../theme/theme.dart'; 
 
 class SongsPlaylistPage extends StatelessWidget {
   const SongsPlaylistPage({
@@ -13,7 +14,7 @@ class SongsPlaylistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.purple,
+      decoration: backgroundDecoration,
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: SongPlaylistList(

@@ -6,6 +6,7 @@ import 'widgets/widgets.dart';
 import 'package:collection/collection.dart'; 
 import 'pages/pages.dart'; 
 import '../../data/database.dart'; 
+import '../../theme/theme.dart'; 
 
 class SongListPage extends StatefulWidget {
   const SongListPage({Key? key}) : super(key: key);
@@ -81,40 +82,7 @@ class _SongListPageState extends State<SongListPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          height: 30,
-          color: Colors.blue,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List<Widget>.generate(
-                _pages.length, 
-                (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: InkWell(
-                    onTap: () {
-                      _pageController.animateToPage(
-                        index, 
-                        duration: const Duration(milliseconds: 300), 
-                        curve: Curves.easeIn, 
-                      ); 
-                    },
-                    child: Text(
-                      _pagesTab[index], 
-                      style: _activePage == index ? 
-                        const TextStyle(
-            
-                          fontWeight: FontWeight.bold, 
-                        ) : 
-                        const TextStyle()
-                      ,
-                    ),
-                  ),
-                )
-              )
-            ),
-          ),
-        ), 
+        _SongCategoryTabs(pages: _pages, pageController: _pageController, pagesTab: _pagesTab, activePage: _activePage), 
         Expanded(
           child: PageView(
             scrollBehavior: AppScrollBehavior(),
@@ -128,6 +96,65 @@ class _SongListPageState extends State<SongListPage> {
           ),
         ),
       ]
+    );
+  }
+}
+
+class _SongCategoryTabs extends StatelessWidget {
+  const _SongCategoryTabs({
+    Key? key,
+    required List<Widget> pages,
+    required PageController pageController,
+    required List<String> pagesTab,
+    required int activePage,
+  }) : _pages = pages, _pageController = pageController, _pagesTab = pagesTab, _activePage = activePage, super(key: key);
+
+  final List<Widget> _pages;
+  final PageController _pageController;
+  final List<String> _pagesTab;
+  final int _activePage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 30, 
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(context).primaryColorLight
+          )
+        )
+      ),
+      child: Center(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List<Widget>.generate(
+              _pages.length, 
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: InkWell(
+                  onTap: () {
+                    _pageController.animateToPage(
+                      index, 
+                      duration: const Duration(milliseconds: 300), 
+                      curve: Curves.easeIn, 
+                    ); 
+                  },
+                  child: Text(
+                    _pagesTab[index], 
+                    style: _activePage == index ? 
+                      Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold) : 
+                      Theme.of(context).textTheme.titleSmall
+                    ,
+                  ),
+                ),
+              )
+            )
+          ),
+        ),
+      ),
     );
   }
 }

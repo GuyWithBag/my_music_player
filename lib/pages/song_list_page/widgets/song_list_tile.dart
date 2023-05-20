@@ -16,7 +16,7 @@ class SongListTile extends StatelessWidget {
 
   final Song song; 
   final double thumbnailSize = 60; 
-  final double thumbnailBorderRadius = 8; 
+  final double thumbnailBorderRadius = 5; 
 
   Widget _songAlbumArt(Metadata metadata) {
     Uint8List? albumArt = metadata.albumArt; 
@@ -50,12 +50,25 @@ class SongListTile extends StatelessWidget {
             containerHeight: 75,
           );
         } else {
-          return const Placeholder();
+          return SongTile(
+            onTap: () {
+              Get.toNamed('/AudioPlayer', arguments: song); 
+            },
+            header: "Null",
+            subHeader: "Unknown Artist", 
+            thumbnail: const Icon(
+              Icons.hourglass_empty
+            ), 
+            thumbnailSize: thumbnailSize,
+            thumbnailBorderRadius: thumbnailBorderRadius,
+            containerHeight: 75,
+          );
         }
       }
     );
   }
 }
+
 
 
 

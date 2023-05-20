@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart'; 
 import 'package:get/get.dart'; 
 import '../domain/domain.dart'; 
@@ -21,6 +22,11 @@ class _NavBarState extends State<NavBar> {
     return BottomNavigationBarItem(icon: Icon(icon), label: label); 
   }
 
+  void printUrl() async {
+    FilePickerResult? file = await pickSongFile(); 
+    print(file?.paths.toString()); 
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +35,7 @@ class _NavBarState extends State<NavBar> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).primaryColor,
+            elevation: 0,
             title: const Text("Music Player"), 
             actions: <Widget>[
               IconButton(
@@ -39,14 +46,21 @@ class _NavBarState extends State<NavBar> {
                 icon: const Icon(Icons.more_vert), 
                 itemBuilder: (context) => const [
                   PopupMenuItem(
+                    value: _popupMenuValues.settings, 
                     child: Text("Settings"), 
-                    value: _popupMenuValues.settings,
+                  ), 
+                  PopupMenuItem(
+                    value: 1,
+                    child: Text("Open Song"),
                   )
                 ],
                 onSelected: (value) {
                   switch (value) {
                     case _popupMenuValues.settings: 
                       Get.toNamed('/Settings'); 
+                      break;
+                    case 1: 
+                      printUrl(); 
                   }
                 },
               ), 
@@ -61,8 +75,6 @@ class _NavBarState extends State<NavBar> {
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.purple, 
-            unselectedItemColor: Colors.grey,
             currentIndex: controller.tabIndex, 
             onTap: controller.changeTabIndex,
             items: [

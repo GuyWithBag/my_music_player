@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/song_list.dart';
 import '../../../data/database.dart';
 import '../../../domain/audio_player.dart'; 
+import '../../../theme/theme.dart'; 
 
 class AllSongsPage extends StatelessWidget {
-  const AllSongsPage({Key? key, required this.songs}) : super(key: key);
+  const AllSongsPage({
+    Key? key, required this.songs
+  }) : super(key: key);
 
   final List<Song> songs; 
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.green,
+      decoration: backgroundDecoration,
       child: Column(
         children: [
           SongListSubHeader(songs: songs), 
@@ -38,37 +41,32 @@ class SongListSubHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
+      color: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Row(
           children: [
             Expanded(
-              flex: 12,
               child: Text("${songs.length} songs")
             ), 
             const Expanded(
-              flex: 1,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SmallTabIcon(
-                      icon: Icon(
-                        Icons.sort, 
-                        color: Colors.white,
-                      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SmallTabIcon(
+                    icon: Icon(
+                      Icons.sort, 
+                      color: Colors.white,
                     ),
-                    SizedBox(width: 25), 
-                    SmallTabIcon(
-                      icon: Icon(
-                        Icons.list, 
-                        color: Colors.white,
-                      ),
-                    ), 
-                  ],
-                ),
+                  ),
+                  SizedBox(width: 25), 
+                  SmallTabIcon(
+                    icon: Icon(
+                      Icons.list, 
+                      color: Colors.white,
+                    ),
+                  ), 
+                ],
               ),
             ), 
           ],
@@ -88,8 +86,7 @@ class SmallTabIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.purple, 
+    return SizedBox(
       height: 20,
       child: InkWell(
         onTap: () {},

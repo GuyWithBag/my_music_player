@@ -6,12 +6,15 @@ class Database {
   
   List<Song> songs = []; 
   final List<Song> placeholderSongs = [
-    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
-    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
-    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
-    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
-    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
-    Song("E:/CODE STUFF/Flutter/my_music_player/assets/audio/03 - Taron Egerton - The Way I Feel Inside"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
   ]; 
 
   late final List<SongPlaylist> placeholderPlaylists = [

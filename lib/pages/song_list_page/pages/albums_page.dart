@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../theme/theme.dart'; 
 
 class AlbumsPage extends StatelessWidget {
   const AlbumsPage({super.key});
@@ -6,7 +7,7 @@ class AlbumsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
+      decoration: backgroundDecoration,
     );
   }
 }

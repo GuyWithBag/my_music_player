@@ -25,11 +25,27 @@ const MaterialColor pallete1Accent = MaterialColor(_pallete1AccentValue, <int, C
 const int _pallete1AccentValue = 0xFF2937FF;
 
 ThemeData defaultTheme = ThemeData(
-  brightness: Brightness.light, 
-  primaryColor: pallete1Accent, 
-
+  brightness: Brightness.dark, 
+  primaryColor: pallete1, 
+  primarySwatch: pallete1, 
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: pallete1.shade900, 
+    unselectedItemColor: Colors.grey.shade600, 
+    selectedItemColor: Colors.white
+  )
 ); 
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark
 ); 
+
+BoxDecoration backgroundDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      defaultTheme.primaryColor, 
+      defaultTheme.primaryColorDark
+    ]
+  )
+);
