@@ -38,6 +38,7 @@ class _SongListPageState extends State<SongListPage> {
     "Playlist", 
     "Albums", 
   ];
+  
   void pickFolderAndAddSongs() async {
     Directory? dir = await pickFolderDirectory(); 
     if (dir == null) { 
@@ -78,24 +79,26 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _SongCategoryTabs(pages: _pages, pageController: _pageController, pagesTab: _pagesTab, activePage: _activePage), 
-        Expanded(
-          child: PageView(
-            scrollBehavior: AppScrollBehavior(),
-            controller: _pageController,
-            onPageChanged: (int page) {
-              setState(() {
-                _activePage = page; 
-              });
-            },
-            children: _pages,
+    return SizedBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _SongCategoryTabs(pages: _pages, pageController: _pageController, pagesTab: _pagesTab, activePage: _activePage), 
+          Expanded(
+            child: PageView(
+              scrollBehavior: AppScrollBehavior(),
+              controller: _pageController,
+              onPageChanged: (int page) {
+                setState(() {
+                  _activePage = page; 
+                });
+              },
+              children: _pages,
+            ),
           ),
-        ),
-      ]
+        ]
+      ),
     );
   }
 }

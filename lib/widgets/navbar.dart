@@ -11,16 +11,12 @@ class NavBar extends StatefulWidget {
   State<NavBar> createState() => _NavBarState();
 }
 
-  enum _popupMenuValues {
-    settings, 
-  }
+enum _popupMenuValues {
+  settings, 
+}
 
 class _NavBarState extends State<NavBar> {
   final NavBarController controller = Get.put(NavBarController()); 
-
-  BottomNavigationBarItem _bottombarItem(IconData icon, String label) {
-    return BottomNavigationBarItem(icon: Icon(icon), label: label); 
-  }
 
   void printUrl() async {
     FilePickerResult? file = await pickSongFile(); 
@@ -34,7 +30,6 @@ class _NavBarState extends State<NavBar> {
       builder: (NavBarController navBarController) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).primaryColor,
             elevation: 0,
             title: const Text("Music Player"), 
             actions: <Widget>[
@@ -71,15 +66,21 @@ class _NavBarState extends State<NavBar> {
             index: controller.tabIndex, 
             children: const [
               SongListPage(), 
-              AudioPlayerPage(), 
+              MoreFeaturesPage(),    
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.tabIndex, 
             onTap: controller.changeTabIndex,
-            items: [
-              _bottombarItem(Icons.music_note, "Songs"), 
-              _bottombarItem(Icons.audio_file, "Audio Player")
+            items: const [
+              BottomNavigationBarItem(
+                label: "Songs", 
+                icon: Icon(Icons.music_note), 
+              ), 
+              BottomNavigationBarItem(
+                label: "More", 
+                icon: Icon(Icons.more), 
+              )
             ],
           ),
         ); 

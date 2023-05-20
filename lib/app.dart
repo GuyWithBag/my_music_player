@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/SongsListPage', page: () => const SongListPage()), 
         GetPage(name: '/AudioPlayer', page: () => const AudioPlayerPage()), 
         GetPage(name: "/Settings", page: () => const SettingsPage()), 
+        GetPage(name: "/More", page: () => const SettingsPage()), 
       ],
     );
   }

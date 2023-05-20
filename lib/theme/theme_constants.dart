@@ -32,6 +32,9 @@ ThemeData defaultTheme = ThemeData(
     backgroundColor: pallete1.shade900, 
     unselectedItemColor: Colors.grey.shade600, 
     selectedItemColor: Colors.white
+  ), 
+  appBarTheme: const AppBarTheme(
+    backgroundColor: pallete1, 
   )
 ); 
 
