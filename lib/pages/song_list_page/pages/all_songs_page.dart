@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_music_player/pages/song_list_page/widgets/song_list.dart';
+import 'package:my_music_player/widgets/widgets.dart';
 import '../../../data/database.dart';
 import '../../../domain/audio_player.dart'; 
-import '../../../theme/theme.dart'; 
+import '../../../theme/theme.dart';
+import '../widgets/widgets.dart'; 
 
 class AllSongsPage extends StatelessWidget {
   const AllSongsPage({
@@ -17,7 +18,26 @@ class AllSongsPage extends StatelessWidget {
       decoration: backgroundDecoration,
       child: Column(
         children: [
-          SongListSubHeader(songs: songs), 
+          SubHeader(
+            header: Text("${songs.length} songs"), 
+            actions: [
+              SubHeaderAction(
+                onTap: () {},
+                icon: const Icon(
+                  Icons.sort, 
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 25), 
+              SubHeaderAction(
+                onTap: () {},
+                icon: const Icon(
+                  Icons.list, 
+                  color: Colors.white,
+                ),
+              ), 
+            ],
+          ), 
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(top: 10), 
@@ -30,68 +50,6 @@ class AllSongsPage extends StatelessWidget {
   }
 }
 
-class SongListSubHeader extends StatelessWidget {
-  const SongListSubHeader({
-    Key? key,
-    required this.songs,
-  }) : super(key: key);
 
-  final List<Song> songs; 
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text("${songs.length} songs")
-            ), 
-            const Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SmallTabIcon(
-                    icon: Icon(
-                      Icons.sort, 
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(width: 25), 
-                  SmallTabIcon(
-                    icon: Icon(
-                      Icons.list, 
-                      color: Colors.white,
-                    ),
-                  ), 
-                ],
-              ),
-            ), 
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class SmallTabIcon extends StatelessWidget {
-  const SmallTabIcon({
-    Key? key, 
-    required this.icon, 
-  }) : super(key: key);
-
-  final Icon icon; 
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 20,
-      child: InkWell(
-        onTap: () {},
-        child: icon
-      ),
-    );
-  }
-}

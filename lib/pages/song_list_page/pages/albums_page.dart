@@ -7,7 +7,7 @@ class AlbumsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundDecoration,
+      decoration: backgroundDecoration, 
     );
   }
 }

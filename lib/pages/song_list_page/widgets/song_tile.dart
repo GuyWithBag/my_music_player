@@ -46,9 +46,28 @@ class SongTile extends StatelessWidget {
             _Details(
               header: header,
               subHeader: subHeader,
+            ), 
+            const Center(
+              child: _MoreButton()
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _MoreButton extends StatelessWidget {
+  const _MoreButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: const SizedBox(
+        child: Icon(Icons.more_vert)
       ),
     );
   }

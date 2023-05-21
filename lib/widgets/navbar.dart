@@ -23,51 +23,60 @@ class _NavBarState extends State<NavBar> {
     print(file?.paths.toString()); 
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NavBarController>(
       builder: (NavBarController navBarController) {
         return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            title: const Text("Music Player"), 
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {}, 
-                icon: const Icon(Icons.search),  
-              ), 
-              PopupMenuButton(
-                icon: const Icon(Icons.more_vert), 
-                itemBuilder: (context) => const [
-                  PopupMenuItem(
-                    value: _popupMenuValues.settings, 
-                    child: Text("Settings"), 
-                  ), 
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text("Open Song"),
-                  )
-                ],
-                onSelected: (value) {
-                  switch (value) {
-                    case _popupMenuValues.settings: 
-                      Get.toNamed('/Settings'); 
-                      break;
-                    case 1: 
-                      printUrl(); 
-                  }
-                },
-              ), 
-              const SizedBox(width: 10)
-            ],
-          ),
-          body: IndexedStack(
-            index: controller.tabIndex, 
-            children: const [
-              SongListPage(), 
-              MoreFeaturesPage(),    
-            ],
+          body: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  elevation: 0,
+                  title: const Text("Music Player"), 
+                  floating: true,
+                  expandedHeight: 80,
+                  snap: true,
+                  forceElevated: innerBoxIsScrolled,
+                  actions: <Widget>[
+                    IconButton(
+                      onPressed: () {}, 
+                      icon: const Icon(Icons.search),  
+                    ), 
+                    IconButton(
+                      onPressed: () {
+                        Get.toNamed('/Settings'); 
+                      }, 
+                      icon: const Icon(Icons.settings),  
+                    ), 
+                    PopupMenuButton(
+                      icon: const Icon(Icons.more_vert), 
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(
+                          value: 1,
+                          child: Text("Open Song"),
+                        )
+                      ],
+                      onSelected: (value) {
+                        switch (value) {
+                          case 1: 
+                            printUrl(); 
+                        }
+                      },
+                    ), 
+                    const SizedBox(width: 10)
+                  ],
+
+                )
+              ]; 
+            },
+            body: IndexedStack(
+              index: controller.tabIndex, 
+              children: const [
+                SongListPage(), 
+                MoreFeaturesPage(),    
+              ],
+            ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.tabIndex, 

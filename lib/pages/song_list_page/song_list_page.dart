@@ -28,17 +28,19 @@ class _SongListPageState extends State<SongListPage> {
   List<FileSystemEntity> _files = []; 
   List<Song> _songs = []; 
   late final List<Widget> _pages = <Widget>[
+    SongsPlaylistPage(database: db), 
+    const SongFoldersPage(), 
     AllSongsPage(songs: placeholderSongs,), 
-    SongsPlaylistPage(songPlaylists: placeholderPlaylists,), 
     const AlbumsPage(), 
   ]; 
 
   final List<String> _pagesTab = const <String>[
-    "All Songs", 
     "Playlist", 
+    "Folders", 
+    "All Songs",  
     "Albums", 
-  ];
-  
+  ]; 
+
   void pickFolderAndAddSongs() async {
     Directory? dir = await pickFolderDirectory(); 
     if (dir == null) { 
@@ -84,7 +86,12 @@ class _SongListPageState extends State<SongListPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _SongCategoryTabs(pages: _pages, pageController: _pageController, pagesTab: _pagesTab, activePage: _activePage), 
+          _SongCategoryTabs(
+            pages: _pages, 
+            pageController: _pageController, 
+            pagesTab: _pagesTab, 
+            activePage: _activePage
+          ), 
           Expanded(
             child: PageView(
               scrollBehavior: AppScrollBehavior(),
