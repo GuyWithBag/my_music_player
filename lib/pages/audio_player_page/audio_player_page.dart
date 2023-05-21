@@ -8,6 +8,8 @@ import 'package:path/path.dart';
 
 import 'widgets/widgets.dart'; 
 
+// TODO: continue this:  https://youtu.be/DIqB8qEZW1U?t=214
+
 class AudioPlayerPage extends StatefulWidget {
   const AudioPlayerPage({Key? key}) : super(key: key);
 
@@ -44,13 +46,17 @@ class _ControlsPageState extends State<AudioPlayerPage> {
   }
 
   Stream<SeekBarData> get _seekBarDataStream => 
-  rxdart.Rx.combineLatest2<Duration, Duration?, SeekBarData>(
-    audioPlayer.positionStream, 
-    audioPlayer.durationStream, 
-    (Duration position, Duration? duration) {
-      return SeekBarData(position, duration ?? Duration.zero); 
-    }
-  );
+    rxdart.Rx.combineLatest3<Duration, Duration, Duration?, SeekBarData>(
+      audioPlayer.positionStream, 
+      audioPlayer.bufferedPositionStream, 
+      audioPlayer.durationStream, 
+      (Duration position, Duration bufferedPosition, Duration? duration) {
+        return SeekBarData(
+          position, 
+          bufferedPosition, 
+          duration ?? Duration.zero); 
+      }, 
+    );
 
   @override
   Widget build(BuildContext context) {

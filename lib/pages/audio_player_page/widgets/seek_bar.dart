@@ -1,26 +1,34 @@
 import 'dart:math';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 class SeekBarData {
-  final Duration position;
+  const SeekBarData(
+    this.position, 
+    this.bufferedPosition, 
+    this.duration, 
+  ); 
+  final Duration position; 
+  final Duration bufferedPosition; 
   final Duration duration; 
-
-  SeekBarData(this.position, this.duration); 
 }
 
 class SeekBar extends StatefulWidget {
-  final Duration position; 
-  final Duration duration; 
-  final ValueChanged<Duration>? onChanged; 
-  final ValueChanged<Duration>? onChangedEnd; 
-  
   const SeekBar({
     Key? key, 
-    required this.position, 
-    required this.duration, 
     this.onChanged, 
     this.onChangedEnd, 
+    required this.seekBarDataStream, 
+    required this.audioPlayer, 
   }) : super(key: key); 
+
+  final ValueChanged<Duration>? onChanged; 
+  final ValueChanged<Duration>? onChangedEnd; 
+
+  final AudioPlayer audioPlayer; 
+  final Stream<SeekBarData> seekBarDataStream; 
+  
 
   @override 
   State<SeekBar> createState() => _SeekBarState(); 
@@ -41,60 +49,19 @@ class _SeekBarState extends State<SeekBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(_formatDuration(widget.position)), 
-        Expanded(
-          child: SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              trackHeight: 4, 
-              thumbShape: const RoundSliderThumbShape(
-                disabledThumbRadius: 4, 
-                enabledThumbRadius: 4, 
-              ), 
-              overlayShape: const RoundSliderOverlayShape(
-                overlayRadius: 10, 
-              ),
-              activeTrackColor: Colors.white.withOpacity(0.2), 
-              inactiveTrackColor: Colors.white, 
-              thumbColor: Colors.white, 
-              overlayColor: Colors.white,
-            ),
-            child: Slider( 
-              min: 0.0, 
-              max: widget.duration.inMilliseconds.toDouble(),
-              value: min(
-                _dragValue ?? widget.position.inMilliseconds.toDouble(), 
-                widget.duration.inMilliseconds.toDouble(), 
-              ), 
-              onChanged: (value) {
-                setState(() {
-                  _dragValue = value; 
-                }); 
-                if (widget.onChanged != null) {
-                  widget.onChanged!(
-                    Duration(
-                      milliseconds: value.round(), 
-                    ), 
-                  );
-                }
-              }, 
-              onChangeEnd: (value) {
-                if (widget.onChangedEnd != null) {
-                  widget.onChangedEnd!(
-                    Duration(
-                      milliseconds: value.round(), 
-                    )
-                  );
-                }
-                _dragValue = null; 
-              },
-            ),
-          ),
-        ), 
-        Text(_formatDuration(widget.duration)), 
-      ],
-    );
+    return StreamBuilder<SeekBarData>( 
+      stream: widget.seekBarDataStream,
+      builder: (BuildContext context, AsyncSnapshot<SeekBarData> snapshot) {
+        final seekBarData = snapshot.data; 
+        return ProgressBar(
+          progress: seekBarData?.position ?? Duration.zero, 
+          buffered: seekBarData?.bufferedPosition ?? Duration.zero, 
+          total: seekBarData?.duration ?? Duration.zero,
+          onSeek: widget.audioPlayer.seek,
+        ); 
+
+      }
+    ); 
   }
 
 }
