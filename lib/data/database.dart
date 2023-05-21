@@ -4,7 +4,8 @@ import '../domain/audio_player.dart';
 
 class Database {
   
-  List<Song> songs = []; 
+  List<Song> allSongs = []; 
+  
   final List<Song> placeholderSongs = [
     Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
     Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
@@ -18,11 +19,11 @@ class Database {
   ]; 
 
   late final List<SongPlaylist> placeholderPlaylists = [
-    SongPlaylist(songs: songs), 
-    SongPlaylist(songs: songs), 
-    SongPlaylist(songs: songs), 
-    SongPlaylist(songs: songs), 
-    SongPlaylist(songs: songs), 
+    SongPlaylist(songs: allSongs), 
+    SongPlaylist(songs: allSongs), 
+    SongPlaylist(songs: allSongs), 
+    SongPlaylist(songs: allSongs), 
+    SongPlaylist(songs: allSongs), 
   ]; 
 
   // final Box<List> myBox = Hive.box("songsBox"); 

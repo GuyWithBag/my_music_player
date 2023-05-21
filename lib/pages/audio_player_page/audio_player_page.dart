@@ -9,6 +9,7 @@ import 'package:path/path.dart';
 import 'widgets/widgets.dart'; 
 
 // TODO: continue this:  https://youtu.be/DIqB8qEZW1U?t=214
+// TODO: Implement getting metadata for title and suchs
 
 class AudioPlayerPage extends StatefulWidget {
   const AudioPlayerPage({Key? key}) : super(key: key);
@@ -20,24 +21,29 @@ class AudioPlayerPage extends StatefulWidget {
 class _ControlsPageState extends State<AudioPlayerPage> {
   AudioPlayer audioPlayer = AudioPlayer(); 
   dynamic getArguments = Get.arguments; 
-  late Song? song = getArguments; 
+  late List<Song> songs = getArguments; 
 
   @override
   void initState() {
     super.initState(); 
-    if (song == null) {
-      return; 
-    }
     audioPlayer.setAudioSource(
       ConcatenatingAudioSource(
         children: [
-          AudioSource.file(
-            song!.url
-          ),
+          for (Song song in songs)
+            AudioSource.file(
+              song.url, 
+              tag: song.getMetadata()
+            ),
         ],
       ),
     );
+    // _init(); 
   }
+
+  // Future<void> _init() async {
+  //   await audioPlayer.setLoopMode(LoopMode.all); 
+  //   await audioPlayer.setAudioSource(source); 
+  // }
 
   @override
   void dispose() {
@@ -69,13 +75,18 @@ class _ControlsPageState extends State<AudioPlayerPage> {
       body: Stack(
         fit: StackFit.expand, 
         children: [
-          FutureBuilder(
-            future: song == null ? null : song!.getMetadata(),
+          // Gets the Metadata of the current song. 
+          StreamBuilder<SequenceState?>(
+            stream: audioPlayer.sequenceStateStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                Metadata? data = snapshot.data; 
+                final SequenceState? state = snapshot.data; 
+                if (state?.sequence.isEmpty ?? true) {
+                  return const AlbumArt(imageData: null); 
+                }
+                final Metadata metadata = state!.currentSource!.tag as Metadata; 
                 return AlbumArt(
-                  imageData: data?.albumArt,
+                  imageData: metadata.albumArt,
                 );
               }
               return const Placeholder(); 
@@ -83,7 +94,6 @@ class _ControlsPageState extends State<AudioPlayerPage> {
           ), 
           const _BackgroundFilter(), 
           _Controls(
-            song: song, 
             seekBarDataStream: _seekBarDataStream, 
             audioPlayer: audioPlayer
           )
@@ -96,13 +106,11 @@ class _ControlsPageState extends State<AudioPlayerPage> {
 class _Controls extends StatelessWidget {
   const _Controls({
     Key? key, 
-    required this.song, 
     required Stream<SeekBarData> seekBarDataStream,
     required this.audioPlayer,
   }) : _seekBarDataStream = seekBarDataStream, 
         super(key: key);
 
-  final Song? song; 
   final Stream<SeekBarData> _seekBarDataStream;
   final AudioPlayer audioPlayer;
 
@@ -136,17 +144,9 @@ class _Controls extends StatelessWidget {
             }
           ),
           const SizedBox(height: 30), 
-          StreamBuilder(
-            stream: _seekBarDataStream,
-            builder: 
-              (context, snapshot) {
-                final positionData = snapshot.data;
-                return SeekBar(
-                  position: positionData?.position ?? Duration.zero, 
-                  duration: positionData?.duration ?? Duration.zero, 
-                  onChangedEnd: audioPlayer.seek,
-                );
-              },
+          SeekBar(
+            seekBarDataStream: _seekBarDataStream, 
+            audioPlayer: audioPlayer
           ), 
           PlayerButtons(audioPlayer: audioPlayer)
         ],

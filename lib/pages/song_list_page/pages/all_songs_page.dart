@@ -7,10 +7,11 @@ import '../widgets/widgets.dart';
 
 class AllSongsPage extends StatelessWidget {
   const AllSongsPage({
-    Key? key, required this.songs
+    Key? key, 
+    required this.database
   }) : super(key: key);
 
-  final List<Song> songs; 
+  final Database database; 
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class AllSongsPage extends StatelessWidget {
       child: Column(
         children: [
           SubHeader(
-            header: Text("${songs.length} songs"), 
+            header: Text("${database.allSongs.length} songs"), 
             actions: [
               SubHeaderAction(
                 onTap: () {},
@@ -41,7 +42,7 @@ class AllSongsPage extends StatelessWidget {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(top: 10), 
-              child: SongList(songs: songs)
+              child: SongList(songs: database.allSongs)
             ),
           )
         ],

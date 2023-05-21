@@ -26,11 +26,11 @@ class _SongListPageState extends State<SongListPage> {
   int _activePage = 0; 
 
   List<FileSystemEntity> _files = []; 
-  List<Song> _songs = []; 
+
   late final List<Widget> _pages = <Widget>[
     SongsPlaylistPage(database: db), 
     const SongFoldersPage(), 
-    AllSongsPage(songs: placeholderSongs,), 
+    AllSongsPage(database: db,), 
     const AlbumsPage(), 
   ]; 
 
@@ -47,24 +47,23 @@ class _SongListPageState extends State<SongListPage> {
       return; 
     }
     List<Song> newSongs = getSongsFromDirectory(dir); 
-    if (const DeepCollectionEquality.unordered().equals(_songs, newSongs) == false) {
+    if (const DeepCollectionEquality.unordered().equals(db.allSongs, newSongs) == false) {
       clearSongs(); 
       addSongs(newSongs); 
       return; 
     }
-    addSongs(_songs); 
   } 
 
   void addSongs(List<Song> newSongs) {
-    _songs.addAll(newSongs); 
+    db.allSongs.addAll(newSongs); 
   }
 
   void addSong(Song song) {
-    _songs.add(song); 
+    db.allSongs.add(song); 
   }
 
   void clearSongs() {
-    _songs.clear(); 
+    db.allSongs.clear(); 
   }
 
 
