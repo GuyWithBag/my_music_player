@@ -16,6 +16,9 @@ class Song extends HiveObject {
 
   Future<Metadata> getMetadata() async {
     File file = File(url); 
+    if (!(await file.exists())) {
+      print("File: $url does not exist"); 
+    }
     Metadata metadata = await MetadataRetriever.fromFile(file); 
     return metadata; 
   }
@@ -63,9 +66,13 @@ class SongAlbum extends HiveObject {
 }
 
 class AudioPlayerArguments {
+  const AudioPlayerArguments({
+    required this.songs, 
+    required this.currentSongIndex, 
+  }); 
 
-  int indexToPlay = 0; 
-  List<Song> songs = []; 
+  final List<Song> songs; 
+  final int currentSongIndex; 
 
 }
 

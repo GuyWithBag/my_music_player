@@ -7,15 +7,14 @@ class Database {
   List<Song> allSongs = []; 
   
   final List<Song> placeholderSongs = [
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
-    Song("assets/audio/03 - Taron Egerton - The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
+    Song("assets/audio/The Way I Feel Inside.mp3"),
   ]; 
 
   late final List<SongPlaylist> placeholderPlaylists = [

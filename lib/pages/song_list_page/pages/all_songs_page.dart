@@ -42,7 +42,7 @@ class AllSongsPage extends StatelessWidget {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(top: 10), 
-              child: SongList(songs: database.allSongs)
+              child: SongList(database: database)
             ),
           )
         ],
@@ -50,6 +50,8 @@ class AllSongsPage extends StatelessWidget {
     ); 
   }
 }
+
+
 
 
 

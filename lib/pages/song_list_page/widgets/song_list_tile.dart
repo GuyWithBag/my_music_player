@@ -5,16 +5,20 @@ import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:get/get.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 
+import '../../../data/database.dart';
 import '../../../domain/audio_player.dart';
 import 'package:path/path.dart'; 
 
 class SongListTile extends StatelessWidget {
   const SongListTile({
     Key? key, 
-    required this.song, 
+    required this.database, 
+    required this.currentSongIndex, 
   }) : super(key: key);
 
-  final Song song; 
+  final Database database; 
+  final int currentSongIndex;  
+
   final double thumbnailSize = 60; 
   final double thumbnailBorderRadius = 5; 
 
@@ -33,17 +37,25 @@ class SongListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Song> songs = database.placeholderSongs; 
+    final Song currentSong = songs[currentSongIndex]; 
     return FutureBuilder(
-      future: song.getMetadata(),
+      future: currentSong.getMetadata(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Metadata data = snapshot.data!; 
           return SongTile(
             onTap: () {
-              Get.toNamed('/AudioPlayer', arguments: song); 
+              Get.toNamed(
+              '/AudioPlayer', 
+              arguments: AudioPlayerArguments(
+                songs: songs, 
+                currentSongIndex: currentSongIndex
+                )
+              ); 
             },
-            header: basenameWithoutExtension(song.url),
-            subHeader: data.authorName ?? "Unknown Artist", 
+            header: basenameWithoutExtension(currentSong.url),
+            subHeader: data.trackArtistNames?.join(", ") ?? "Unknown Artist", 
             thumbnail: _songAlbumArt(data), 
             thumbnailSize: thumbnailSize,
             thumbnailBorderRadius: thumbnailBorderRadius,
@@ -52,7 +64,13 @@ class SongListTile extends StatelessWidget {
         } else {
           return SongTile(
             onTap: () {
-              Get.toNamed('/AudioPlayer', arguments: song); 
+              Get.toNamed(
+              '/AudioPlayer', 
+              arguments: AudioPlayerArguments(
+                songs: songs, 
+                currentSongIndex: currentSongIndex
+                )
+              ); 
             },
             header: "Null",
             subHeader: "Unknown Artist", 

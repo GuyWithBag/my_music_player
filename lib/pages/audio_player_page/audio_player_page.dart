@@ -20,13 +20,24 @@ class AudioPlayerPage extends StatefulWidget {
 
 class _ControlsPageState extends State<AudioPlayerPage> {
   AudioPlayer audioPlayer = AudioPlayer(); 
-  dynamic getArguments = Get.arguments; 
-  late List<Song> songs = getArguments; 
+  AudioPlayerArguments getArguments = Get.arguments; 
+  late List<Song> songs = getArguments.songs; 
+  late int currentSongIndex = getArguments.currentSongIndex;  
 
   @override
   void initState() {
     super.initState(); 
-    audioPlayer.setAudioSource(
+    _init(); 
+  }
+
+  Future<void> _init() async {
+    for (Song song in songs) {
+      var data = await song.getMetadata(); 
+      print("done"); 
+      print(data.trackArtistNames!.join(", ") + "lol"); 
+    }
+    await audioPlayer.setLoopMode(LoopMode.all); 
+    await audioPlayer.setAudioSource(
       ConcatenatingAudioSource(
         children: [
           for (Song song in songs)
@@ -35,15 +46,10 @@ class _ControlsPageState extends State<AudioPlayerPage> {
               tag: song.getMetadata()
             ),
         ],
-      ),
+      ), 
+      initialIndex: currentSongIndex, 
     );
-    // _init(); 
   }
-
-  // Future<void> _init() async {
-  //   await audioPlayer.setLoopMode(LoopMode.all); 
-  //   await audioPlayer.setAudioSource(source); 
-  // }
 
   @override
   void dispose() {
@@ -78,24 +84,31 @@ class _ControlsPageState extends State<AudioPlayerPage> {
           // Gets the Metadata of the current song. 
           StreamBuilder<SequenceState?>(
             stream: audioPlayer.sequenceStateStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final SequenceState? state = snapshot.data; 
-                if (state?.sequence.isEmpty ?? true) {
-                  return const AlbumArt(imageData: null); 
-                }
-                final Metadata metadata = state!.currentSource!.tag as Metadata; 
-                return AlbumArt(
-                  imageData: metadata.albumArt,
-                );
+            builder: (BuildContext context, AsyncSnapshot<SequenceState?> snapshot) {
+              if (!snapshot.hasData) {
+                return const Placeholder(); 
               }
-              return const Placeholder(); 
+              final SequenceState? state = snapshot.data; 
+              return FutureBuilder(
+                future: state!.currentSource!.tag,
+                builder: (BuildContext context,  snapshot) {
+                  if (state.sequence.isEmpty || !snapshot.hasData) {
+                    return const AlbumArt(imageData: null); 
+                  }
+                  print(snapshot.data); 
+                  final Metadata metadata = snapshot.data as Metadata; 
+                  return AlbumArt(
+                    imageData: metadata.albumArt,
+                  );
+                }, 
+              ); 
             },
           ), 
           const _BackgroundFilter(), 
           _Controls(
             seekBarDataStream: _seekBarDataStream, 
-            audioPlayer: audioPlayer
+            audioPlayer: audioPlayer, 
+            songs: songs,
           )
         ],
       )
@@ -108,11 +121,13 @@ class _Controls extends StatelessWidget {
     Key? key, 
     required Stream<SeekBarData> seekBarDataStream,
     required this.audioPlayer,
+    required this.songs, 
   }) : _seekBarDataStream = seekBarDataStream, 
         super(key: key);
 
   final Stream<SeekBarData> _seekBarDataStream;
   final AudioPlayer audioPlayer;
+  final List<Song> songs; 
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +140,12 @@ class _Controls extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end, 
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder(
-            future: song == null ? null : song!.getMetadata(),
-            builder: (context, snapshot) {
+          StreamBuilder<SequenceState?>(
+            stream: audioPlayer.sequenceStateStream,
+            builder: (BuildContext context, AsyncSnapshot<SequenceState?> snapshot) {
               if (snapshot.hasData) {
-                String? fileName = basenameWithoutExtension(song!.url); 
+                final SequenceState? state = snapshot.data; 
+                String? fileName = basenameWithoutExtension(songs[state?.currentIndex ?? 0].url); 
                 return Text(
                   fileName, 
                   style: Theme.of(context)
@@ -155,8 +171,6 @@ class _Controls extends StatelessWidget {
   }
 }
 
-
-
 class _BackgroundFilter extends StatelessWidget {
   const _BackgroundFilter({
     Key? key,
@@ -173,7 +187,7 @@ class _BackgroundFilter extends StatelessWidget {
             Colors.white, 
             Colors.white.withOpacity(0.5), 
             Colors.white.withOpacity(0.0), 
-          ],
+          ], 
           stops: const [
               0.0, 
               0.4, 
