@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:my_music_player/widgets/navbar.dart'; 
 import 'pages/pages.dart'; 
 import 'theme/theme.dart'; 
+import 'package:provider/provider.dart'; 
+import 'domain/domain.dart'; 
 
 ThemeManager _themeManager = ThemeManager(); 
 
@@ -15,23 +17,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      themeMode: ThemeMode.light,
-      theme: defaultTheme, 
-      darkTheme: darkTheme,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      initialRoute: "/",
-      getPages: [
-        GetPage(name: '/', page: () => const NavBar()), 
-        GetPage(name: '/SongsListPage', page: () => const SongListPage()), 
-        GetPage(name: '/AudioPlayer', page: () => const AudioPlayerPage()), 
-        GetPage(name: "/Settings", page: () => const SettingsPage()), 
-        GetPage(name: "/More", page: () => const SettingsPage()), 
-      ],
+    return ChangeNotifierProvider(
+      create: (context) => AllSongsState(),
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        themeMode: ThemeMode.light,
+        theme: defaultTheme, 
+        darkTheme: darkTheme,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        initialRoute: "/",
+        getPages: [
+          GetPage(name: '/', page: () => const NavBar()), 
+          GetPage(name: '/SongsListPage', page: () => const SongListPage()), 
+          GetPage(name: '/AudioPlayer', page: () => const AudioPlayerPage()), 
+          GetPage(name: "/Settings", page: () => const SettingsPage()), 
+          GetPage(name: "/More", page: () => const SettingsPage()), 
+        ],
+      ),
     );
   }
 }

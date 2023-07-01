@@ -59,8 +59,8 @@ class SongTile extends StatelessWidget {
 
 class _MoreButton extends StatelessWidget {
   const _MoreButton({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_music_player/widgets/widgets.dart';
-import '../../../data/database.dart';
 import '../../../domain/audio_player.dart'; 
 import '../../../theme/theme.dart';
 import '../widgets/widgets.dart'; 
@@ -8,10 +7,10 @@ import '../widgets/widgets.dart';
 class AllSongsPage extends StatelessWidget {
   const AllSongsPage({
     Key? key, 
-    required this.database
+    required this.songs, 
   }) : super(key: key);
 
-  final Database database; 
+  final List<Song> songs;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class AllSongsPage extends StatelessWidget {
       child: Column(
         children: [
           SubHeader(
-            header: Text("${database.allSongs.length} songs"), 
+            header: Text("${songs.length} songs"), 
             actions: [
               SubHeaderAction(
                 onTap: () {},
@@ -42,7 +41,7 @@ class AllSongsPage extends StatelessWidget {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(top: 10), 
-              child: SongList(database: database)
+              child: SongList(songs: songs)
             ),
           )
         ],

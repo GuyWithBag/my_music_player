@@ -3,20 +3,21 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:get/get.dart';
+import 'package:my_music_player/domain/domain.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
-import '../../../data/database.dart';
 import '../../../domain/audio_player.dart';
 import 'package:path/path.dart'; 
 
 class SongListTile extends StatelessWidget {
   const SongListTile({
     Key? key, 
-    required this.database, 
+    required this.songs, 
     required this.currentSongIndex, 
   }) : super(key: key);
 
-  final Database database; 
+  final List<Song> songs; 
   final int currentSongIndex;  
 
   final double thumbnailSize = 60; 
@@ -37,7 +38,7 @@ class SongListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Song> songs = database.placeholderSongs; 
+    final List<Song> songs = context.watch<AllSongsState>().allSongs; 
     final Song currentSong = songs[currentSongIndex]; 
     return FutureBuilder(
       future: currentSong.getMetadata(),
@@ -54,7 +55,7 @@ class SongListTile extends StatelessWidget {
                 )
               ); 
             },
-            header: basenameWithoutExtension(currentSong.url),
+            header: currentSong.name,
             subHeader: data.trackArtistNames?.join(", ") ?? "Unknown Artist", 
             thumbnail: _songAlbumArt(data), 
             thumbnailSize: thumbnailSize,

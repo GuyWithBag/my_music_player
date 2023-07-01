@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../domain/domain.dart'; 
 import 'dart:io'; 
-import 'widgets/widgets.dart';
+// import 'widgets/widgets.dart';
 import 'package:collection/collection.dart'; 
 import 'pages/pages.dart'; 
-import '../../data/database.dart'; 
-import '../../theme/theme.dart'; 
+// import '../../theme/theme.dart'; 
 
 class SongListPage extends StatefulWidget {
   const SongListPage({Key? key}) : super(key: key);
@@ -16,23 +16,14 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
-  Database db = Database(); 
-  late List<Song> placeholderSongs = db.placeholderSongs; 
-  late List<SongPlaylist> placeholderPlaylists = db.placeholderPlaylists; 
+  late List<Song> placeholderSongs = AllSongsState.placeholderSongs; 
+  late List<SongPlaylist> placeholderPlaylists = AllSongsState.placeholderPlaylists; 
   
-  String? _songsPath; 
+  // String? _songsPath; 
 
   final PageController _pageController = PageController(initialPage: 0); 
   int _activePage = 0; 
 
-  List<FileSystemEntity> _files = []; 
-
-  late final List<Widget> _pages = <Widget>[
-    SongsPlaylistPage(database: db), 
-    const SongFoldersPage(), 
-    AllSongsPage(database: db,), 
-    const AlbumsPage(), 
-  ]; 
 
   final List<String> _pagesTab = const <String>[
     "Playlist", 
@@ -40,31 +31,6 @@ class _SongListPageState extends State<SongListPage> {
     "All Songs",  
     "Albums", 
   ]; 
-
-  void pickFolderAndAddSongs() async {
-    Directory? dir = await pickFolderDirectory(); 
-    if (dir == null) { 
-      return; 
-    }
-    List<Song> newSongs = getSongsFromDirectory(dir); 
-    if (const DeepCollectionEquality.unordered().equals(db.allSongs, newSongs) == false) {
-      clearSongs(); 
-      addSongs(newSongs); 
-      return; 
-    }
-  } 
-
-  void addSongs(List<Song> newSongs) {
-    db.allSongs.addAll(newSongs); 
-  }
-
-  void addSong(Song song) {
-    db.allSongs.add(song); 
-  }
-
-  void clearSongs() {
-    db.allSongs.clear(); 
-  }
 
 
   // @override
@@ -80,13 +46,22 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AllSongsState>(); 
+
+    late final List<Widget> pages = <Widget>[
+      SongsPlaylistPage(songs: appState.allSongs,), 
+      const SongFoldersPage(), 
+      AllSongsPage(songs: appState.allSongs,), 
+      const AlbumsPage(), 
+    ]; 
+
     return SizedBox(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _SongCategoryTabs(
-            pages: _pages, 
+            pages: pages, 
             pageController: _pageController, 
             pagesTab: _pagesTab, 
             activePage: _activePage
@@ -100,7 +75,7 @@ class _SongListPageState extends State<SongListPage> {
                   _activePage = page; 
                 });
               },
-              children: _pages,
+              children: pages,
             ),
           ),
         ]

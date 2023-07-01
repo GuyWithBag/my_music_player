@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart'; 
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
+
+import 'package:provider/provider.dart'; 
 import '../domain/domain.dart'; 
 import '../pages/pages.dart'; 
 
@@ -11,9 +13,9 @@ class NavBar extends StatefulWidget {
   State<NavBar> createState() => _NavBarState();
 }
 
-enum _popupMenuValues {
-  settings, 
-}
+// enum _popupMenuValues {
+//   settings, 
+// }
 
 class _NavBarState extends State<NavBar> {
   final NavBarController controller = Get.put(NavBarController()); 
@@ -25,6 +27,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final AllSongsState appState = context.watch<AllSongsState>(); 
     return GetBuilder<NavBarController>(
       builder: (NavBarController navBarController) {
         return Scaffold(
@@ -53,14 +56,14 @@ class _NavBarState extends State<NavBar> {
                       icon: const Icon(Icons.more_vert), 
                       itemBuilder: (context) => const [
                         PopupMenuItem(
-                          value: 1,
+                          value: 1, 
                           child: Text("Open Song"),
                         )
                       ],
                       onSelected: (value) {
                         switch (value) {
                           case 1: 
-                            printUrl(); 
+                            appState.pickFolderAndAddSongs(); 
                         }
                       },
                     ), 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'; 
-import '../../../data/database.dart';
+
 import '../../../domain/domain.dart'; 
 import '../../../widgets/widgets.dart';
 import '../widgets/widgets.dart'; 
@@ -8,10 +8,11 @@ import '../../../theme/theme.dart';
 class SongsPlaylistPage extends StatefulWidget {
   const SongsPlaylistPage({
     Key? key, 
-    required this.database, 
+    required this.songs, 
   }) : super(key: key);
 
-  final Database database; 
+  // Not yet implemented. 
+  final List<Song> songs; 
 
   @override
   State<SongsPlaylistPage> createState() => _SongsPlaylistPageState();
@@ -23,7 +24,7 @@ class _SongsPlaylistPageState extends State<SongsPlaylistPage> {
 
   void _promptCreatePlaylistDialogue(BuildContext context) {
     AlertDialog alert = AlertDialog(
-      title: Text("New Playlist"), 
+      title: const Text("New Playlist"), 
       titlePadding: const EdgeInsets.only(
         top: 30, 
         left: 20, 
@@ -43,14 +44,14 @@ class _SongsPlaylistPageState extends State<SongsPlaylistPage> {
           onPressed: () {
             Navigator.pop(context); 
           }, 
-          child: Text("Cancel")
+          child: const Text("Cancel")
         ), 
         ElevatedButton(
           onPressed: () {
-            _createPlaylist(textEditingController.text, widget.database.placeholderSongs); 
+            _createPlaylist(textEditingController.text, AllSongsState.placeholderSongs); 
             Navigator.pop(context); 
           }, 
-          child: Text("Create")
+          child: const Text("Create")
         ), 
       ],
     ); 

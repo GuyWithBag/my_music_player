@@ -22,13 +22,14 @@ List<Song> getSongsFromDirectory(Directory directory) {
   final List<FileSystemEntity> files = getFilesFromDirectory(directory); 
   List<Song> songs = []; 
   for (FileSystemEntity file in files) {
-    String fileName = file.path.split("/").last; 
+    String filePath = file.path; 
+    String fileName = filePath.split("/").last; 
     if (!fileName.isAudioFileName) {
-      print("Not audio"); 
+      print("Database: $filePath is not an audio file."); 
       continue; 
     }
-    songs.add(Song(file.path)); 
-    // print(file.path); 
+    songs.add(Song(filePath)); 
+    print("Database: $filePath found as an audio file. "); 
   }
   return songs; 
 }

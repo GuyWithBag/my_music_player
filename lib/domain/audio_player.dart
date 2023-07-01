@@ -10,9 +10,11 @@ class Song extends HiveObject {
   @HiveField(0)
   final String url; 
   @HiveField(1)
-  late final String name = basenameWithoutExtension(url); 
+  late final String name; 
 
-  Song(this.url); 
+  Song(this.url) {
+    name = basenameWithoutExtension(url); 
+  }
 
   Future<Metadata> getMetadata() async {
     File file = File(url); 
