@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:get/get.dart';
+import 'package:my_music_player/theme/theme.dart';
 import '../../domain/domain.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rxdart; 
@@ -31,11 +33,6 @@ class _ControlsPageState extends State<AudioPlayerPage> {
   }
 
   Future<void> _init() async {
-    for (Song song in songs) {
-      var data = await song.getMetadata(); 
-      print("done"); 
-      print(data.trackArtistNames!.join(", ") + "lol"); 
-    }
     await audioPlayer.setLoopMode(LoopMode.all); 
     await audioPlayer.setAudioSource(
       ConcatenatingAudioSource(
@@ -43,7 +40,7 @@ class _ControlsPageState extends State<AudioPlayerPage> {
           for (Song song in songs)
             AudioSource.file(
               song.url, 
-              tag: song.getMetadata()
+              tag: song
             ),
         ],
       ), 
@@ -74,43 +71,43 @@ class _ControlsPageState extends State<AudioPlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent, 
         elevation: 0, 
       ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        fit: StackFit.expand, 
-        children: [
-          // Gets the Metadata of the current song. 
-          StreamBuilder<SequenceState?>(
-            stream: audioPlayer.sequenceStateStream,
-            builder: (BuildContext context, AsyncSnapshot<SequenceState?> snapshot) {
-              if (!snapshot.hasData) {
-                return const Placeholder(); 
+      body: Container(
+        decoration: backgroundDecoration,
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: [
+            StreamBuilder(
+              stream: audioPlayer.sequenceStateStream,
+              builder: (BuildContext context, snapshot) {
+                final SequenceState? state = snapshot.data; 
+                if (snapshot.hasData) {
+                  Song song = state!.currentSource!.tag; 
+                  return FutureBuilder(
+                    future: song.getMetadata(),
+                    builder: (BuildContext context, AsyncSnapshot<Metadata> snapshot) {
+                      Metadata? metadata = snapshot.data; 
+                      if (snapshot.hasData) {
+                        return AlbumArt(imageData: metadata!.albumArt); 
+                      } else {
+                        return const AlbumArt(imageData: null); 
+                      }
+                    },
+                  ); 
+                } else {
+                 return const AlbumArt(imageData: null,); 
+                }
               }
-              final SequenceState? state = snapshot.data; 
-              return FutureBuilder(
-                future: state!.currentSource!.tag,
-                builder: (BuildContext context,  snapshot) {
-                  if (state.sequence.isEmpty || !snapshot.hasData) {
-                    return const AlbumArt(imageData: null); 
-                  }
-                  print(snapshot.data); 
-                  final Metadata metadata = snapshot.data as Metadata; 
-                  return AlbumArt(
-                    imageData: metadata.albumArt,
-                  );
-                }, 
-              ); 
-            },
-          ), 
-          const _BackgroundFilter(), 
-          _Controls(
-            seekBarDataStream: _seekBarDataStream, 
-            audioPlayer: audioPlayer, 
-            songs: songs,
-          )
-        ],
+            ), 
+            _Controls(
+              seekBarDataStream: _seekBarDataStream, 
+              audioPlayer: audioPlayer, 
+              songs: songs,
+            )
+          ],
+        ),
       )
     );
   }
@@ -140,25 +137,7 @@ class _Controls extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end, 
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StreamBuilder<SequenceState?>(
-            stream: audioPlayer.sequenceStateStream,
-            builder: (BuildContext context, AsyncSnapshot<SequenceState?> snapshot) {
-              if (snapshot.hasData) {
-                final SequenceState? state = snapshot.data; 
-                String? fileName = basenameWithoutExtension(songs[state?.currentIndex ?? 0].url); 
-                return Text(
-                  fileName, 
-                  style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold, 
-                  ),
-                );
-              } else {
-                return const Placeholder(); 
-              }
-            }
-          ),
+          TitleAndButtons(audioPlayer: audioPlayer),
           const SizedBox(height: 30), 
           SeekBar(
             seekBarDataStream: _seekBarDataStream, 
@@ -171,44 +150,130 @@ class _Controls extends StatelessWidget {
   }
 }
 
-class _BackgroundFilter extends StatelessWidget {
-  const _BackgroundFilter({
-    Key? key,
-  }) : super(key: key);
+class TitleAndButtons extends StatelessWidget {
+  const TitleAndButtons({
+    super.key,
+    required this.audioPlayer,
+  });
+
+  final AudioPlayer audioPlayer;
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (rect) {
-        return LinearGradient(
-          begin: Alignment.topCenter, 
-          end: Alignment.bottomCenter, 
-          colors: [
-            Colors.white, 
-            Colors.white.withOpacity(0.5), 
-            Colors.white.withOpacity(0.0), 
-          ], 
-          stops: const [
-              0.0, 
-              0.4, 
-              0.6
-            ]
-        ).createShader(rect);
-      },
-      blendMode: BlendMode.dstOut,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter, 
-            end: Alignment.bottomCenter, 
-            colors: [
-              Colors.deepPurple.shade200, 
-              Colors.deepPurple.shade800,
-            ]
-          )
-        ),
-      ),
+    return StreamBuilder<SequenceState?>(
+      stream: audioPlayer.sequenceStateStream,
+      builder: (BuildContext context, AsyncSnapshot<SequenceState?> snapshot) {
+        if (snapshot.hasData) {
+          final SequenceState? state = snapshot.data; 
+          Song song = state!.currentSource!.tag; 
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+              SizedBox(
+                height: 20,
+                child: InkWell(
+                  onTap: () {
+
+                  }, 
+                  child: const Icon(CupertinoIcons.heart)
+                ),
+              ), 
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      Text(
+                        song.name, 
+                        maxLines: 1, 
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold, 
+                        ), 
+                      ), 
+                      FutureBuilder(
+                        future: song.getMetadata(), 
+                        builder: (BuildContext context, AsyncSnapshot<Metadata> snapshot) {
+                          Metadata? metadata = snapshot.data; 
+                          if (snapshot.hasData) {
+                            return Text(
+                              Song.artistNamesToReadable(metadata!.trackArtistNames), 
+                              maxLines: 1, 
+                              overflow: TextOverflow.clip, 
+                              style: Theme.of(context)
+                                .textTheme
+                                .labelSmall,
+                            );
+                          } else {
+                            return const Text(
+                              "Unknown Artist"
+                            );
+                          }
+                        }
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+                child: InkWell(
+                  onTap: () {
+
+                  }, 
+                  child: const Icon(Icons.share)
+                ),
+              ), 
+            ],
+          );
+        } else {
+          return const Placeholder(); 
+        }
+      }
     );
   }
 }
+
+// class _BackgroundFilter extends StatelessWidget {
+//   const _BackgroundFilter({
+//     Key? key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ShaderMask(
+//       shaderCallback: (rect) {
+//         return LinearGradient(
+//           begin: Alignment.topCenter, 
+//           end: Alignment.bottomCenter, 
+//           colors: [
+//             Colors.white, 
+//             Colors.white.withOpacity(0.5), 
+//             Colors.white.withOpacity(0.0), 
+//           ], 
+//           stops: const [
+//               0.0, 
+//               0.4, 
+//               0.6
+//             ]
+//         ).createShader(rect);
+//       },
+//       blendMode: BlendMode.dstOut,
+//       child: Container(
+//         decoration: BoxDecoration(
+//           gradient: LinearGradient(
+//             begin: Alignment.topCenter, 
+//             end: Alignment.bottomCenter, 
+//             colors: [
+//               Colors.deepPurple.shade200, 
+//               Colors.deepPurple.shade800,
+//             ]
+//           )
+//         ),
+//       ),
+//     );
+//   }
+// }
 

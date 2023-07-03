@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; 
+
+// This Widget is reused as a template for other tiles so that i do not have to rewrite code. 
+// This is created for reusability. 
 
 class SongTile extends StatelessWidget {
   const SongTile({
@@ -10,6 +14,7 @@ class SongTile extends StatelessWidget {
     required this.thumbnailSize, 
     required this.thumbnailBorderRadius, 
     required this.containerHeight, 
+    this.index = -1, 
   });
 
   final void Function() onTap; 
@@ -22,6 +27,7 @@ class SongTile extends StatelessWidget {
   final double thumbnailBorderRadius; 
 
   final double containerHeight; 
+  final int index; 
 
 
   @override
@@ -49,7 +55,14 @@ class SongTile extends StatelessWidget {
             ), 
             const Center(
               child: _MoreButton()
-            )
+            ), 
+            index <= -1 ? 
+              const SizedBox()
+            : 
+            ReorderableDragStartListener(
+                index: index, 
+                child: const Icon(CupertinoIcons.equal), 
+              )
           ],
         ),
       ),
@@ -115,8 +128,7 @@ class _Details extends StatelessWidget {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Wrap(
           children: [
             Container(
               width: 300, 

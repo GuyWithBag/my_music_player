@@ -52,3 +52,10 @@ BoxDecoration backgroundDecoration = BoxDecoration(
     ]
   )
 );
+
+BoxDecoration borderOutline = BoxDecoration(
+  border: Border.all(
+    color: Colors.white, 
+    width: 3
+  )
+);

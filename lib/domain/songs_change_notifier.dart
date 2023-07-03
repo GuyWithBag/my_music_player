@@ -22,6 +22,8 @@ class AllSongsState extends ChangeNotifier {
       return; 
     }
     List<Song> newSongs = getSongsFromDirectory(dir); 
+    // TEST
+    sortSongsAlphabetically(newSongs); 
     if (const DeepCollectionEquality.unordered().equals(allSongs, newSongs) == false) {
       clearSongs(); 
       addSongs(newSongs); 
@@ -46,6 +48,17 @@ class AllSongsState extends ChangeNotifier {
 
   void clearSongs() {
     allSongs.clear(); 
+    notifyListeners(); 
+  }
+
+  Song removeSongAt(int index) {
+    Song song = allSongs.removeAt(index); 
+    notifyListeners(); 
+    return song; 
+  }
+
+  void insertSongAt(int index, Song song) {
+    allSongs.insert(index, song); 
     notifyListeners(); 
   }
 

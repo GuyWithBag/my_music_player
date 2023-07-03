@@ -35,17 +35,15 @@ class SeekBar extends StatefulWidget {
 }
 
 class _SeekBarState extends State<SeekBar> {
-  double? _dragValue; 
-
-  String _formatDuration(Duration? duration) {
-    if (duration == null) {
-      return "--:--"; 
-    } else {
-      String minutes = duration.inMinutes.toString().padLeft(2, '0'); 
-      String seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0'); 
-      return "$minutes:$seconds"; 
-    }
-  }
+  // String _formatDuration(Duration? duration) {
+  //   if (duration == null) {
+  //     return "--:--"; 
+  //   } else {
+  //     String minutes = duration.inMinutes.toString().padLeft(2, '0'); 
+  //     String seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0'); 
+  //     return "$minutes:$seconds"; 
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +52,8 @@ class _SeekBarState extends State<SeekBar> {
       builder: (BuildContext context, AsyncSnapshot<SeekBarData> snapshot) {
         final seekBarData = snapshot.data; 
         return ProgressBar(
+          thumbColor: Theme.of(context).primaryColorLight, 
+          progressBarColor: Theme.of(context).primaryColor,
           progress: seekBarData?.position ?? Duration.zero, 
           buffered: seekBarData?.bufferedPosition ?? Duration.zero, 
           total: seekBarData?.duration ?? Duration.zero,

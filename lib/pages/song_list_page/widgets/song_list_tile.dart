@@ -10,12 +10,14 @@ import 'package:provider/provider.dart';
 import '../../../domain/audio_player.dart';
 import 'package:path/path.dart'; 
 
+// The purpose of this is to use the SongTile widget as just a gui and so that this can use FutureBuilder while allowing you to reuse SongTile for other widgets. 
+
 class SongListTile extends StatelessWidget {
   const SongListTile({
     Key? key, 
     required this.songs, 
     required this.currentSongIndex, 
-  }) : super(key: key);
+  }) : super(key: key); 
 
   final List<Song> songs; 
   final int currentSongIndex;  
@@ -31,7 +33,7 @@ class SongListTile extends StatelessWidget {
       ); 
     } else {
       return const Icon(
-          Icons.hourglass_empty
+          Icons.music_note
       ); 
     }
   }
@@ -60,7 +62,8 @@ class SongListTile extends StatelessWidget {
             thumbnail: _songAlbumArt(data), 
             thumbnailSize: thumbnailSize,
             thumbnailBorderRadius: thumbnailBorderRadius,
-            containerHeight: 75,
+            containerHeight: 75, 
+            index: currentSongIndex,
           );
         } else {
           return SongTile(
@@ -76,11 +79,12 @@ class SongListTile extends StatelessWidget {
             header: "Null",
             subHeader: "Unknown Artist", 
             thumbnail: const Icon(
-              Icons.hourglass_empty
+              Icons.music_note
             ), 
             thumbnailSize: thumbnailSize,
             thumbnailBorderRadius: thumbnailBorderRadius,
-            containerHeight: 75,
+            containerHeight: 75,  
+            index: currentSongIndex,
           );
         }
       }

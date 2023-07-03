@@ -11,6 +11,10 @@ class Song extends HiveObject {
   final String url; 
   @HiveField(1)
   late final String name; 
+  @HiveField(2)
+  bool favorite = false; 
+  @HiveField(3)
+  List<SongPlaylist> playlistsIn = []; 
 
   Song(this.url) {
     name = basenameWithoutExtension(url); 
@@ -24,6 +28,11 @@ class Song extends HiveObject {
     Metadata metadata = await MetadataRetriever.fromFile(file); 
     return metadata; 
   }
+
+  static String artistNamesToReadable(List<String>? trackArtistNames) {
+    return trackArtistNames?.join(", ") ?? "Unknown Artist"; 
+  }
+
 }
 
 @HiveType(typeId: 1)

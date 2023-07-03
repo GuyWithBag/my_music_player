@@ -22,7 +22,7 @@ class SongAlbumTile extends StatelessWidget {
       header: songAlbum.name,
       subHeader: "${songAlbum.artistName} - ${songAlbum.songs.length} songs",
       containerHeight: containerHeight,
-      thumbnail: const Icon(Icons.hourglass_empty),
+      thumbnail: const Icon(Icons.music_note),
       thumbnailSize: thumbnailSize, 
       thumbnailBorderRadius: thumbnailBorderRadius,
     );

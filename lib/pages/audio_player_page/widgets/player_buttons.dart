@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart'; 
 import 'package:just_audio/just_audio.dart';
+import 'package:my_music_player/widgets/inkwell_icon.dart';
 
 class PlayerButtons extends StatelessWidget {
   const PlayerButtons({
@@ -7,22 +8,33 @@ class PlayerButtons extends StatelessWidget {
     required this.audioPlayer,
   });
 
-  final AudioPlayer audioPlayer;
+  final AudioPlayer audioPlayer; 
+  final double? iconsSize = 45; 
+  final double? adjustedIconSize = 30; 
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 140, 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          StreamBuilder<SequenceState?>(
+          InkwellIcon(
+            height: adjustedIconSize,
+            width: adjustedIconSize,
+            icon: const Icon(
+              Icons.loop, 
+              color: Colors.white, 
+            ),
+          ), 
+          const Spacer(), 
+          StreamBuilder<SequenceState?>( 
             stream: audioPlayer.sequenceStateStream,
-            builder: (context, index) {
-              return IconButton(
-                onPressed: 
-                  audioPlayer.hasPrevious ? audioPlayer.seekToPrevious : null, 
-                iconSize: 45,
+            builder: (BuildContext context, index) {
+              return InkwellIcon(
+                height: iconsSize,
+                width: iconsSize,
+                onTap:  audioPlayer.hasPrevious ? audioPlayer.seekToPrevious : null, 
                 icon: const Icon(
                   Icons.skip_previous, 
                   color: Colors.white,
@@ -30,65 +42,18 @@ class PlayerButtons extends StatelessWidget {
               );
             }
           ),
-          StreamBuilder<PlayerState>(
-            stream: audioPlayer.playerStateStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final playerState = snapshot.data;  
-                final processingState = playerState!.processingState; 
-    
-                if (processingState == ProcessingState.loading || 
-                  processingState == ProcessingState.buffering) {
-                  return Container(
-                    width: 64.0,
-                    height: 64.0, 
-                    margin: const EdgeInsets.all(10.0),
-                    child: const CircularProgressIndicator(
-                    ),
-                  );
-                } else if (!audioPlayer.playing) {
-                  return IconButton(
-                    onPressed: audioPlayer.play, 
-                    iconSize: 75,
-                    icon: const Icon(
-                      Icons.play_circle, 
-                      color: Colors.white,
-                    ),
-                  );
-                } else if (processingState != ProcessingState.completed) {
-                  return IconButton(
-                    onPressed: audioPlayer.pause, 
-                    iconSize: 75,
-                    icon: const Icon(
-                      Icons.pause_circle, 
-                      color: Colors.white, 
-                    ),
-                  );
-                } else {
-                  return IconButton(
-                    onPressed: () => audioPlayer.seek(
-                      Duration.zero, 
-                      index: audioPlayer.effectiveIndices!.first, 
-                    ), 
-                    iconSize: 75,
-                    icon: const Icon(
-                      Icons.replay_circle_filled_outlined, 
-                      color: Colors.white, 
-                    ),
-                  );
-                }
-              } else {
-                return const CircularProgressIndicator();
-              }
-            }, 
+          const Spacer(), 
+          PlayerButton(
+            audioPlayer: audioPlayer, 
           ), 
+          const Spacer(), 
           StreamBuilder<SequenceState?>(
             stream: audioPlayer.sequenceStateStream,
-            builder: (context, index) {
-              return IconButton(
-                onPressed: 
-                  audioPlayer.hasNext ? audioPlayer.seekToNext : null, 
-                iconSize: 45,
+            builder: (BuildContext context, index) {
+              return InkwellIcon(
+                height: iconsSize, 
+                width: iconsSize, 
+                onTap: audioPlayer.hasNext ? audioPlayer.seekToNext : null, 
                 icon: const Icon(
                   Icons.skip_next, 
                   color: Colors.white,
@@ -96,8 +61,85 @@ class PlayerButtons extends StatelessWidget {
               );
             }
           ),
+          const Spacer(), 
+          InkwellIcon(
+            height: adjustedIconSize,
+            width: adjustedIconSize,
+            icon: const Icon(
+              Icons.shuffle, 
+              color: Colors.white, 
+            ),
+          ), 
         ],
       ),
+    );
+  }
+}
+
+class PlayerButton extends StatelessWidget {
+  const PlayerButton({
+    super.key,
+    required this.audioPlayer,
+  });
+
+  final AudioPlayer audioPlayer;
+  final double? playerButtonIconSize = 67;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<PlayerState>(
+      stream: audioPlayer.playerStateStream,
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          final playerState = snapshot.data;  
+          final processingState = playerState!.processingState; 
+    
+          if (processingState == ProcessingState.loading || 
+            processingState == ProcessingState.buffering) {
+            return InkwellIcon(
+              width: playerButtonIconSize,
+              height: playerButtonIconSize, 
+              icon: const CircularProgressIndicator(
+              ),
+            );
+          } else if (!audioPlayer.playing) {
+            return InkwellIcon(
+              height: playerButtonIconSize,
+              width: playerButtonIconSize,
+              onTap: audioPlayer.play, 
+              icon: const Icon(
+                Icons.play_circle, 
+                color: Colors.white, 
+              ),
+            ); 
+          } else if (processingState != ProcessingState.completed) {
+            return InkwellIcon(
+              height: playerButtonIconSize,
+              width: playerButtonIconSize,
+              onTap: audioPlayer.pause,
+              icon: const Icon(
+                Icons.pause_circle, 
+                color: Colors.white, 
+              ),
+            ); 
+          } else {
+            return InkwellIcon(
+              height: playerButtonIconSize,
+              width: playerButtonIconSize,
+              onTap: () => audioPlayer.seek(
+                Duration.zero, 
+                index: audioPlayer.effectiveIndices!.first, 
+              ), 
+              icon: const Icon(
+                Icons.replay_circle_filled_outlined, 
+                color: Colors.white,
+              )
+            ); 
+          } 
+        } else {
+          return const CircularProgressIndicator();
+        }
+      }, 
     );
   }
 }

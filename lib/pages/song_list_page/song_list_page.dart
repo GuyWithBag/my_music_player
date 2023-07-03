@@ -8,6 +8,13 @@ import 'package:collection/collection.dart';
 import 'pages/pages.dart'; 
 // import '../../theme/theme.dart'; 
 
+class PageItem {
+  final String pageName; 
+  final Widget page;
+
+  PageItem(this.pageName, this.page); 
+}
+
 class SongListPage extends StatefulWidget {
   const SongListPage({Key? key}) : super(key: key);
 
@@ -24,15 +31,6 @@ class _SongListPageState extends State<SongListPage> {
   final PageController _pageController = PageController(initialPage: 0); 
   int _activePage = 0; 
 
-
-  final List<String> _pagesTab = const <String>[
-    "Playlist", 
-    "Folders", 
-    "All Songs",  
-    "Albums", 
-  ]; 
-
-
   // @override
   // void initState() {
   //   super.initState();
@@ -48,12 +46,24 @@ class _SongListPageState extends State<SongListPage> {
   Widget build(BuildContext context) {
     final appState = context.watch<AllSongsState>(); 
 
-    late final List<Widget> pages = <Widget>[
-      SongsPlaylistPage(songs: appState.allSongs,), 
-      const SongFoldersPage(), 
-      AllSongsPage(songs: appState.allSongs,), 
-      const AlbumsPage(), 
-    ]; 
+    late final Set<PageItem> pages = <PageItem>{
+      PageItem(
+        "Playlist",
+        SongsPlaylistPage(songs: appState.allSongs,), 
+      ),
+      PageItem(
+        "Folders",
+        const SongFoldersPage(), 
+      ),
+      PageItem(
+        "All Songs",
+        AllSongsPage(songs: appState.allSongs,), 
+      ),
+      PageItem(
+        "Albums",
+        const AlbumsPage(), 
+      ),
+    }; 
 
     return SizedBox(
       child: Column(
@@ -63,7 +73,6 @@ class _SongListPageState extends State<SongListPage> {
           _SongCategoryTabs(
             pages: pages, 
             pageController: _pageController, 
-            pagesTab: _pagesTab, 
             activePage: _activePage
           ), 
           Expanded(
@@ -75,7 +84,10 @@ class _SongListPageState extends State<SongListPage> {
                   _activePage = page; 
                 });
               },
-              children: pages,
+              children: [
+                for (PageItem pageItem in pages) 
+                  pageItem.page, 
+              ],
             ),
           ),
         ]
@@ -88,15 +100,13 @@ class _SongListPageState extends State<SongListPage> {
 class _SongCategoryTabs extends StatelessWidget {
   const _SongCategoryTabs({
     Key? key,
-    required List<Widget> pages,
+    required Set<PageItem> pages,
     required PageController pageController,
-    required List<String> pagesTab,
     required int activePage,
-  }) : _pages = pages, _pageController = pageController, _pagesTab = pagesTab, _activePage = activePage, super(key: key);
+  }) : _pages = pages, _pageController = pageController, _activePage = activePage, super(key: key);
 
-  final List<Widget> _pages;
+  final Set<PageItem> _pages;
   final PageController _pageController;
-  final List<String> _pagesTab;
   final int _activePage;
 
   @override
@@ -128,7 +138,7 @@ class _SongCategoryTabs extends StatelessWidget {
                     ); 
                   },
                   child: Text(
-                    _pagesTab[index], 
+                    _pages.elementAt(index).pageName, 
                     style: _activePage == index ? 
                       Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold) : 
                       Theme.of(context).textTheme.titleSmall
