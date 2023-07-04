@@ -11,11 +11,12 @@ class PlayerButtons extends StatelessWidget {
   final AudioPlayer audioPlayer; 
   final double? iconsSize = 45; 
   final double? adjustedIconSize = 30; 
+  final double? playerButtonIconSize = 67; 
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 140, 
+      height: playerButtonIconSize, 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -45,6 +46,7 @@ class PlayerButtons extends StatelessWidget {
           const Spacer(), 
           PlayerButton(
             audioPlayer: audioPlayer, 
+            playerButtonIconSize: playerButtonIconSize,
           ), 
           const Spacer(), 
           StreamBuilder<SequenceState?>(
@@ -79,11 +81,12 @@ class PlayerButtons extends StatelessWidget {
 class PlayerButton extends StatelessWidget {
   const PlayerButton({
     super.key,
-    required this.audioPlayer,
+    required this.audioPlayer, 
+    this.playerButtonIconSize,
   });
 
   final AudioPlayer audioPlayer;
-  final double? playerButtonIconSize = 67;
+  final double? playerButtonIconSize;
 
   @override
   Widget build(BuildContext context) {

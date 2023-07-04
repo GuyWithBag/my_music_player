@@ -10,40 +10,42 @@ class AlbumArt extends StatelessWidget {
   }) : super(key: key); 
 
   final Uint8List? imageData; 
-  final double? size = 280; 
+  final double? size = 300; 
   final double? musicNoteSize = 100; 
   final double borderRadius = 10; 
 
-  @override
-  Widget build(BuildContext context) {
+  Widget getImage(Uint8List? imageData) {
     if (imageData != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: Image.memory(
-          imageData! 
-        ),
-      ); 
+      return Image.memory(imageData); 
     } else {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: Container(
-          width: size,
-          height: size,
-          color: Colors.grey, 
-          alignment: Alignment.center,
-          child: SizedBox(
-            height: musicNoteSize, 
-            width: musicNoteSize,
-            child: const FittedBox(
-              fit: BoxFit.fill,
-              child: Icon(
-                Icons.music_note
-              ),
+      return Container(
+        height: size,
+        color: Colors.grey, 
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: musicNoteSize, 
+          width: musicNoteSize,
+          child: const FittedBox(
+            fit: BoxFit.fill,
+            child: Icon(
+              Icons.music_note
             ),
-          )
-        ),
+          ),
+        )
       ); 
     }
+  }
+
+  double getLength(double a, double b) {
+    return a * b; 
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: getImage(imageData),
+    ); 
   }
 }
 

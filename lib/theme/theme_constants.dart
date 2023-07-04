@@ -35,7 +35,7 @@ ThemeData defaultTheme = ThemeData(
   ), 
   appBarTheme: const AppBarTheme(
     backgroundColor: pallete1, 
-  )
+  ), 
 ); 
 
 ThemeData darkTheme = ThemeData(

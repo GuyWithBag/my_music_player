@@ -30,7 +30,13 @@ class Song extends HiveObject {
   }
 
   static String artistNamesToReadable(List<String>? trackArtistNames) {
-    return trackArtistNames?.join(", ") ?? "Unknown Artist"; 
+    String artistNames = trackArtistNames?.join(", ") ?? "Unknown Artist"; 
+    artistNames = trimTopic(artistNames); 
+    return artistNames; 
+  }
+
+  static String trimTopic(String input) {
+    return input.replaceAll(RegExp(r'\s?-\s?Topic'), '');
   }
 
 }

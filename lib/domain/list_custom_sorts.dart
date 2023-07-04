@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 import 'audio_player.dart';
 
 
@@ -27,6 +29,11 @@ bool isEnglish(String value) {
   return RegExp(r'^[a-zA-Z0-9\s,.!?]*$').hasMatch(value);
 }
 
+double getTextWidth({required TextSpan textSpan, TextDirection textDirection = TextDirection.ltr}) {
+  final tp = TextPainter(text: textSpan, textDirection: TextDirection.ltr);
+  tp.layout(); 
+  return tp.width; 
+}
 // int arrangeStringAlphabetically(Song a, Song b) {
 //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
 // }
