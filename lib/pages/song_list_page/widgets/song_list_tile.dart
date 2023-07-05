@@ -25,68 +25,44 @@ class SongListTile extends StatelessWidget {
   final double thumbnailSize = 60; 
   final double thumbnailBorderRadius = 5; 
 
-  Widget _songAlbumArt(Metadata metadata) {
-    Uint8List? albumArt = metadata.albumArt; 
-    if (albumArt != null) {
-      return Image.memory(
-        albumArt
-      ); 
+  Widget _songAlbumArt(Metadata? metadata) {
+    
+    if ( metadata != null) {
+      Uint8List? albumArt = metadata.albumArt; 
+      if (albumArt == null) {
+        return const Icon(Icons.music_note); 
+      }
+      return Image.memory(albumArt); 
     } else {
-      return const Icon(
-          Icons.music_note
-      ); 
+      return const Icon(Icons.music_note); 
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Song> songs = context.watch<AllSongsState>().allSongs; 
+    AllSongsState allSongsState = context.watch<AllSongsState>(); 
+    final List<Song> songs = allSongsState.allSongs; 
     final Song currentSong = songs[currentSongIndex]; 
     return FutureBuilder(
       future: currentSong.getMetadata(),
       builder: (context, snapshot) {
+        Metadata? data; 
         if (snapshot.hasData) {
-          Metadata data = snapshot.data!; 
-          return SongTile(
-            onTap: () {
-              Get.toNamed(
-              '/AudioPlayer', 
-              arguments: AudioPlayerArguments(
-                songs: songs, 
-                currentSongIndex: currentSongIndex
-                )
-              ); 
-            },
-            header: currentSong.name,
-            subHeader: data.trackArtistNames?.join(", ") ?? "Unknown Artist", 
-            thumbnail: _songAlbumArt(data), 
-            thumbnailSize: thumbnailSize,
-            thumbnailBorderRadius: thumbnailBorderRadius,
-            containerHeight: 75, 
-            index: currentSongIndex,
-          );
-        } else {
-          return SongTile(
-            onTap: () {
-              Get.toNamed(
-              '/AudioPlayer', 
-              arguments: AudioPlayerArguments(
-                songs: songs, 
-                currentSongIndex: currentSongIndex
-                )
-              ); 
-            },
-            header: "Null",
-            subHeader: "Unknown Artist", 
-            thumbnail: const Icon(
-              Icons.music_note
-            ), 
-            thumbnailSize: thumbnailSize,
-            thumbnailBorderRadius: thumbnailBorderRadius,
-            containerHeight: 75,  
-            index: currentSongIndex,
-          );
+          data = snapshot.data!; 
         }
+        return SongTile(
+          onTap: () {
+            allSongsState.startAudioPlayer(songs, currentSongIndex); 
+            Get.toNamed( '/AudioPlayer'); 
+          },
+          header: snapshot.hasData ? currentSong.name : "Null",
+          subHeader: data != null ? data.trackArtistNames?.join(", ") ?? "Unknown Artist" : "Unknown Artist", 
+          thumbnail: _songAlbumArt(data), 
+          index: currentSongIndex,
+          thumbnailSize: thumbnailSize,
+          thumbnailBorderRadius: thumbnailBorderRadius,
+          containerHeight: 75,  
+        );
       }
     );
   }

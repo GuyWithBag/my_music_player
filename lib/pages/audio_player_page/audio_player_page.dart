@@ -5,8 +5,8 @@ import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:my_music_player/theme/theme.dart';
-import 'package:my_music_player/widgets/inkwell_icon.dart';
 import 'package:my_music_player/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 import '../../domain/domain.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rxdart; 
@@ -14,49 +14,21 @@ import 'package:path/path.dart';
 
 import 'widgets/widgets.dart'; 
 
-class AudioPlayerPage extends StatefulWidget {
-  const AudioPlayerPage({Key? key}) : super(key: key);
-
-  @override
-  State<AudioPlayerPage> createState() => _ControlsPageState();
-}
-
-class _ControlsPageState extends State<AudioPlayerPage> {
-  AudioPlayer audioPlayer = AudioPlayer(); 
-  AudioPlayerArguments getArguments = Get.arguments; 
-  late List<Song> songs = getArguments.songs; 
-  late int currentSongIndex = getArguments.currentSongIndex;  
+class AudioPlayerPage extends StatelessWidget {
+  const AudioPlayerPage({
+    Key? key
+  }) : super(key: key);
+  
   final double _mainGUIPadding = 30; 
-  @override
-  void initState() {
-    super.initState(); 
-    _init(); 
-  }
-
-  Future<void> _init() async {
-    await audioPlayer.setLoopMode(LoopMode.all); 
-    await audioPlayer.setAudioSource(
-      ConcatenatingAudioSource(
-        children: [
-          for (Song song in songs)
-            AudioSource.file(
-              song.url, 
-              tag: song
-            ),
-        ],
-      ), 
-      initialIndex: currentSongIndex, 
-    );
-  }
 
   @override
-  void dispose() {
-    audioPlayer.dispose(); 
-    super.dispose(); 
-  }
+  Widget build(BuildContext context) {
+    AllSongsState allSongsState = context.watch<AllSongsState>(); 
+    print("ASD"); 
+    AudioPlayer audioPlayer = allSongsState.audioPlayer!; 
+    final List<Song> songs = allSongsState.allSongs; 
 
-  Stream<SeekBarData> get _seekBarDataStream => 
-    rxdart.Rx.combineLatest3<Duration, Duration, Duration?, SeekBarData>(
+    Stream<SeekBarData> seekBarDataStream = rxdart.Rx.combineLatest3<Duration, Duration, Duration?, SeekBarData>(
       audioPlayer.positionStream, 
       audioPlayer.bufferedPositionStream, 
       audioPlayer.durationStream, 
@@ -68,8 +40,6 @@ class _ControlsPageState extends State<AudioPlayerPage> {
       }, 
     );
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: _AudioPlayerAppBar(
         preferredSize: const Size.fromHeight(80),
@@ -89,7 +59,7 @@ class _ControlsPageState extends State<AudioPlayerPage> {
           ),
           child: _MainGUI(
             audioPlayer: audioPlayer, 
-            seekBarDataStream: _seekBarDataStream, 
+            seekBarDataStream: seekBarDataStream, 
             songs: songs
           ),
         ),
@@ -179,13 +149,13 @@ class _SongsQueueButton extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.bold), 
                   ), 
                   Text(
-                    "${state!.currentIndex} / ${songs.length}"
+                    "${(state!.currentIndex) + 1} / ${songs.length}"
                   ), 
                 ]
-              );
+              ); 
             }
             return Text(
-              "${audioPlayer.currentIndex} / ${songs.length}"
+              "${(audioPlayer.currentIndex ?? -1) + 1} / ${songs.length}"
             ); 
           }
         ),

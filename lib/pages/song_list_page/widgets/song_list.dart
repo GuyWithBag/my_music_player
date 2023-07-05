@@ -15,7 +15,7 @@ class SongList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AllSongsState>(); 
+    AllSongsState appState = context.watch<AllSongsState>(); 
     void updateSongList(int oldIndex, int newIndex) {
       if (oldIndex < newIndex) {
         newIndex--;

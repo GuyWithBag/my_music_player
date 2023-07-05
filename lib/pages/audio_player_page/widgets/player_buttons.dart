@@ -102,8 +102,7 @@ class PlayerButton extends StatelessWidget {
             return InkwellIcon(
               width: playerButtonIconSize,
               height: playerButtonIconSize, 
-              icon: const CircularProgressIndicator(
-              ),
+              icon: const CircularProgressIndicator(),
             );
           } else if (!audioPlayer.playing) {
             return InkwellIcon(

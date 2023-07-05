@@ -25,11 +25,11 @@ List<Song> getSongsFromDirectory(Directory directory) {
     String filePath = file.path; 
     String fileName = filePath.split("/").last; 
     if (!fileName.isAudioFileName) {
-      print("Database: $filePath is not an audio file."); 
+      // print("Database: $filePath is not an audio file."); 
       continue; 
     }
     songs.add(Song(filePath)); 
-    print("Database: $filePath found as an audio file. "); 
+    // print("Database: $filePath found as an audio file. "); 
   }
   return songs; 
 }
