@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:collection/collection.dart';
-import 'domain.dart'; 
+import '../domain/domain.dart'; 
 
-// Implevent Hive here
+// All the songs that the app has found are stored here. 
+// All the songs that will be played will be in SongQueuState
+// AudioPlayerState is where the songs should be played. 
 class AllSongsState extends SongsState{
 
   static final List<Song> placeholderSongs = [
@@ -28,6 +29,7 @@ class AllSongsState extends SongsState{
     }
   }
 }
+
 
 
 

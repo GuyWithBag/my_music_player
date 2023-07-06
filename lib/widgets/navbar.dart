@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart'; 
 import '../domain/domain.dart'; 
 import '../pages/pages.dart'; 
+import '../providers/providers.dart'; 
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});

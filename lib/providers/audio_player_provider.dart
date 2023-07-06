@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
 
-import 'domain.dart';
+import '../domain/domain.dart';
 
 class AudioPlayerState extends ChangeNotifier {
 

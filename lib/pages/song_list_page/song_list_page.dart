@@ -6,6 +6,7 @@ import 'dart:io';
 // import 'widgets/widgets.dart';
 import 'package:collection/collection.dart'; 
 import 'pages/pages.dart'; 
+import '../../providers/providers.dart'; 
 // import '../../theme/theme.dart'; 
 
 class PageItem {

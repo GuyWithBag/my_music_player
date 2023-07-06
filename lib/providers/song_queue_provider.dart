@@ -1,4 +1,4 @@
-import 'domain.dart';
+import '../domain/domain.dart';
 
 class SongQueueState extends SongsState {
 

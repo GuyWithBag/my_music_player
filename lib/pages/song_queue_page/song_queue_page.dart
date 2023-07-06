@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../domain/domain.dart'; 
 import '../song_list_page/widgets/widgets.dart'; 
+import '../../providers/providers.dart'; 
 
 class SongQueuePage extends StatelessWidget {
   const SongQueuePage({super.key});

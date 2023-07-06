@@ -8,7 +8,7 @@ import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/audio_player.dart';
-import 'package:path/path.dart'; 
+import '../../../providers/providers.dart'; 
 
 // The purpose of this is to use the SongTile widget as just a gui and so that this can use FutureBuilder while allowing you to reuse SongTile for other widgets. 
 
