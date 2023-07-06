@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:my_music_player/domain/domain.dart';
 import 'package:my_music_player/widgets/widgets.dart';
-import '../../../domain/audio_player.dart'; 
+import 'package:provider/provider.dart';
 import '../../../theme/theme.dart';
 import '../widgets/widgets.dart'; 
 
 class AllSongsPage extends StatelessWidget {
   const AllSongsPage({
     Key? key, 
-    required this.songs, 
   }) : super(key: key);
-
-  final List<Song> songs;
 
   @override
   Widget build(BuildContext context) {
+    final AllSongsState allSongsState = context.watch<AllSongsState>(); 
+    List<Song> songs = allSongsState.allSongs; 
     return Container(
       decoration: backgroundDecoration,
       child: Column(
@@ -41,7 +41,15 @@ class AllSongsPage extends StatelessWidget {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(top: 10), 
-              child: SongList(songs: songs)
+              child: AllSongsList(
+                songs: songs, 
+                onReorder: (int oldIndex, int newIndex) => onReOrderUpdateList(
+                  oldIndex, 
+                  newIndex, 
+                  allSongsState.removeSongAt, 
+                  allSongsState.insertSongAt
+                ),
+              )
             ),
           )
         ],

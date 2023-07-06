@@ -57,7 +57,7 @@ class _SongListPageState extends State<SongListPage> {
       ),
       PageItem(
         "All Songs",
-        AllSongsPage(songs: appState.allSongs,), 
+        AllSongsPage(), 
       ),
       PageItem(
         "Albums",

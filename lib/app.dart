@@ -7,7 +7,7 @@ import 'theme/theme.dart';
 import 'package:provider/provider.dart'; 
 import 'domain/domain.dart'; 
 
-ThemeManager _themeManager = ThemeManager(); 
+// ThemeManager _themeManager = ThemeManager(); 
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -17,8 +17,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AllSongsState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AllSongsState>(create: (_) => AllSongsState()),
+        ChangeNotifierProvider<AudioPlayerState>(create: (_) => AudioPlayerState()),
+        ChangeNotifierProvider<SongQueueState>(create: (_) => SongQueueState()),
+      ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

@@ -12,8 +12,8 @@ import 'package:path/path.dart';
 
 // The purpose of this is to use the SongTile widget as just a gui and so that this can use FutureBuilder while allowing you to reuse SongTile for other widgets. 
 
-class SongListTile extends StatelessWidget {
-  const SongListTile({
+class AllSongsTile extends StatelessWidget {
+  const AllSongsTile({
     Key? key, 
     required this.songs, 
     required this.currentSongIndex, 
@@ -40,9 +40,10 @@ class SongListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AllSongsState allSongsState = context.watch<AllSongsState>(); 
-    final List<Song> songs = allSongsState.allSongs; 
+    AudioPlayerState audioPlayerState = context.watch<AudioPlayerState>(); 
+    SongQueueState songQueueState = context.watch<SongQueueState>(); 
     final Song currentSong = songs[currentSongIndex]; 
+    
     return FutureBuilder(
       future: currentSong.getMetadata(),
       builder: (context, snapshot) {
@@ -52,7 +53,8 @@ class SongListTile extends StatelessWidget {
         }
         return SongTile(
           onTap: () {
-            allSongsState.startAudioPlayer(songs, currentSongIndex); 
+            songQueueState.setSongs(songs); 
+            audioPlayerState.startAudioPlayer(songQueueState.allSongs, currentSongIndex); 
             Get.toNamed( '/AudioPlayer'); 
           },
           header: snapshot.hasData ? currentSong.name : "Null",

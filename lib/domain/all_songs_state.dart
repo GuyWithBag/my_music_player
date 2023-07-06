@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:collection/collection.dart';
-import 'package:just_audio/just_audio.dart'; 
-
 import 'domain.dart'; 
 
 // Implevent Hive here
-class AllSongsState extends ChangeNotifier {
-  List<Song> allSongs = []; 
-  AudioPlayer? audioPlayer; 
+class AllSongsState extends SongsState{
 
   static final List<Song> placeholderSongs = [
     for (int i = 0; i < 5; i++ ) Song("assets/audio/thewayifeel.mp3"),
@@ -17,23 +13,6 @@ class AllSongsState extends ChangeNotifier {
   static final List<SongPlaylist> placeholderPlaylists = [
     for (int i = 0; i < 5; i++ ) SongPlaylist(songs: placeholderSongs), 
   ]; 
-
-  void startAudioPlayer(List<Song> songs, int initialIndex) async {
-    audioPlayer ??= AudioPlayer(); 
-    await audioPlayer!.setAudioSource(
-      ConcatenatingAudioSource(
-        children: [
-          for (Song song in songs)
-            AudioSource.file(
-              song.url, 
-              tag: song
-            ),
-        ],
-      ), 
-      initialIndex: initialIndex, 
-    );
-    notifyListeners(); 
-  }
 
   void pickFolderAndAddSongs() async {
     Directory? dir = await pickFolderDirectory(); 
@@ -44,40 +23,15 @@ class AllSongsState extends ChangeNotifier {
     // TEST
     sortSongsAlphabetically(newSongs); 
     if (const DeepCollectionEquality.unordered().equals(allSongs, newSongs) == false) {
-      clearSongs(); 
-      addSongs(newSongs); 
+      setSongs(newSongs); 
       return; 
     }
   }
-
-  void addSongs(List<Song> songs) {
-    allSongs.addAll(songs); 
-    notifyListeners(); 
-  }
-
-  void setSongs(List<Song> songs) {
-    allSongs = songs; 
-    notifyListeners(); 
-  }
-
-  void addSong(Song song) {
-    allSongs.add(song); 
-    notifyListeners(); 
-  }
-
-  void clearSongs() {
-    allSongs.clear(); 
-    notifyListeners(); 
-  }
-
-  Song removeSongAt(int index) {
-    Song song = allSongs.removeAt(index); 
-    notifyListeners(); 
-    return song; 
-  }
-
-  void insertSongAt(int index, Song song) {
-    allSongs.insert(index, song); 
-    notifyListeners(); 
-  }
 }
+
+
+
+
+
+
+

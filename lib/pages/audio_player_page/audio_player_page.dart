@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
+import 'package:my_music_player/pages/song_queue_page/song_queue_page.dart';
 import 'package:my_music_player/theme/theme.dart';
 import 'package:my_music_player/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +21,14 @@ class AudioPlayerPage extends StatelessWidget {
   }) : super(key: key);
   
   final double _mainGUIPadding = 30; 
+  final double _appBarSize = 70; 
+  final double _sheetSafeAreaOffset = 10; 
 
   @override
   Widget build(BuildContext context) {
     AllSongsState allSongsState = context.watch<AllSongsState>(); 
-    print("ASD"); 
-    AudioPlayer audioPlayer = allSongsState.audioPlayer!; 
+    AudioPlayerState audioPlayerState = context.watch<AudioPlayerState>();
+    AudioPlayer audioPlayer = audioPlayerState.audioPlayer!; 
     final List<Song> songs = allSongsState.allSongs; 
 
     Stream<SeekBarData> seekBarDataStream = rxdart.Rx.combineLatest3<Duration, Duration, Duration?, SeekBarData>(
@@ -41,69 +44,130 @@ class AudioPlayerPage extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: _AudioPlayerAppBar(
-        preferredSize: const Size.fromHeight(80),
-        child: _SongsQueueButton(
-          audioPlayer: audioPlayer, 
-          songs: songs, 
-          height: 70,
-        ),
-      ),
       body: Container(
         decoration: backgroundDecoration,
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: _mainGUIPadding, 
-            right: _mainGUIPadding, 
-            bottom: _mainGUIPadding,
-          ),
-          child: _MainGUI(
-            audioPlayer: audioPlayer, 
-            seekBarDataStream: seekBarDataStream, 
-            songs: songs
-          ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: _mainGUIPadding, 
+                right: _mainGUIPadding, 
+                bottom: _mainGUIPadding,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SafeArea(
+                    child: SizedBox(
+                      height: _appBarSize + _sheetSafeAreaOffset,
+                    ),
+                  ),
+                  _MainGUI(
+                    audioPlayer: audioPlayer, 
+                    seekBarDataStream: seekBarDataStream, 
+                    songs: songs
+                  ),
+                ],
+              ),
+            ), 
+            _AudioPlayerAppBar(
+              height: _appBarSize,
+              sheetSafeAreaOffset: _sheetSafeAreaOffset,
+              audioPlayer: audioPlayer,
+              sheetContent: SongQueuePage(
+
+              ),
+              child: _SongsQueueButton(
+                audioPlayer: audioPlayer, 
+                height: _appBarSize,
+              ),
+            ),
+          ],
         ),
       )
     );
   }
 }
 
-class _AudioPlayerAppBar extends PreferredSize {
+class _AudioPlayerAppBar extends StatelessWidget {
   const _AudioPlayerAppBar({
-    Key? key,
-    required super.child, 
-    required super.preferredSize,
+    Key? key, 
+    required this.audioPlayer, 
+    required this.height, 
+    required this.sheetSafeAreaOffset, 
+    required this.sheetContent, 
+    required this.child,
   }) : super(key: key);
 
+  final double height; 
+  final AudioPlayer audioPlayer; 
+  final double minChildSize = 0.11; 
+  final double sheetSafeAreaOffset; 
+  final Widget sheetContent; 
+  final Widget child; 
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 25, 
-            left: 8, 
-            right: 8, 
+    return RotatedBox(
+      quarterTurns: 2,
+      child: Column(
+        children: [
+          Expanded(
+            child: DraggableScrollableSheet(
+              snap: true,
+              initialChildSize: minChildSize,
+              minChildSize: minChildSize,
+              maxChildSize: 1,
+              builder: (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  color: Theme.of(context).primaryColor,
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: RotatedBox(
+                      quarterTurns: 2,
+                      child: Column(
+                        children: [
+                          sheetContent, 
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 25, 
+                              left: 8, 
+                              right: 8, 
+                            ),
+                            child: Row(
+                              children: [
+                                const BackButton(), 
+                                Expanded(
+                                  child: child, 
+                                ), 
+                                SizedBox(
+                                  width: 40,
+                                  child: InkwellIcon(
+                                    onTap: () {
+                                
+                                    },
+                                    icon: const Icon(Icons.more_vert), 
+                                  ),
+                                ), 
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ), 
+                );
+              },
+            ),
           ),
-          child: Row(
-            children: [
-              const BackButton(), 
-              Expanded(child: child), 
-              SizedBox(
-                width: 40,
-                child: InkwellIcon(
-                  onTap: () {
-              
-                  },
-                  icon: const Icon(Icons.more_vert), 
-                ),
-              ), 
-            ],
+          SafeArea(
+            child: Container(
+              color: Theme.of(context).primaryColor,
+              height: sheetSafeAreaOffset,
+            ),
           ),
-        ),
-      ), 
+        ],
+      ),
     );
   }
 }
@@ -112,16 +176,17 @@ class _SongsQueueButton extends StatelessWidget {
   const _SongsQueueButton({
     Key? key, 
     required this.audioPlayer, 
-    required this.songs,
     required this.height, 
   }) : super(key: key);
 
   final AudioPlayer audioPlayer; 
-  final List<Song> songs; 
   final double? height; 
 
   @override
   Widget build(BuildContext context) {
+    final ConcatenatingAudioSource audioSource = (audioPlayer.audioSource as ConcatenatingAudioSource); 
+    final List<AudioSource> songs = audioSource.children; 
+
     return InkWell(
       onTap: () {},
       child: Container(
