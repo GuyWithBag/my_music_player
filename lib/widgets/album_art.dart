@@ -6,20 +6,22 @@ import 'package:flutter/material.dart';
 class AlbumArt extends StatelessWidget {
   const AlbumArt({
     Key? key, 
+    this.height, 
     required this.imageData, 
   }) : super(key: key); 
-
+  
   final Uint8List? imageData; 
-  final double? size = 300; 
+  final double? height; 
   final double? musicNoteSize = 100; 
   final double borderRadius = 10; 
 
   Widget getImage(Uint8List? imageData) {
     if (imageData != null) {
       return Image.memory(imageData); 
+      
     } else {
       return Container(
-        height: size,
+        height: height,
         color: Colors.grey, 
         alignment: Alignment.center,
         child: SizedBox(

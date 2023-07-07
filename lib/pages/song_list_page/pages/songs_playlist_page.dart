@@ -1,109 +1,47 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../providers/providers.dart'; 
-
 import '../../../domain/domain.dart'; 
 import '../../../widgets/widgets.dart';
 import '../widgets/widgets.dart'; 
 import '../../../theme/theme.dart'; 
 
-class SongsPlaylistPage extends StatefulWidget {
+class SongsPlaylistPage extends StatelessWidget {
   const SongsPlaylistPage({
     Key? key, 
-    required this.songs, 
   }) : super(key: key);
-
-  // Not yet implemented. 
-  final List<Song> songs; 
-
-  @override
-  State<SongsPlaylistPage> createState() => _SongsPlaylistPageState();
-}
-
-class _SongsPlaylistPageState extends State<SongsPlaylistPage> {
-  final TextEditingController textEditingController = TextEditingController(); 
-  final List<SongPlaylist> songPlaylists = []; 
-
-  void _promptCreatePlaylistDialogue(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      title: const Text("New Playlist"), 
-      titlePadding: const EdgeInsets.only(
-        top: 30, 
-        left: 20, 
-        right: 20, 
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20), 
-      actionsPadding: const EdgeInsets.only(bottom: 30),
-      backgroundColor: Theme.of(context).primaryColor, 
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6)
-      ),
-      content: CreatePlaylistDialogContent(
-        textEditingController: textEditingController
-      ), 
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context); 
-          }, 
-          child: const Text("Cancel")
-        ), 
-        ElevatedButton(
-          onPressed: () {
-            _createPlaylist(textEditingController.text, AllSongsState.placeholderSongs); 
-            Navigator.pop(context); 
-          }, 
-          child: const Text("Create")
-        ), 
-      ],
-    ); 
-    showDialog(
-      context: context, 
-      builder: (BuildContext context) {
-        return alert; 
-      }, 
-    ); 
-  }
-
-  void _createPlaylist(String name, List<Song> songs) {
-    if (name == "") {
-      return; 
-    }
-    setState(() {
-      SongPlaylist newSongPlaylist = SongPlaylist(
-        name: name, 
-        songs: songs, 
-      ); 
-      songPlaylists.add(newSongPlaylist); 
-    });
-  }
-
-  @override
-  void dispose() {
-    textEditingController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final SongPlaylistProvider songPlaylistProvider = context.watch<SongPlaylistProvider>();
+    final List<SongPlaylist> playlists = songPlaylistProvider.playlists; 
     return Container(
       decoration: backgroundDecoration, 
       child: Column(
         children: [
           SubHeader(
-            header: Text("Playlists (${songPlaylists.length})"), 
+            header: Text("Playlists (${playlists.length})"), 
             actions: <SubHeaderAction>[
               SubHeaderAction(
                 onTap: () {
-                  _promptCreatePlaylistDialogue(context); 
+                  songPlaylistProvider.promptCreatePlaylistDialogue(context); 
                 },
                 icon: const Icon(Icons.add)
               )
             ],
           ), 
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: SongPlaylistList(
-              songPlaylists: songPlaylists, 
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SongPlaylistList(
+                onReorder: (int oldIndex, int newIndex) => onReOrderUpdateList(
+                  oldIndex, 
+                  newIndex, 
+                  songPlaylistProvider.removePlaylistAt, 
+                  songPlaylistProvider.insertPlaylistAt
+                ),
+                songPlaylists: playlists, 
+              ),
             ),
           ),
         ],
@@ -112,61 +50,7 @@ class _SongsPlaylistPageState extends State<SongsPlaylistPage> {
   }
 }
 
-class CreatePlaylistDialogContent extends StatelessWidget {
-  const CreatePlaylistDialogContent({
-    super.key,
-    required this.textEditingController,
-  });
 
-  final TextEditingController textEditingController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      color: Theme.of(context).primaryColor, 
-      height: 100,
-      child: Center(
-        child: Row(
-          children: [
-            _PlaylistArtDisplay(), 
-            const SizedBox(width: 20,), 
-            Expanded(
-              child: TextFormField(
-                controller: textEditingController,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), 
-                  labelText: "Playlist Name: "
-                ),
-              ),
-            )
-          ],
-        )
-      ),
-    );
-  }
-}
-
-class _PlaylistArtDisplay extends StatelessWidget {
-  const _PlaylistArtDisplay({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40, 
-      width: 40,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(5),
-        child: Container(
-          color: Colors.grey,
-          child: const Icon(Icons.music_note)
-        ),
-      ),
-    );
-  }
-}
 
 
 

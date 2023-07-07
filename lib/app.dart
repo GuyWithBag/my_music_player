@@ -5,7 +5,7 @@ import 'package:my_music_player/widgets/navbar.dart';
 import 'pages/pages.dart'; 
 import 'theme/theme.dart'; 
 import 'package:provider/provider.dart'; 
-import 'domain/domain.dart'; 
+import 'providers/providers.dart'; 
 
 // ThemeManager _themeManager = ThemeManager(); 
 
@@ -19,9 +19,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AllSongsState>(create: (_) => AllSongsState()),
-        ChangeNotifierProvider<AudioPlayerState>(create: (_) => AudioPlayerState()),
-        ChangeNotifierProvider<SongQueueState>(create: (_) => SongQueueState()),
+        ChangeNotifierProvider<AllSongsProvider>(create: (_) => AllSongsProvider()),
+        ChangeNotifierProvider<AudioPlayerProvider>(create: (_) => AudioPlayerProvider()),
+        ChangeNotifierProvider<SongQueueProvider>(create: (_) => SongQueueProvider()),
+        ChangeNotifierProvider<SongPlaylistProvider>(create: (_) => SongPlaylistProvider()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/AudioPlayer', page: () => const AudioPlayerPage()), 
           GetPage(name: "/Settings", page: () => const SettingsPage()), 
           GetPage(name: "/More", page: () => const SettingsPage()), 
+          GetPage(name: "/SongsListPage/SongPlaylistPage", page: () => const SongPlaylistPage()), 
         ],
       ),
     );

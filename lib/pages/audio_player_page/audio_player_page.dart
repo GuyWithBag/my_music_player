@@ -27,8 +27,8 @@ class AudioPlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AllSongsState allSongsState = context.watch<AllSongsState>(); 
-    AudioPlayerState audioPlayerState = context.watch<AudioPlayerState>();
+    AllSongsProvider allSongsState = context.watch<AllSongsProvider>(); 
+    AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>();
     AudioPlayer audioPlayer = audioPlayerState.audioPlayer!; 
     final List<Song> songs = allSongsState.allSongs; 
 
@@ -258,9 +258,15 @@ class _MainGUI extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<Metadata> snapshot) {
                   Metadata? metadata = snapshot.data; 
                   if (snapshot.hasData) {
-                    return AlbumArt(imageData: metadata!.albumArt); 
+                    return AlbumArt(
+                      imageData: metadata!.albumArt, 
+                      height: 300,
+                    ); 
                   } else {
-                    return const AlbumArt(imageData: null); 
+                    return const AlbumArt(
+                      imageData: null, 
+                      height: 300,
+                    ); 
                   }
                 },
               ); 
@@ -305,7 +311,7 @@ class _Controls extends StatelessWidget {
           seekBarDataStream: _seekBarDataStream, 
           audioPlayer: audioPlayer
         ), 
-        PlayerButtons(audioPlayer: audioPlayer)
+        PlayerControls(audioPlayer: audioPlayer)
       ],
     );
   }
@@ -318,35 +324,6 @@ class TitleAndButtons extends StatelessWidget {
   });
 
   final AudioPlayer audioPlayer; 
-
-  Widget getAudioPlayerHeader({required String text, required double maxWidth, required BuildContext context, TextDirection textDirection = TextDirection.ltr}) {
-    TextStyle style = Theme.of(context)
-      .textTheme
-      .titleLarge!.copyWith(
-        fontWeight: FontWeight.bold, 
-    ); 
-    TextSpan textSpan = TextSpan(text: text, style: style); 
-    double textWidth = getTextWidth(textSpan: textSpan); 
-    if (textWidth >= maxWidth) {
-      return SizedBox(
-        height: 30,
-        child: Marquee(
-          text: text, 
-          blankSpace: 40, 
-          startAfter: const Duration(seconds: 1), 
-          fadingEdgeStartFraction: 0.1,
-          fadingEdgeEndFraction: 0.1,
-          style: style, 
-        ),
-      ); 
-    }
-    return Text(
-      text, 
-      maxLines: 1, 
-      style: style, 
-      textAlign: TextAlign.center,
-    ); 
-  }
 
   double getTextWidth({required TextSpan textSpan, TextDirection textDirection = TextDirection.ltr}) {
     final tp = TextPainter(text: textSpan, textDirection: TextDirection.ltr);
@@ -361,84 +338,75 @@ class TitleAndButtons extends StatelessWidget {
       .titleLarge!.copyWith(
         fontWeight: FontWeight.bold, 
     ); 
-    return StreamBuilder<SequenceState?>(
-      stream: audioPlayer.sequenceStateStream,
-      builder: (BuildContext context, AsyncSnapshot<SequenceState?> snapshot) {
-        if (snapshot.hasData) {
-          final SequenceState? state = snapshot.data; 
-          Song song = state!.currentSource!.tag; 
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center, 
-            children: [
-              SizedBox(
-                height: 20,
-                child: InkWell(
-                  onTap: () {
+    return AudioPlayerSongBuilder(
+      audioPlayer: audioPlayer,
+      builder: (BuildContext context, song, metadata) {
+        if (song == null) {
 
-                  }, 
-                  child: const Icon(CupertinoIcons.heart)
-                ),
-              ), 
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    children: [
-                      AutomaticMarqueeText(
-                        marquee: Marquee(
-                          text: song.name, 
-                          style: songNameStyle, 
-                          blankSpace: 40, 
-                          startAfter: const Duration(seconds: 1), 
-                          fadingEdgeStartFraction: 0.1,
-                          fadingEdgeEndFraction: 0.1,
-                        ),
-                        context: context, 
-                        text: song.name, 
-                        maxWidth: MediaQuery.of(context).size.width, 
-                        style: songNameStyle, 
-                        maxLines: 1,
-                        textAlign: TextAlign.center, 
-                      ), 
-                      const SizedBox(height: 5), 
-                      FutureBuilder(
-                        future: song.getMetadata(), 
-                        builder: (BuildContext context, AsyncSnapshot<Metadata> snapshot) {
-                          Metadata? metadata = snapshot.data; 
-                          if (snapshot.hasData) {
-                            return Text(
-                              Song.artistNamesToReadable(metadata!.trackArtistNames), 
-                              maxLines: 1, 
-                              overflow: TextOverflow.clip, 
-                              style: Theme.of(context)
-                                .textTheme
-                                .labelSmall,
-                            );
-                          } else {
-                            return const Text(
-                              "Unknown Artist"
-                            );
-                          }
-                        }
-                      )
-                    ],
-                  ),
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: [
+            SizedBox(
+              height: 20,
+              child: InkWell(
+                onTap: () {
+
+                }, 
+                child: const Icon(CupertinoIcons.heart)
+              ),
+            ), 
+            Expanded(
+              child: SizedBox(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          AutomaticMarqueeText(
+                            marquee: Marquee(
+                              text: Song.getNullSafeName(song), 
+                              style: songNameStyle, 
+                              blankSpace: 40, 
+                              startAfter: const Duration(seconds: 1), 
+                              fadingEdgeStartFraction: 0.1,
+                              fadingEdgeEndFraction: 0.1,
+                            ),
+                            context: context, 
+                            text: Song.getNullSafeName(song), 
+                            maxWidth: constraints.maxWidth, 
+                            style: songNameStyle, 
+                            maxLines: 1,
+                            textAlign: TextAlign.center, 
+                          ),
+                          const SizedBox(height: 5), 
+                          Text(
+                            Song.nullSafeArtistNamesToReadable(metadata), 
+                            maxLines: 1, 
+                            overflow: TextOverflow.clip, 
+                            style: Theme.of(context)
+                              .textTheme
+                              .labelSmall,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 ),
               ),
-              SizedBox(
-                height: 20,
-                child: InkWell(
-                  onTap: () {
+            ),
+            SizedBox(
+              height: 20,
+              child: InkWell(
+                onTap: () {
 
-                  }, 
-                  child: const Icon(Icons.share)
-                ),
-              ), 
-            ],
-          );
-        } else {
-          return const Placeholder(); 
-        }
+                }, 
+                child: const Icon(Icons.share)
+              ),
+            ), 
+          ],
+        );
       }
     );
   }

@@ -28,7 +28,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final AllSongsState appState = context.watch<AllSongsState>(); 
+    final AllSongsProvider appState = context.watch<AllSongsProvider>(); 
     return GetBuilder<NavBarController>(
       builder: (NavBarController navBarController) {
         return Scaffold(

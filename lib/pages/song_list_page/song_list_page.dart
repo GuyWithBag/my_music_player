@@ -1,5 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:my_music_player/pages/song_list_page/widgets/floating_audio_player_button.dart';
+import 'package:my_music_player/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import '../../domain/domain.dart'; 
 import 'dart:io'; 
@@ -24,8 +28,8 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
-  late List<Song> placeholderSongs = AllSongsState.placeholderSongs; 
-  late List<SongPlaylist> placeholderPlaylists = AllSongsState.placeholderPlaylists; 
+  late List<Song> placeholderSongs = AllSongsProvider.placeholderSongs; 
+  late List<SongPlaylist> placeholderPlaylists = AllSongsProvider.placeholderPlaylists; 
   
   // String? _songsPath; 
 
@@ -45,12 +49,14 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AllSongsState>(); 
+    final AllSongsProvider allSongState = context.watch<AllSongsProvider>(); 
+    final AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>(); 
+    final AudioPlayer? audioPlayer = audioPlayerState.audioPlayer; 
 
     late final Set<PageItem> pages = <PageItem>{
       PageItem(
         "Playlist",
-        SongsPlaylistPage(songs: appState.allSongs,), 
+        const SongsPlaylistPage(), 
       ),
       PageItem(
         "Folders",
@@ -58,7 +64,7 @@ class _SongListPageState extends State<SongListPage> {
       ),
       PageItem(
         "All Songs",
-        AllSongsPage(), 
+        const AllSongsPage(), 
       ),
       PageItem(
         "Albums",
@@ -67,36 +73,49 @@ class _SongListPageState extends State<SongListPage> {
     }; 
 
     return SizedBox(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Stack(
         children: [
-          _SongCategoryTabs(
-            pages: pages, 
-            pageController: _pageController, 
-            activePage: _activePage
-          ), 
-          Expanded(
-            child: PageView(
-              scrollBehavior: AppScrollBehavior(),
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _activePage = page; 
-                });
-              },
-              children: [
-                for (PageItem pageItem in pages) 
-                  pageItem.page, 
-              ],
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _SongCategoryTabs(
+                pages: pages, 
+                pageController: _pageController, 
+                activePage: _activePage
+              ), 
+              Expanded(
+                child: PageView(
+                  scrollBehavior: AppScrollBehavior(),
+                  controller: _pageController,
+                  onPageChanged: (int page) {
+                    setState(() {
+                      _activePage = page; 
+                    });
+                  },
+                  children: [
+                    for (PageItem pageItem in pages) 
+                      pageItem.page, 
+                  ],
+                ),
+              ),
+            ]
           ),
-        ]
+          Align(
+            alignment: const Alignment(0, 0.98),
+            child: FloatingAudioPlayerButton(
+              onTap: () {
+                Get.toNamed( '/AudioPlayer'); 
+              },
+              active: audioPlayer != null ? true : false, 
+              audioPlayer: audioPlayer, 
+            ), 
+          ), 
+        ],
       ),
     );
   }
 }
-
 
 class _SongCategoryTabs extends StatelessWidget {
   const _SongCategoryTabs({

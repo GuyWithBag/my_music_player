@@ -9,7 +9,7 @@ class SongQueuePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AllSongsState allSongsState = context.watch<AllSongsState>(); 
+    final AllSongsProvider allSongsState = context.watch<AllSongsProvider>(); 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,

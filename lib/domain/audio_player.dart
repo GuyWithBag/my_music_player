@@ -35,8 +35,16 @@ class Song extends HiveObject {
     return artistNames; 
   }
 
+  static String nullSafeArtistNamesToReadable(Metadata? metadata) {
+    return metadata != null ? artistNamesToReadable(metadata!.trackArtistNames) : "Unknown Artist"; 
+  }
+
   static String trimTopic(String input) {
     return input.replaceAll(RegExp(r'\s?-\s?Topic'), '');
+  }
+
+  static String getNullSafeName(Song? song) {
+    return song != null ? song.name : "Null"; 
   }
 
 }
@@ -45,7 +53,7 @@ class Song extends HiveObject {
 class SongPlaylist extends HiveObject  {
 
   @HiveField(0)
-  List<Song>? songs; 
+  List<Song> songs; 
 
   @HiveField(1)
   late String? name; 
@@ -54,11 +62,10 @@ class SongPlaylist extends HiveObject  {
   late String? thumbnail; 
 
   SongPlaylist({
-    this.songs, 
+    required this.songs, 
     this.name, 
     this.thumbnail, 
   }); 
-
 }
 
 @HiveType(typeId: 2)
@@ -79,17 +86,6 @@ class SongAlbum extends HiveObject {
     required this.songs, 
     required this.name, 
   }); 
-
-}
-
-class AudioPlayerArguments {
-  const AudioPlayerArguments({
-    required this.songs, 
-    required this.currentSongIndex, 
-  }); 
-
-  final List<Song> songs; 
-  final int currentSongIndex; 
 
 }
 

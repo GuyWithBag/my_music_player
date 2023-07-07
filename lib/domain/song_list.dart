@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'domain.dart';
 
 void onReOrderUpdateList(int oldIndex, int newIndex, Function(int) removeItemAt, Function insertItemAt) {
@@ -7,6 +10,18 @@ void onReOrderUpdateList(int oldIndex, int newIndex, Function(int) removeItemAt,
   }
   final song = removeItemAt(oldIndex); 
   insertItemAt(newIndex, song); 
+}
+
+Widget getSongAlbumArt(Metadata? metadata) {
+  if ( metadata != null) {
+    Uint8List? albumArt = metadata.albumArt; 
+    if (albumArt == null) {
+      return const Icon(Icons.music_note); 
+    }
+    return Image.memory(albumArt); 
+  } else {
+    return const Icon(Icons.music_note); 
+  }
 }
 
 abstract class SongsState extends ChangeNotifier {

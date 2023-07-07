@@ -25,9 +25,10 @@ class AutomaticMarqueeText extends StatelessWidget {
   Widget getMarquee({required String text, required double maxWidth, required BuildContext context, TextDirection textDirection = TextDirection.ltr}) {
     TextSpan textSpan = TextSpan(text: text, style: style); 
     double textWidth = getTextWidth(textSpan: textSpan); 
+    double textHeight = getTextHeight(textSpan: textSpan); 
     if (textWidth >= maxWidth) {
       return SizedBox(
-        height: 30,
+        height: textHeight,
         child: marquee
       ); 
     }

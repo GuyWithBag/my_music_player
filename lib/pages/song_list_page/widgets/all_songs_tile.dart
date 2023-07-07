@@ -1,14 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
-import 'package:get/get.dart';
 import 'package:my_music_player/domain/domain.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-
-import '../../../domain/audio_player.dart';
-import '../../../providers/providers.dart'; 
+import '../../../providers/providers.dart';
+import '../../../widgets/widgets.dart'; 
 
 // The purpose of this is to use the SongTile widget as just a gui and so that this can use FutureBuilder while allowing you to reuse SongTile for other widgets. 
 
@@ -16,51 +12,33 @@ class AllSongsTile extends StatelessWidget {
   const AllSongsTile({
     Key? key, 
     required this.songs, 
-    required this.currentSongIndex, 
+    required this.songIndex, 
   }) : super(key: key); 
 
   final List<Song> songs; 
-  final int currentSongIndex;  
+  final int songIndex;  
 
   final double thumbnailSize = 60; 
   final double thumbnailBorderRadius = 5; 
 
-  Widget _songAlbumArt(Metadata? metadata) {
-    
-    if ( metadata != null) {
-      Uint8List? albumArt = metadata.albumArt; 
-      if (albumArt == null) {
-        return const Icon(Icons.music_note); 
-      }
-      return Image.memory(albumArt); 
-    } else {
-      return const Icon(Icons.music_note); 
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    AudioPlayerState audioPlayerState = context.watch<AudioPlayerState>(); 
-    SongQueueState songQueueState = context.watch<SongQueueState>(); 
-    final Song currentSong = songs[currentSongIndex]; 
+    AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>(); 
+    final Song currentSong = songs[songIndex]; 
     
-    return FutureBuilder(
-      future: currentSong.getMetadata(),
-      builder: (context, snapshot) {
-        Metadata? data; 
-        if (snapshot.hasData) {
-          data = snapshot.data!; 
-        }
+    return SongBuilder(
+      song: currentSong,
+      builder: (BuildContext context, Metadata? metadata) {
         return SongTile(
           onTap: () {
-            songQueueState.setSongs(songs); 
-            audioPlayerState.startAudioPlayer(songQueueState.allSongs, currentSongIndex); 
-            Get.toNamed( '/AudioPlayer'); 
+            audioPlayerState.startAndGoToAudioPlayer(context, songs, songIndex); 
           },
-          header: snapshot.hasData ? currentSong.name : "Null",
-          subHeader: data != null ? data.trackArtistNames?.join(", ") ?? "Unknown Artist" : "Unknown Artist", 
-          thumbnail: _songAlbumArt(data), 
-          index: currentSongIndex,
+          details: SongTileDetails(
+            header: Song.getNullSafeName(currentSong),
+            subHeader: Song.nullSafeArtistNamesToReadable(metadata),
+          ),
+          thumbnail: getSongAlbumArt(metadata), 
+          index: songIndex,
           thumbnailSize: thumbnailSize,
           thumbnailBorderRadius: thumbnailBorderRadius,
           containerHeight: 75,  
@@ -69,6 +47,7 @@ class AllSongsTile extends StatelessWidget {
     );
   }
 }
+
 
 
 

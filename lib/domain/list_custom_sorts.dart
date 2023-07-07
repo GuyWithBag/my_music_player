@@ -34,6 +34,13 @@ double getTextWidth({required TextSpan textSpan, TextDirection textDirection = T
   tp.layout(); 
   return tp.width; 
 }
+
+double getTextHeight({required TextSpan textSpan, TextDirection textDirection = TextDirection.ltr}) {
+  final tp = TextPainter(text: textSpan, textDirection: TextDirection.ltr);
+  tp.layout(); 
+  return tp.height; 
+}
+
 // int arrangeStringAlphabetically(Song a, Song b) {
 //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
 // }

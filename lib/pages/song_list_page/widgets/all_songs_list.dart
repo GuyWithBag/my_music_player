@@ -12,19 +12,19 @@ class AllSongsList extends StatelessWidget {
   final List<Song> songs; 
   final Function(int, int) onReorder; 
 
-
   @override
   Widget build(BuildContext context) {
     return PrimaryScrollController(
       controller: scrollController,
       child: ReorderableListView(
+        scrollController: scrollController,
         onReorder: onReorder,
         children: [
           for (int i = 0; i < songs.length; i++) 
             AllSongsTile(
               key: ValueKey(i), 
               songs: songs, 
-              currentSongIndex: i,
+              songIndex: i,
             ), 
         ]
       ),

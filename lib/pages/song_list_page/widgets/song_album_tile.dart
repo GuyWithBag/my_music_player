@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import '../../../domain/audio_player.dart';
+import '../../../widgets/widgets.dart';
 
 
 class SongAlbumTile extends StatelessWidget {
@@ -18,9 +18,13 @@ class SongAlbumTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SongTile(
-      onTap: () {},
-      header: songAlbum.name,
-      subHeader: "${songAlbum.artistName} - ${songAlbum.songs.length} songs",
+      onTap: () {
+        
+      },
+      details: SongTileDetails(
+        header: songAlbum.name, 
+        subHeader: "${songAlbum.artistName} - ${songAlbum.songs.length} songs"
+      ),
       containerHeight: containerHeight,
       thumbnail: const Icon(Icons.music_note),
       thumbnailSize: thumbnailSize, 

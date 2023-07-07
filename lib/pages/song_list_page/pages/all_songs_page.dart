@@ -4,6 +4,7 @@ import 'package:my_music_player/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import '../../../theme/theme.dart';
 import '../widgets/widgets.dart'; 
+import '../../../providers/providers.dart'; 
 
 class AllSongsPage extends StatelessWidget {
   const AllSongsPage({
@@ -12,7 +13,7 @@ class AllSongsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AllSongsState allSongsState = context.watch<AllSongsState>(); 
+    final AllSongsProvider allSongsState = context.watch<AllSongsProvider>(); 
     List<Song> songs = allSongsState.allSongs; 
     return Container(
       decoration: backgroundDecoration,
