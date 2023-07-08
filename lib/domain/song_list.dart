@@ -24,7 +24,7 @@ Widget getSongAlbumArt(Metadata? metadata) {
   }
 }
 
-abstract class SongsState extends ChangeNotifier {
+abstract class SongsProvider extends ChangeNotifier {
   List<Song> allSongs = []; 
 
   void addSongs(List<Song> songs) {
@@ -57,4 +57,23 @@ abstract class SongsState extends ChangeNotifier {
     allSongs.insert(index, song); 
     notifyListeners(); 
   }
+
+  List<Song> getSearchedSongs(String searchValue) {
+    List<Song> songs = []; 
+    if (searchValue.isEmpty) {
+      return songs; 
+    }
+    for (Song song in allSongs) {
+      if (song.name.contains(searchValue)) {
+        songs.add(song); 
+      }
+    }
+    return songs; 
+  }
+
+  void removeSong(Song song) {
+    allSongs.remove(song); 
+    notifyListeners(); 
+  }
+
 }

@@ -1,5 +1,6 @@
 
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart'; 
 import '../../theme/theme.dart';
 import '../../widgets/widgets.dart'; 
 
@@ -18,7 +19,9 @@ class SettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch, 
             children: [
               IconInkWellTile(
-                onTap: () {},
+                onTap: () {
+
+                },
                 text: Text(
                   "Display", 
                   style: Theme.of(context).textTheme.labelLarge,
@@ -26,7 +29,9 @@ class SettingsPage extends StatelessWidget {
                 icon: const Icon(Icons.tv), 
               ), 
               IconInkWellTile(
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed("Settings/Audio"); 
+                },
                 text: Text(
                   "Audio", 
                   style: Theme.of(context).textTheme.labelLarge,

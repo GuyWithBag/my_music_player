@@ -13,15 +13,17 @@ class AllSongsTile extends StatelessWidget {
     Key? key, 
     required this.songs, 
     required this.songIndex, 
+    this.reOrderabble = true, 
   }) : super(key: key); 
 
   final List<Song> songs; 
   final int songIndex;  
+  final bool reOrderabble; 
 
   final double thumbnailSize = 60; 
   final double thumbnailBorderRadius = 5; 
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>(); 
     final Song currentSong = songs[songIndex]; 

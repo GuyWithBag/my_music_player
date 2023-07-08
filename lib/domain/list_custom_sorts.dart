@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 
 import 'audio_player.dart';
 
@@ -41,7 +42,47 @@ double getTextHeight({required TextSpan textSpan, TextDirection textDirection = 
   return tp.height; 
 }
 
+// TODO: Put this into the SongAlbumList page
+Future<List<SongAlbum>> getSongsSortedByAlbum(List<Song> songs) async {
+  List<SongAlbum> albums = [
+    SongAlbum(
+      name: "No Album"
+    )
+  ]; 
+  SongAlbum? getAlbumByAlbumName(String albumName) {
+    for (SongAlbum album in albums) {
+      if (albumName == album.name) {
+        return album; 
+      }
+    }
+    return null; 
+  }
+
+  for (Song song in songs) {
+    Metadata metadata = await song.getMetadata(); 
+    List<String> albumNames = []; 
+    // This will put all the album names into a list so that we can check if an albumName is inside there. 
+    for (SongAlbum album in albums) {
+      albumNames.add(album.name); 
+    }
+    // If it doesn't contain an Album
+    if (metadata.albumName == null) {
+      SongAlbum songAlbum = getAlbumByAlbumName("No Album")!; 
+      songAlbum.songs.add(song); 
+    // If the album is not already in the albums
+    } else if (!albumNames.contains(metadata.albumName)) {
+      SongAlbum(
+        name: metadata.albumName!, 
+      ); 
+    // If the album is already in the albums
+    } else if (albumNames.contains(metadata.albumName)) {
+      SongAlbum songAlbum = getAlbumByAlbumName(metadata.albumName!)!; 
+      songAlbum.songs.add(song); 
+    }
+  }
+  return albums; 
+}
+
 // int arrangeStringAlphabetically(Song a, Song b) {
 //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
 // }
-

@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
 
-class SongPlaylistPageTile extends StatelessWidget {
-  const SongPlaylistPageTile({
+class SongPlaylistPageSongTile extends StatelessWidget {
+  const SongPlaylistPageSongTile({
     Key? key, 
     required this.songs, 
     required this.songIndex, 

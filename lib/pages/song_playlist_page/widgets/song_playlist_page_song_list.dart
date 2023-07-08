@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import '../../../domain/domain.dart';
+import 'widgets.dart';
 
-class AllSongsList extends StatelessWidget {
-  const AllSongsList({
+class SongPlaylistPageSongList extends StatelessWidget {
+  const SongPlaylistPageSongList({
     super.key,
     required this.songs, 
     required this.onReorder, 
@@ -14,14 +14,25 @@ class AllSongsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (songs.isEmpty) {
+      return Center(
+        child: Text(
+          "No songs here!\nTo add songs, click the plus icon!", 
+          textAlign: TextAlign.center, 
+          style: Theme.of(context)
+              .textTheme
+              .labelLarge,
+        ),
+      );
+    }
     return PrimaryScrollController(
       controller: scrollController,
       child: ReorderableListView(
-        scrollController: scrollController,
+        scrollController: scrollController, 
         onReorder: onReorder,
         children: [
           for (int i = 0; i < songs.length; i++) 
-            AllSongsTile(
+            SongPlaylistPageSongTile(
               key: ValueKey(i), 
               songs: songs, 
               songIndex: i,
@@ -31,6 +42,3 @@ class AllSongsList extends StatelessWidget {
     );
   }
 }
-
-
-

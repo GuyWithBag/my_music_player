@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:my_music_player/theme/theme.dart';
 
 class InkwellIcon extends StatelessWidget {
   const InkwellIcon({
     super.key, 
     this.height, 
     this.width, 
+    this.onTap, 
+    this.fit = BoxFit.fill, 
     required this.icon, 
-    this.onTap
   }); 
 
   final double? height; 
   final double? width; 
   final Widget icon; 
   final Function()? onTap; 
+  final BoxFit fit; 
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class InkwellIcon extends StatelessWidget {
       child: InkWell(
         onTap: onTap, 
         child: FittedBox(
-          fit: BoxFit.fill,
+          fit: fit,
           child: icon
         ),
       ),

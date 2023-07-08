@@ -91,5 +91,10 @@ class SongPlaylistProvider extends ChangeNotifier {
     ); 
     addPlaylist(newSongPlaylist); 
   }
+
+  void updateNotifier() {
+    notifyListeners(); 
+  }
+
 }
 

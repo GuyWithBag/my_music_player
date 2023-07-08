@@ -11,9 +11,9 @@ class AudioPlayerProvider extends ChangeNotifier {
   AudioPlayer? audioPlayer; 
 
   void startAndGoToAudioPlayer(BuildContext context, List<Song> songs, int initialIndex) {
-    final SongQueueProvider songQueueState = context.watch<SongQueueProvider>(); 
-    songQueueState.setSongs(songs); 
-    startAudioPlayer(songQueueState.allSongs, initialIndex); 
+    final SongQueueProvider songQueueProvider = context.read<SongQueueProvider>(); 
+    songQueueProvider.setSongs(songs); 
+    startAudioPlayer(songQueueProvider.allSongs, initialIndex); 
     Get.toNamed( '/AudioPlayer'); 
   }
 

@@ -41,3 +41,9 @@ Future<FilePickerResult?> pickSongFile() async {
   return result; 
 }
 
+Future<FilePickerResult?> pickImageFile() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.image
+  );
+  return result; 
+}

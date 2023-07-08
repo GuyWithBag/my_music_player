@@ -44,7 +44,9 @@ class _NavBarState extends State<NavBar> {
                   forceElevated: innerBoxIsScrolled,
                   actions: <Widget>[
                     IconButton(
-                      onPressed: () {}, 
+                      onPressed: () {
+                        Get.toNamed('/SearchResults'); 
+                      }, 
                       icon: const Icon(Icons.search),  
                     ), 
                     IconButton(

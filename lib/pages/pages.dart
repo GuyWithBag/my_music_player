@@ -5,3 +5,4 @@ export 'settings_page/settings_page.dart';
 export 'more_features_page/more_features_page.dart'; 
 export 'song_queue_page/song_queue_page.dart'; 
 export 'song_playlist_page/song_playlist_page.dart'; 
+export 'search_results_page/search_results_page.dart'; 
