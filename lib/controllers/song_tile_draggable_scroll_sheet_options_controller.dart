@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-class SongTileDraggableScrollSheetOptions extends ChangeNotifier {
+
+class SongTileDraggableScrollSheetOptionsController extends ChangeNotifier {
   bool visible = false; 
 
   void setVisible(bool value) {
@@ -9,3 +10,4 @@ class SongTileDraggableScrollSheetOptions extends ChangeNotifier {
   }
 
 }
+

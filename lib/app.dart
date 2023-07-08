@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart'; 
 import 'package:get/get.dart';
+import 'package:my_music_player/controllers/controllers.dart';
 import 'package:my_music_player/widgets/navbar.dart'; 
 import 'pages/pages.dart'; 
 import 'pages/settings_page/pages/pages.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AudioPlayerProvider>(create: (_) => AudioPlayerProvider()),
         ChangeNotifierProvider<SongQueueProvider>(create: (_) => SongQueueProvider()),
         ChangeNotifierProvider<SongPlaylistProvider>(create: (_) => SongPlaylistProvider()),
-        ChangeNotifierProvider<SongFavoritesProvider>(create: (_) => SongFavoritesProvider()),
+        ChangeNotifierProvider<SongFavoritesProvider>(create: (_) => SongFavoritesProvider()), 
+        ChangeNotifierProvider<SongTileDraggableScrollSheetOptionsController>(create: (_) => SongTileDraggableScrollSheetOptionsController()), 
       ], 
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

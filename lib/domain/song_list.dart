@@ -64,7 +64,8 @@ abstract class SongsProvider extends ChangeNotifier {
       return songs; 
     }
     for (Song song in allSongs) {
-      if (song.name.contains(searchValue)) {
+      String songName = song.name.toLowerCase(); 
+      if (songName.contains(searchValue.toLowerCase())) {
         songs.add(song); 
       }
     }

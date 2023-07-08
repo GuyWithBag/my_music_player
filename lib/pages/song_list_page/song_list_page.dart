@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/floating_audio_player_button.dart';
+import 'package:my_music_player/widgets/song_tile_draggable_scroll_sheet_options.dart';
 import 'package:my_music_player/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import '../../controllers/controllers.dart';
 import '../../domain/domain.dart'; 
 import 'dart:io'; 
 // import 'widgets/widgets.dart';
@@ -71,7 +73,7 @@ class _SongListPageState extends State<SongListPage> {
         const AlbumsPage(), 
       ),
     }; 
-
+    SongTileDraggableScrollSheetOptionsController songTileDraggableScrollSheetOptionsController = context.watch<SongTileDraggableScrollSheetOptionsController>();
     return SizedBox(
       child: Stack(
         children: [
@@ -91,7 +93,7 @@ class _SongListPageState extends State<SongListPage> {
                   onPageChanged: (int page) {
                     setState(() {
                       _activePage = page; 
-                    });
+                    }); 
                   },
                   children: [
                     for (PageItem pageItem in pages) 
@@ -100,7 +102,7 @@ class _SongListPageState extends State<SongListPage> {
                 ),
               ),
             ]
-          ),
+          ), 
           Align(
             alignment: const Alignment(0, 0.98),
             child: FloatingAudioPlayerButton(
@@ -110,6 +112,12 @@ class _SongListPageState extends State<SongListPage> {
               active: audioPlayer != null ? true : false, 
               audioPlayer: audioPlayer, 
             ), 
+          ),
+          SongTileDraggableScrollSheetOptions(
+            children: [
+              
+            ], 
+            visible: songTileDraggableScrollSheetOptionsController.visible
           ), 
         ],
       ),
@@ -182,3 +190,4 @@ class AppScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.trackpad,
       };
 }
+

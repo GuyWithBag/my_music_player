@@ -3,6 +3,7 @@ import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:my_music_player/domain/domain.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import '../../../controllers/controllers.dart';
 import '../../../providers/providers.dart';
 import '../../../widgets/widgets.dart'; 
 
@@ -26,14 +27,17 @@ class AllSongsTile extends StatelessWidget {
   @override 
   Widget build(BuildContext context) {
     AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>(); 
+    SongTileDraggableScrollSheetOptionsController songTileDraggableScrollSheetOptionsController = context.watch<SongTileDraggableScrollSheetOptionsController>();
     final Song currentSong = songs[songIndex]; 
-    
     return SongBuilder(
       song: currentSong,
       builder: (BuildContext context, Metadata? metadata) {
         return SongTile(
           onTap: () {
             audioPlayerState.startAndGoToAudioPlayer(context, songs, songIndex); 
+          }, 
+          onMoreButtonTap: () {
+            songTileDraggableScrollSheetOptionsController.setVisible(true); 
           },
           details: SongTileDetails(
             header: Song.getNullSafeName(currentSong),

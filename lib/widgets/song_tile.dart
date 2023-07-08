@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../widgets/widgets.dart'; 
+import '../../../widgets/widgets.dart';
+import '../controllers/controllers.dart'; 
 
 // This Widget is reused as a template for other tiles so that i do not have to rewrite code. 
 // This is created for reusability. 
@@ -16,9 +18,11 @@ class SongTile extends StatelessWidget {
     required this.thumbnailBorderRadius, 
     required this.containerHeight, 
     required this.details, 
+    this.onMoreButtonTap, 
   });
 
   final void Function() onTap; 
+  final void Function()? onMoreButtonTap; 
 
   final Widget details; 
 
@@ -51,8 +55,10 @@ class SongTile extends StatelessWidget {
             ), 
             const SizedBox(width: 15), 
             details, 
-            const Center(
-              child: _MoreButton()
+            Center(
+              child: _MoreButton(
+                onTap: onMoreButtonTap
+              )
             ), 
             index <= -1 ? 
               const SizedBox()
@@ -70,13 +76,16 @@ class SongTile extends StatelessWidget {
 
 class _MoreButton extends StatelessWidget {
   const _MoreButton({
-    Key? key,
+    Key? key, 
+    required this.onTap, 
   }) : super(key: key);
+
+  final void Function()? onTap; 
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: const SizedBox(
         child: Icon(Icons.more_vert)
       ),

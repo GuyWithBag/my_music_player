@@ -28,6 +28,7 @@ class SongPlaylistProvider extends ChangeNotifier {
       actions: [
         ElevatedButton(
           onPressed: () {
+            textEditingController.dispose(); 
             Navigator.pop(context); 
           }, 
           child: const Text("Cancel")
