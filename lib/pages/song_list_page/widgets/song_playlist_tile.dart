@@ -25,7 +25,7 @@ class SongPlaylistTile extends StatelessWidget {
     return SongTile(
       onTap: () {
         Get.toNamed(
-          "/SongsListPage/SongPlaylistPage", 
+          "/SongsList/SongPlaylist", 
           arguments: SongPlaylistPageArguments(
             songPlaylist
           ), 

@@ -29,7 +29,10 @@ class FloatingAudioPlayerButton extends StatelessWidget {
         audioPlayer: audioPlayer!, 
         builder: (BuildContext context, Song? song, Metadata? metadata) {
           return _Container(
-            decoration: backgroundDecoration, 
+            // decoration: backgroundDecoration, 
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor
+            ),
             children: [
               SongThumbnail(
                 thumbnail: getSongAlbumArt(metadata), 

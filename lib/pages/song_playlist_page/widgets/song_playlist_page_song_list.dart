@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../controllers/controllers.dart';
 import '../../../domain/domain.dart';
 import 'widgets.dart';
 
@@ -26,9 +27,9 @@ class SongPlaylistPageSongList extends StatelessWidget {
       );
     }
     return PrimaryScrollController(
-      controller: scrollController,
+      controller: primaryScrollController,
       child: ReorderableListView(
-        scrollController: scrollController, 
+        scrollController: primaryScrollController, 
         onReorder: onReorder,
         children: [
           for (int i = 0; i < songs.length; i++) 

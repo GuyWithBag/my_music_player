@@ -27,29 +27,30 @@ class _SettingsTileState extends State<SettingsTile> {
     return SizedBox(
       child: Row(
         children: [
-          SizedBox(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.header, 
-                  maxLines: 1, 
-                  style: Theme.of(context)
-                              .textTheme
-                              .titleMedium,
-                ), 
-                Text(
-                  widget.shortDescription ?? "", 
-                  maxLines: 1,
-                  style: Theme.of(context) 
-                              .textTheme 
-                              .titleSmall!
-                              .copyWith(color: Colors.grey), 
-                ), 
-              ],
+          Expanded(
+            child: SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.header, 
+                    maxLines: 1, 
+                    style: Theme.of(context)
+                                .textTheme
+                                .titleMedium,
+                  ), 
+                  Text(
+                    widget.shortDescription ?? "", 
+                    maxLines: 3,
+                    style: Theme.of(context) 
+                                .textTheme 
+                                .titleSmall!
+                                .copyWith(color: Colors.grey), 
+                  ), 
+                ],
+              ),
             ),
           ), 
-          const Spacer(), 
           Switch.adaptive(
             value: widget.initialSwitchValue ?? switchValue,  
             autofocus: true,

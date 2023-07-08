@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:provider/provider.dart'; 
+import '../controllers/controllers.dart';
 import '../domain/domain.dart'; 
 import '../pages/pages.dart'; 
 import '../providers/providers.dart'; 

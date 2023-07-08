@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import '../../../domain/domain.dart';
+import '../../../controllers/controllers.dart';
 
 class SongPlaylistList extends StatelessWidget {
   const SongPlaylistList({
@@ -17,9 +18,9 @@ class SongPlaylistList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PrimaryScrollController(
-      controller: scrollController, 
+      controller: primaryScrollController, 
       child: ReorderableListView(
-        scrollController: scrollController,
+        scrollController: primaryScrollController,
         onReorder: onReorder, 
         children: [
           for (int i = 0; i < songPlaylists.length; i++) 

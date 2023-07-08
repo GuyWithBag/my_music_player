@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_music_player/domain/domain.dart';
 import 'package:my_music_player/widgets/widgets.dart';
 import '../../theme/theme.dart'; 
+import '../../../controllers/controllers.dart';
 
 class MoreFeaturesPage extends StatelessWidget {
   const MoreFeaturesPage({super.key});
@@ -20,7 +20,7 @@ class MoreFeaturesPage extends StatelessWidget {
             top: 30
           ),
           child: PrimaryScrollController(
-            controller: scrollController,
+            controller: primaryScrollController,
             child: SingleChildScrollView(
               child: Column(
                 children: [

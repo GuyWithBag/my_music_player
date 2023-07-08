@@ -115,11 +115,11 @@ class _AudioPlayerAppBar extends StatelessWidget {
               initialChildSize: minChildSize,
               minChildSize: minChildSize,
               maxChildSize: 1,
-              builder: (BuildContext context, ScrollController scrollController) {
+              builder: (BuildContext context, ScrollController primaryScrollController) {
                 return Container(
                   color: Theme.of(context).primaryColor,
                   child: SingleChildScrollView(
-                    controller: scrollController,
+                    controller: primaryScrollController,
                     child: RotatedBox(
                       quarterTurns: 2,
                       child: Column(
