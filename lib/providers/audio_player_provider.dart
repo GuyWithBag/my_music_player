@@ -27,8 +27,8 @@ class AudioPlayerProvider extends ChangeNotifier {
 
   void startAndGoToAudioPlayer(BuildContext context, List<Song> songs, int initialIndex) {
     final SongQueueProvider songQueueProvider = context.read<SongQueueProvider>(); 
-    songQueueProvider.setSongs(songs); 
-    startAudioPlayer(songQueueProvider.allSongs, initialIndex); 
+    songQueueProvider.setItems(songs); 
+    startAudioPlayer(songQueueProvider.items, initialIndex); 
     Get.toNamed( '/AudioPlayer'); 
   } 
 
@@ -45,7 +45,10 @@ class AudioPlayerProvider extends ChangeNotifier {
         ],
       ), 
       initialIndex: initialIndex, 
-    );
+    ); 
+    final Song currentSong = songs[initialIndex]; 
+    currentSong.timesSelected++; 
+    currentSong.timesPlayed++; 
     audioPlayer!.play(); 
     notifyListeners(); 
   }

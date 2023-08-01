@@ -8,19 +8,23 @@ import 'package:path/path.dart';
 // part 'audio_player.g.dart'; 
 
 @HiveType(typeId: 0)
-class Song extends HiveObject {
-  @HiveField(0)
+class Song extends SongModel {
+  @HiveField(9)
   final String url; 
-  @HiveField(1)
-  late final String name; 
-  @HiveField(2)
+
+  @HiveField(11)
   bool favorite = false; 
-  @HiveField(3)
+
+  @HiveField(12)
   List<SongPlaylist> playlistsIn = []; 
 
-  Song(this.url) {
-    name = basenameWithoutExtension(url); 
-  }
+  @HiveField(7)
+  int timesSkipped = 0; 
+
+  @HiveField(8)
+  int timesInterruptedWhilePlaying = 0; 
+
+  Song(this.url) : super(name: basenameWithoutExtension(url)); 
 
   Future<Metadata> getMetadata() async {
     File file = File(url); 
@@ -48,32 +52,22 @@ class Song extends HiveObject {
   static String getNullSafeName(Song? song) {
     return song != null ? song.name : "Null"; 
   }
+
 }
 
 @HiveType(typeId: 1)
-class SongPlaylist extends HiveObject  {
-
-  @HiveField(0)
-  List<Song> songs; 
-
-  @HiveField(1)
-  late String? name; 
-
+class SongPlaylist extends SongList  {
   @HiveField(2)
   late String? thumbnailPath; 
 
   SongPlaylist({
-    required this.songs, 
-    this.name, 
+    required super.songs, 
     this.thumbnailPath, 
-  }); 
+    super.name, 
+  }) : super(); 
 
   void setName(String value) {
     name = value; 
-  }
-
-  static String getNullSafeName(SongPlaylist? playlist) {
-    return playlist != null ? playlist.name! : "Null"; 
   }
 
   // TODO: Implement it so that shit works visually. 
@@ -89,23 +83,54 @@ class SongPlaylist extends HiveObject  {
 }
 
 @HiveType(typeId: 2)
-class SongAlbum extends HiveObject {
-  @HiveField(0)
-  List<Song> songs = []; 
-
-  @HiveField(1)
-  late String name; 
-
-  @HiveField(2)
+class SongAlbum extends SongList {
+  @HiveField(10)
   late String artistName; 
 
   @HiveField(3)
   late String? thumbnailPath; 
 
   SongAlbum({
-    required this.name, 
+    super.name, 
   }); 
 }
 
 // Box songsBox = Hive.box("allSongs"); 
+
+abstract class SongList extends SongModel {
+  @HiveField(0)
+  List<Song> songs; 
+
+  SongList({
+    super.name, 
+    this.songs = const [], 
+  });
+
+}
+
+abstract class SongModel extends HasNameObject {
+
+  @HiveField(4)
+  int timesSelected = 0; 
+
+  @HiveField(5) 
+  int timesPlayed = 0; 
+
+  @HiveField(6)
+  Duration totalDurationPlayed = const Duration(); 
+
+  SongModel({
+    super.name 
+  });
+}
+
+abstract class HasNameObject extends HiveObject {
+  @HiveField(1)
+  String name; 
+
+  HasNameObject({
+    this.name = "Null", 
+  }); 
+
+}
 

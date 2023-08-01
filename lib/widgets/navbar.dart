@@ -96,7 +96,7 @@ class _NavBarState extends State<NavBar> {
               BottomNavigationBarItem(
                 label: "More", 
                 icon: Icon(Icons.more), 
-              )
+              ), 
             ],
           ),
         ); 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_music_player/pages/song_list_page/widgets/widgets.dart';
 import '../../../domain/domain.dart';
 import '../../../controllers/controllers.dart';
+import 'widgets.dart';
 
 class AllSongsList extends StatelessWidget {
   const AllSongsList({

@@ -51,7 +51,6 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AllSongsProvider allSongState = context.watch<AllSongsProvider>(); 
     final AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>(); 
     final AudioPlayer? audioPlayer = audioPlayerState.audioPlayer; 
 
@@ -113,12 +112,6 @@ class _SongListPageState extends State<SongListPage> {
               audioPlayer: audioPlayer, 
             ), 
           ),
-          SongTileDraggableScrollSheetOptions(
-            children: [
-              
-            ], 
-            visible: songTileDraggableScrollSheetOptionsController.visible
-          ), 
         ],
       ),
     );

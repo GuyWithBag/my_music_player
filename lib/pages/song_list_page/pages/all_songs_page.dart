@@ -14,7 +14,7 @@ class AllSongsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AllSongsProvider allSongsState = context.watch<AllSongsProvider>(); 
-    List<Song> songs = allSongsState.allSongs; 
+    List<Song> songs = allSongsState.items; 
     return Container(
       decoration: backgroundDecoration,
       child: Column(
@@ -47,8 +47,8 @@ class AllSongsPage extends StatelessWidget {
                 onReorder: (int oldIndex, int newIndex) => onReOrderUpdateList(
                   oldIndex, 
                   newIndex, 
-                  allSongsState.removeSongAt, 
-                  allSongsState.insertSongAt
+                  allSongsState.removeItemAt, 
+                  allSongsState.insertItemAt, 
                 ),
               )
             ),

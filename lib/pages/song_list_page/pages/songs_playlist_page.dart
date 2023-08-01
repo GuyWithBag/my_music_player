@@ -14,7 +14,7 @@ class SongsPlaylistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SongPlaylistProvider songPlaylistProvider = context.watch<SongPlaylistProvider>();
-    final List<SongPlaylist> playlists = songPlaylistProvider.playlists; 
+    final List<SongPlaylist> playlists = songPlaylistProvider.items; 
     return Container(
       decoration: backgroundDecoration, 
       child: Column(
@@ -24,7 +24,7 @@ class SongsPlaylistPage extends StatelessWidget {
             actions: <SubHeaderAction>[
               SubHeaderAction(
                 onTap: () {
-                  songPlaylistProvider.promptCreatePlaylistDialogue(context); 
+                  songPlaylistProvider.promptCreatePlaylist(context); 
                 },
                 icon: const Icon(Icons.add)
               )
@@ -37,8 +37,8 @@ class SongsPlaylistPage extends StatelessWidget {
                 onReorder: (int oldIndex, int newIndex) => onReOrderUpdateList(
                   oldIndex, 
                   newIndex, 
-                  songPlaylistProvider.removePlaylistAt, 
-                  songPlaylistProvider.insertPlaylistAt
+                  songPlaylistProvider.removeItemAt, 
+                  songPlaylistProvider.insertItemAt
                 ),
                 songPlaylists: playlists, 
               ),

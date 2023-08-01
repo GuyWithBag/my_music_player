@@ -11,6 +11,7 @@ class SongPlaylistTile extends StatelessWidget {
     super.key,
     required this.songPlaylist, 
     required this.playlistIndex, 
+    this.reOrderabble = true, 
   });
 
   final double playlistThumbnailSize = 67;
@@ -19,6 +20,7 @@ class SongPlaylistTile extends StatelessWidget {
   final int playlistIndex; 
   
   final SongPlaylist songPlaylist;
+  final bool reOrderabble; 
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class SongPlaylistTile extends StatelessWidget {
         );
       }, 
       details: SongTileDetails(
-        header: songPlaylist.name ?? "Playlist",
+        header: songPlaylist.name, 
         subHeader: "${songPlaylist.songs.length} songs",
       ),
       thumbnail: const Icon(Icons.hourglass_empty),
@@ -40,6 +42,7 @@ class SongPlaylistTile extends StatelessWidget {
       thumbnailBorderRadius: playlistThumbnailBorderRadius, 
       containerHeight: containerHeight,
       index: playlistIndex, 
+      reOrderable: reOrderabble,
     ); 
   }
 }

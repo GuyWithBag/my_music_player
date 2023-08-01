@@ -28,9 +28,9 @@ class SongPlaylistPageSongTile extends StatelessWidget {
       song: currentSong,
       builder: (BuildContext context, Metadata? metadata) {
         return SongTile(
-          details: _Details(
-            song: currentSong, 
-            metadata: metadata,
+          details: SongTileDetails(
+            header: currentSong.name, 
+            subHeader: Song.nullSafeArtistNamesToReadable(metadata),
           ),
           onTap: () {
             audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 

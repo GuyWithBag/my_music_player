@@ -43,7 +43,10 @@ class PlayerButton extends StatelessWidget {
             return InkwellIcon(
               height: playerButtonIconSize,
               width: playerButtonIconSize,
-              onTap: audioPlayer.play, 
+              onTap: () {
+                audioPlayer.play(); 
+                // TODO: Add code that increments the song's timesPlayed
+              }, 
               icon: playingIcon, /* const Icon(
                 Icons.play_circle, 
                 color: Colors.white, 

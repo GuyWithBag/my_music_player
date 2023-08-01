@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:my_music_player/controllers/controllers.dart';
 import 'package:my_music_player/widgets/navbar.dart'; 
 import 'pages/pages.dart'; 
+import 'pages/search_results_page/pages/pages.dart';
 import 'pages/settings_page/pages/pages.dart';
 import 'theme/theme.dart'; 
 import 'package:provider/provider.dart'; 
@@ -40,8 +41,10 @@ class MyApp extends StatelessWidget {
         initialRoute: "/",
         getPages: [
           GetPage(name: "/", page: () => const NavBar()), 
+          GetPage(name: "/SelectSongs", page: () => const SelectSongsPage()), 
           GetPage(name: "/AudioPlayer", page: () => const AudioPlayerPage()), 
           GetPage(name: "/SearchResults", page: () => const SearchResultsPage()), 
+          GetPage(name: "/SearchResults/SeeMore", page: () => const SearchResultsSeeMorePage()), 
           GetPage(name: "/SongsList", page: () => const SongListPage()), 
           GetPage(name: "/SongsList/SongPlaylist", page: () => const SongPlaylistPage()), 
           GetPage(name: "/Settings", page: () => const SettingsPage()), 

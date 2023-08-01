@@ -37,13 +37,13 @@ class TitleAndButtons extends StatelessWidget {
                   if (song == null) {
                     return; 
                   }
-                  if (songFavoritesProvider.songIsInFavorites(song)) {
-                    songFavoritesProvider.removeSong(song); 
+                  if (songFavoritesProvider.items.contains(song)) {
+                    songFavoritesProvider.removeItem(song); 
                     return; 
                   }
-                  songFavoritesProvider.addFavoriteSong(song); 
+                  songFavoritesProvider.addFavorite(song); 
                 }, 
-                child: songFavoritesProvider.songIsInFavorites(song) ? 
+                child: songFavoritesProvider.items.contains(song) ? 
                   const Icon(CupertinoIcons.heart_fill) 
                   : 
                   const Icon(CupertinoIcons.heart)

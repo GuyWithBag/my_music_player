@@ -1,17 +1,15 @@
+import 'package:my_music_player/providers/providers.dart';
+
 import '../domain/domain.dart';
 
-class SongFavoritesProvider extends SongsProvider{ 
+class SongFavoritesProvider extends ItemListProvider<Song>{ 
 
-  void addFavoriteSong(Song song) { 
-    if (songIsInFavorites(song)) {
+  void addFavorite(Song song) { 
+    if (items.contains(song)) {
       return; 
     }
-    addSong(song); 
+    addItem(song); 
     notifyListeners(); 
   } 
-
-  bool songIsInFavorites(Song? song) {
-    return allSongs.contains(song); 
-  }
 }
 

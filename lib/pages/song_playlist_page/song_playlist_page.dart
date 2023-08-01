@@ -40,13 +40,13 @@ class _SongPlaylistPageState extends State<SongPlaylistPage> {
             width: actionsButtonSize, 
             icon: const Icon(Icons.search), 
           ), 
-          InkwellIcon(
-            onTap: () {
-
+          IconButton(
+            onPressed: () {
+              Get.toNamed(
+                "/SelectSongs", 
+                arguments: SelectSongsPageArguments(songPlaylist)
+              ); 
             },
-            fit: BoxFit.contain, 
-            height: actionsButtonSize,
-            width: actionsButtonSize,
             icon: const Icon(Icons.add), 
           ), 
           const SizedBox(width: 10), 
@@ -233,11 +233,11 @@ class _Details extends StatelessWidget {
               children: [
                 AutomaticMarqueeText(
                   marquee: Marquee(
-                    text: SongPlaylist.getNullSafeName(playlist), 
+                    text: playlist.name, 
                     style: headerTextStyle, 
                   ), 
                   context: context, 
-                  text: SongPlaylist.getNullSafeName(playlist), 
+                  text: playlist.name, 
                   maxWidth: MediaQuery.of(context).size.width, 
                   style: headerTextStyle,
                 ), 

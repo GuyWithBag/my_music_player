@@ -24,7 +24,7 @@ class FloatingAudioPlayerButton extends StatelessWidget {
       return const SizedBox(); 
     }
     return InkWell( 
-      onTap: onTap,
+      onTap: onTap, 
       child: AudioPlayerSongBuilder(
         audioPlayer: audioPlayer!, 
         builder: (BuildContext context, Song? song, Metadata? metadata) {

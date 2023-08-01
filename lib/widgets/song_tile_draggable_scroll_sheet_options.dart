@@ -43,7 +43,7 @@ class _SongTileDraggableScrollSheetOptionsState extends State<SongTileDraggableS
           end: maxChildSize
         ),
         duration: const Duration(milliseconds: 7), 
-        child: _SongTileDraggableScrollableSheetOptiosBody(
+        child: _SongTileDraggableScrollableSheetOptionsBody(
           scrollController: scrollController,
           children: widget.children, 
         ),
@@ -64,8 +64,8 @@ class _SongTileDraggableScrollSheetOptionsState extends State<SongTileDraggableS
   }
 }
 
-class _SongTileDraggableScrollableSheetOptiosBody extends StatelessWidget {
-  const _SongTileDraggableScrollableSheetOptiosBody({
+class _SongTileDraggableScrollableSheetOptionsBody extends StatelessWidget {
+  const _SongTileDraggableScrollableSheetOptionsBody({
     Key? key,
     required this.children, 
     required this.scrollController,
@@ -84,9 +84,17 @@ class _SongTileDraggableScrollableSheetOptiosBody extends StatelessWidget {
       child: Container(
         color: Theme.of(context).primaryColor, 
         padding: const EdgeInsets.all(20),
-        child: ListView(
+        child: ListView.separated(
           controller: scrollController, 
-          children: children, 
+          itemCount: children.length,
+          itemBuilder: (context, index) {
+            return ListView(
+              children: children, 
+            ); 
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: 20); 
+          },
         ),
       ),
     );

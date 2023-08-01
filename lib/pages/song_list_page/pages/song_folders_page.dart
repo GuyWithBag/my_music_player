@@ -24,7 +24,7 @@ class SongFoldersPage extends StatelessWidget {
             child: Column(
               children: [
                 SubHeader(
-                  header: Text("Add Folder"), 
+                  header: const Text("Add Folder"), 
                   padding: const EdgeInsets.only(top: 15), 
                   actions: [
                     SubHeaderAction(

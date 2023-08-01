@@ -1,8 +1,5 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
-import 'package:marquee/marquee.dart';
 import 'package:my_music_player/pages/song_queue_page/song_queue_page.dart';
 import 'package:my_music_player/theme/theme.dart';
 import 'package:my_music_player/widgets/widgets.dart';
@@ -28,7 +25,7 @@ class AudioPlayerPage extends StatelessWidget {
     AllSongsProvider allSongsState = context.watch<AllSongsProvider>(); 
     AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>();
     AudioPlayer audioPlayer = audioPlayerState.audioPlayer!; 
-    final List<Song> songs = allSongsState.allSongs; 
+    final List<Song> songs = allSongsState.items; 
 
     Stream<SeekBarData> seekBarDataStream = rxdart.Rx.combineLatest3<Duration, Duration, Duration?, SeekBarData>(
       audioPlayer.positionStream, 
