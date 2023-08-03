@@ -32,7 +32,7 @@ class SongPlaylistPageSongTile extends StatelessWidget {
             header: currentSong.name, 
             subHeader: Song.nullSafeArtistNamesToReadable(metadata),
           ),
-          onTap: () {
+          onPressed: () {
             audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 
           }, 
           thumbnail: getSongAlbumArt(metadata), 

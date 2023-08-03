@@ -3,7 +3,6 @@ import 'package:my_music_player/domain/domain.dart';
 import 'package:my_music_player/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import '../../../theme/theme.dart';
-import '../widgets/widgets.dart'; 
 import '../../../providers/providers.dart'; 
 
 class AllSongsPage extends StatelessWidget {

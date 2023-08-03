@@ -30,30 +30,64 @@ class AllSongsTile extends StatelessWidget {
   final double thumbnailSize = 60; 
   final double thumbnailBorderRadius = 5; 
 
+  BoxDecoration? _isPlayingDecoration(BuildContext context, Song currentSong) {
+    AudioPlayerProvider audioPlayerProvider = context.watch<AudioPlayerProvider>(); 
+    if (audioPlayerProvider.currentSong == null) {
+      return null; 
+    }
+    if (audioPlayerProvider.currentSong == currentSong) {
+      return BoxDecoration(
+        border: Border.all(
+          width: 1, 
+          color: Colors.white.withOpacity(0.3), 
+        ),
+        color: HSVColor.fromColor(
+          Theme.of(context).primaryColor.withOpacity(0.3)
+        )
+        .withValue(0.6)
+        .toColor(), 
+      );
+    }
+    return null; 
+  }
+
   @override 
   Widget build(BuildContext context) {
-    AudioPlayerProvider audioPlayerState = context.watch<AudioPlayerProvider>(); 
+    AudioPlayerProvider audioPlayerProvider = context.watch<AudioPlayerProvider>(); 
     SongQueueProvider songQueueProvider = context.watch<SongQueueProvider>(); 
-    SongTileDraggableScrollSheetOptionsController songTileDraggableScrollSheetOptionsController = context.watch<SongTileDraggableScrollSheetOptionsController>();
     final Song currentSong = songs[songIndex]; 
     return SongBuilder(
       song: currentSong,
       builder: (BuildContext context, Metadata? metadata) {
         return SongTile(
-          onTap: () {
-            audioPlayerState.startAndGoToAudioPlayer(context, songs, songIndex); 
+          onPressed: () {
+            audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 
           }, 
+          decoration: _isPlayingDecoration(context, currentSong),
           onSelected: onSelected,
           onMoreButtonPressed: () {
             showDialog(
               context: context, 
               builder: (BuildContext context) {
                 return SongTileDraggableScrollSheetOptions(
-                  visible: songTileDraggableScrollSheetOptionsController.visible, 
+                  header: SongTile( 
+                    onPressed: () {}, 
+                    thumbnail: getSongAlbumArt(metadata), 
+                    containerHeight: 60, 
+                    thumbnailSize: 75, 
+                    thumbnailBorderRadius: thumbnailBorderRadius, 
+                    details: SongTileDetails(
+                      header: Song.getNullSafeName(currentSong),
+                      subHeader: Song.nullSafeArtistNamesToReadable(metadata),
+                    ), 
+                    reOrderable: false, 
+                    selectable: false, 
+                    showMoreButton: false,
+                  ),
                   children: [
                     SongTileDraggableScrollSheetButton(
                       onPressed: () {
-                        audioPlayerState.startAndGoToAudioPlayer(context, songs, songIndex); 
+                        audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 
                       }, 
                       icon: const Icon(Icons.play_arrow), 
                       leading: "Play Song",

@@ -18,7 +18,7 @@ class SongAlbumTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SongTile(
-      onTap: () {
+      onPressed: () {
         
       },
       details: SongTileDetails(

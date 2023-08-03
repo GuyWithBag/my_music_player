@@ -9,7 +9,7 @@ class PlayerControls extends StatelessWidget {
   });
 
   final AudioPlayer audioPlayer; 
-  final double? iconsSize = 45; 
+  final double? iconsSize = 44; 
   final double? adjustedIconSize = 30; 
   final double? playerButtonIconSize = 67; 
 
@@ -20,28 +20,20 @@ class PlayerControls extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          InkwellIcon(
-            height: adjustedIconSize,
-            width: adjustedIconSize,
+          IconButton(
+            onPressed: () {
+              
+            },
+            iconSize: adjustedIconSize,
             icon: const Icon(
               Icons.loop, 
               color: Colors.white, 
             ),
           ), 
           const Spacer(), 
-          StreamBuilder<SequenceState?>( 
-            stream: audioPlayer.sequenceStateStream,
-            builder: (BuildContext context, index) {
-              return InkwellIcon(
-                height: iconsSize,
-                width: iconsSize,
-                onTap:  audioPlayer.hasPrevious ? audioPlayer.seekToPrevious : null, 
-                icon: const Icon(
-                  Icons.skip_previous, 
-                  color: Colors.white,
-                )
-              );
-            }
+          SkipPreviousButton(
+            audioPlayer: audioPlayer, 
+            iconsSize: iconsSize
           ),
           const Spacer(), 
           PlayerButton(
@@ -66,24 +58,16 @@ class PlayerControls extends StatelessWidget {
             ),
           ), 
           const Spacer(), 
-          StreamBuilder<SequenceState?>(
-            stream: audioPlayer.sequenceStateStream,
-            builder: (BuildContext context, index) {
-              return InkwellIcon(
-                height: iconsSize, 
-                width: iconsSize, 
-                onTap: audioPlayer.hasNext ? audioPlayer.seekToNext : null, 
-                icon: const Icon(
-                  Icons.skip_next, 
-                  color: Colors.white,
-                )
-              );
-            }
+          SkipNextButton(
+            audioPlayer: audioPlayer, 
+            iconsSize: iconsSize
           ),
           const Spacer(), 
-          InkwellIcon(
-            height: adjustedIconSize,
-            width: adjustedIconSize,
+          IconButton(
+            iconSize: adjustedIconSize, 
+            onPressed: () {
+              
+            }, 
             icon: const Icon(
               Icons.shuffle, 
               color: Colors.white, 
@@ -94,5 +78,4 @@ class PlayerControls extends StatelessWidget {
     );
   }
 }
-
 

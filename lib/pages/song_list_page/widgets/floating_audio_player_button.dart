@@ -3,7 +3,6 @@ import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:marquee/marquee.dart';
 import 'package:my_music_player/domain/domain.dart';
-import 'package:my_music_player/theme/theme.dart';
 import 'package:my_music_player/widgets/widgets.dart';
 
 class FloatingAudioPlayerButton extends StatelessWidget {
@@ -46,26 +45,32 @@ class FloatingAudioPlayerButton extends StatelessWidget {
                   song: song,
                 ),
               ), 
+              SkipPreviousButton(
+                audioPlayer: audioPlayer! 
+              ), 
               PlayerButton(
-              audioPlayer: audioPlayer!, 
-              proccesingStateIcon: const CircularProgressIndicator(), 
-              playingIcon: const Icon( 
-                Icons.play_arrow, 
-                color: Colors.white, 
-              ),
-              pauseIcon: const Icon(
-                Icons.pause, 
-                color: Colors.white, 
+                audioPlayer: audioPlayer!, 
+                proccesingStateIcon: const CircularProgressIndicator(), 
+                playingIcon: const Icon( 
+                  Icons.play_arrow, 
+                  color: Colors.white, 
+                ),
+                pauseIcon: const Icon(
+                  Icons.pause, 
+                  color: Colors.white, 
+                ), 
+                completedIcon: const Icon(
+                  Icons.pause, 
+                  color: Colors.white, 
+                ), 
+                seekIcon: const Icon(
+                  Icons.replay, 
+                  color: Colors.white,
+                ),
               ), 
-              completedIcon: const Icon(
-                Icons.pause, 
-                color: Colors.white, 
-              ), 
-              seekIcon: const Icon(
-                Icons.replay, 
-                color: Colors.white,
-              ),
-            )
+              SkipNextButton(
+                audioPlayer: audioPlayer!, 
+              )
             ],
           );
         }

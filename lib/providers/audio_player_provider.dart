@@ -10,6 +10,7 @@ import '../domain/domain.dart';
 class AudioPlayerProvider extends ChangeNotifier {
 
   AudioPlayer? audioPlayer; 
+  Song? currentSong; 
 
   // TODO: This does not work yet, see: https://suragch.medium.com/background-audio-in-flutter-with-audio-service-and-just-audio-3cce17b4a7d
   void allowOverlapSystemAudio(bool value) async {
@@ -46,10 +47,11 @@ class AudioPlayerProvider extends ChangeNotifier {
       ), 
       initialIndex: initialIndex, 
     ); 
-    final Song currentSong = songs[initialIndex]; 
-    currentSong.timesSelected++; 
-    currentSong.timesPlayed++; 
+    currentSong = songs[initialIndex]; 
+    currentSong!.timesSelected++; 
+    currentSong!.timesPlayed++; 
     audioPlayer!.play(); 
     notifyListeners(); 
   }
 }
+

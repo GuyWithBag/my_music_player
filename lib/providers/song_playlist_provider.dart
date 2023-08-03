@@ -16,11 +16,12 @@ class SongPlaylistProvider extends ItemListProvider<SongPlaylist> with SearchIte
       ), 
       noText: const Text("Cancel"), 
       yesText: const Text("Create"), 
-      onNo: () {
-        textEditingController.dispose(); 
-      }, 
+      // onNo: () {
+      //   textEditingController.dispose(); 
+      // }, 
       onYes: () {
         createPlaylist(textEditingController.text); 
+        // textEditingController.dispose(); 
       }, 
     ); 
     showDialog(

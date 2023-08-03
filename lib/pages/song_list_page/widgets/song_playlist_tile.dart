@@ -25,7 +25,7 @@ class SongPlaylistTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SongTile(
-      onTap: () {
+      onPressed: () {
         Get.toNamed(
           "/SongsList/SongPlaylist", 
           arguments: SongPlaylistPageArguments(
@@ -37,7 +37,7 @@ class SongPlaylistTile extends StatelessWidget {
         header: songPlaylist.name, 
         subHeader: "${songPlaylist.songs.length} songs",
       ),
-      thumbnail: const Icon(Icons.hourglass_empty),
+      thumbnail: const Icon(Icons.hourglass_empty), 
       thumbnailSize: playlistThumbnailSize,
       thumbnailBorderRadius: playlistThumbnailBorderRadius, 
       containerHeight: containerHeight,

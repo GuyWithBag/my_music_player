@@ -16,7 +16,10 @@ class MySearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.search), 
+        Visibility(
+          visible: textEditingController.text.isEmpty,
+          child: const Icon(Icons.search)
+        ), 
         const SizedBox(width: 20), 
         SizedBox(
           width: 200, 

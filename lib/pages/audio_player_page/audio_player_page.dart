@@ -42,41 +42,67 @@ class AudioPlayerPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: backgroundDecoration,
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                left: _mainGUIPadding, 
-                right: _mainGUIPadding, 
-                bottom: _mainGUIPadding,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: ChangeNotifierProvider(
+          create: (context) => AppBarController(), 
+          child: Builder(
+            builder: (context) {
+              AppBarController appBarController = context.watch<AppBarController>(); 
+              return Stack(
                 children: [
-                  SafeArea(
-                    child: SizedBox(
-                      height: _appBarSize + _sheetSafeAreaOffset,
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: _mainGUIPadding, 
+                      right: _mainGUIPadding, 
+                      bottom: _mainGUIPadding,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SafeArea(
+                          child: SizedBox(
+                            height: _appBarSize + _sheetSafeAreaOffset,
+                          ),
+                        ),
+                        _MainGUI(
+                          audioPlayer: audioPlayer, 
+                          seekBarDataStream: seekBarDataStream, 
+                          songs: songs
+                        ),
+                      ],
+                    ),
+                  ), 
+                  _AudioPlayerAppBar(
+                    height: _appBarSize,
+                    audioPlayer: audioPlayer,
+                    controller: appBarController.controller, 
+                    sheetContent: const SongQueuePage(), 
+                    sheetSafeAreaOffset: null,
+                    child: _SongsQueueButton(
+                      audioPlayer: audioPlayer, 
+                      height: _appBarSize, 
+                      onTap: () {
+                        final DraggableScrollableController controller = appBarController.controller; 
+                        Duration duration = const Duration(milliseconds: 400); 
+                        if (controller.size >= 1) {
+                          controller.animateTo(
+                            0, 
+                            duration: duration, 
+                            curve: Curves.fastEaseInToSlowEaseOut, 
+                          ); 
+                          return; 
+                        }
+                        controller.animateTo(
+                          1, 
+                          duration: duration, 
+                          curve: Curves.decelerate, 
+                        ); 
+                      }, 
                     ),
                   ),
-                  _MainGUI(
-                    audioPlayer: audioPlayer, 
-                    seekBarDataStream: seekBarDataStream, 
-                    songs: songs
-                  ),
                 ],
-              ),
-            ), 
-            _AudioPlayerAppBar(
-              height: _appBarSize,
-              sheetSafeAreaOffset: _sheetSafeAreaOffset,
-              audioPlayer: audioPlayer,
-              sheetContent: const SongQueuePage(), 
-              child: _SongsQueueButton(
-                audioPlayer: audioPlayer, 
-                height: _appBarSize,
-              ),
-            ),
-          ],
+              );
+            }
+          ),
         ),
       )
     );
@@ -88,17 +114,19 @@ class _AudioPlayerAppBar extends StatelessWidget {
     Key? key, 
     required this.audioPlayer, 
     required this.height, 
-    required this.sheetSafeAreaOffset, 
     required this.sheetContent, 
     required this.child,
+    this.sheetSafeAreaOffset, 
+    required this.controller, 
   }) : super(key: key);
 
   final double height; 
   final AudioPlayer audioPlayer; 
   final double minChildSize = 0.11; 
-  final double sheetSafeAreaOffset; 
+  final double? sheetSafeAreaOffset; 
   final Widget sheetContent; 
   final Widget child; 
+  final DraggableScrollableController controller; 
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +140,14 @@ class _AudioPlayerAppBar extends StatelessWidget {
               initialChildSize: minChildSize,
               minChildSize: minChildSize,
               maxChildSize: 1,
-              builder: (BuildContext context, ScrollController primaryScrollController) {
+              controller: controller, 
+              builder: (BuildContext context, ScrollController scrollController) {
                 return Container(
                   color: Theme.of(context).primaryColor,
                   child: SingleChildScrollView(
-                    controller: primaryScrollController,
+                    controller: scrollController,
                     child: RotatedBox(
-                      quarterTurns: 2,
+                      quarterTurns: 2, 
                       child: Column(
                         children: [
                           sheetContent, 
@@ -171,10 +200,12 @@ class _SongsQueueButton extends StatelessWidget {
     Key? key, 
     required this.audioPlayer, 
     required this.height, 
+    this.onTap, 
   }) : super(key: key);
 
   final AudioPlayer audioPlayer; 
   final double? height; 
+  final void Function()? onTap; 
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +213,7 @@ class _SongsQueueButton extends StatelessWidget {
     final List<AudioSource> songs = audioSource.children; 
 
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         height: height,
         decoration: BoxDecoration(
@@ -308,6 +339,11 @@ class _Controls extends StatelessWidget {
       ],
     );
   }
+}
+
+class AppBarController extends ChangeNotifier {
+  DraggableScrollableController controller = DraggableScrollableController(); 
+
 }
 
 // class _BackgroundFilter extends StatelessWidget {

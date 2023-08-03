@@ -5,26 +5,33 @@ class SongThumbnail extends StatelessWidget {
     Key? key, 
     this.height, 
     this.width, 
-    required this.thumbnail, 
+    this.thumbnail, 
     required this.borderRadius, 
 
   }) : super(key: key); 
 
-  final Widget thumbnail; 
+  final Widget? thumbnail; 
   final double? height; 
   final double? width; 
   final double borderRadius; 
+
+  Color? _thumbnail() {
+    if (thumbnail == null || thumbnail is Icon) {
+      return Colors.grey; 
+    }
+    return null; 
+  }
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius), 
       child: Container(
-        color: Colors.grey, 
+        color: _thumbnail(), 
         alignment: Alignment.center, 
         height: height,
         width: width, 
-        child: thumbnail
+        child: thumbnail ?? const Icon(Icons.music_note_rounded)
       ),
     );
   }

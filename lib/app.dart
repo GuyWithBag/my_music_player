@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SongQueueProvider>(create: (_) => SongQueueProvider()),
         ChangeNotifierProvider<SongPlaylistProvider>(create: (_) => SongPlaylistProvider()),
         ChangeNotifierProvider<SongFavoritesProvider>(create: (_) => SongFavoritesProvider()), 
-        ChangeNotifierProvider<SongTileDraggableScrollSheetOptionsController>(create: (_) => SongTileDraggableScrollSheetOptionsController()), 
       ], 
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

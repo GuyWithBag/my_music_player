@@ -10,12 +10,12 @@ class SongTile extends StatelessWidget {
   const SongTile({
     super.key,
     this.index = -1, 
-    required this.onTap, 
-    required this.thumbnail, 
-    required this.thumbnailSize, 
+    required this.onPressed, 
     required this.thumbnailBorderRadius, 
-    required this.containerHeight, 
     required this.details, 
+    this.thumbnail, 
+    this.thumbnailSize, 
+    this.containerHeight, 
     this.reOrderable = true, 
     this.showMoreButton = true, 
     this.actions, 
@@ -23,9 +23,10 @@ class SongTile extends StatelessWidget {
     this.onSelected, 
     this.selectable = false, 
     this.selected = false, 
+    this.decoration, 
   });
 
-  final void Function() onTap; 
+  final void Function() onPressed; 
   final void Function()? onMoreButtonPressed; 
   final void Function()? onSelected; 
 
@@ -33,16 +34,18 @@ class SongTile extends StatelessWidget {
 
   final Widget details; 
 
-  final Widget thumbnail; 
-  final double thumbnailSize; 
+  final Widget? thumbnail; 
+  final double? thumbnailSize; 
   final double thumbnailBorderRadius; 
 
-  final double containerHeight; 
+  final double? containerHeight; 
   final int index; 
   final bool reOrderable; 
   final bool showMoreButton; 
   final bool selectable; 
   final List<Widget>? actions; 
+
+  final Decoration? decoration; 
 
   List<Widget> _placeActions() {
     if (actions != null) {
@@ -51,15 +54,29 @@ class SongTile extends StatelessWidget {
     return <Widget>[const SizedBox()]; 
   }
 
+  Decoration? _boxDecoration() {
+    if (selected) {
+      return BoxDecoration(
+        color: selected ? Colors.white.withOpacity(0.2) : null, 
+      );
+    } else if (decoration != null) {
+      return decoration; 
+    }
+    return null; 
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    return ElevatedButton(
+      onPressed: onPressed, 
+      style: const ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll<Color>(Colors.transparent), 
+        elevation: MaterialStatePropertyAll<double>(0), 
+      ),
       child: Container(
         height: containerHeight, 
         margin: const EdgeInsets.only(bottom: 10), 
-        padding: const EdgeInsets.symmetric(horizontal: 20), 
-        color: selected ? Colors.white.withOpacity(0.2) : null,
+        decoration: _boxDecoration(), 
         child: Row(
           children: [
             SongThumbnail(

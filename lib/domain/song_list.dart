@@ -12,15 +12,15 @@ void onReOrderUpdateList(int oldIndex, int newIndex, Function(int) removeItemAt,
   insertItemAt(newIndex, song); 
 }
 
-Widget getSongAlbumArt(Metadata? metadata) {
+Widget? getSongAlbumArt(Metadata? metadata) {
   if ( metadata != null) {
     Uint8List? albumArt = metadata.albumArt; 
     if (albumArt == null) {
-      return const Icon(Icons.music_note); 
+      return null; 
     }
     return Image.memory(albumArt); 
   } else {
-    return const Icon(Icons.music_note); 
+    return null; 
   }
 }
 

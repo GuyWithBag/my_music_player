@@ -72,7 +72,6 @@ class _SongListPageState extends State<SongListPage> {
         const AlbumsPage(), 
       ),
     }; 
-    SongTileDraggableScrollSheetOptionsController songTileDraggableScrollSheetOptionsController = context.watch<SongTileDraggableScrollSheetOptionsController>();
     return SizedBox(
       child: Stack(
         children: [
@@ -107,7 +106,7 @@ class _SongListPageState extends State<SongListPage> {
             child: FloatingAudioPlayerButton(
               onTap: () {
                 Get.toNamed( '/AudioPlayer'); 
-              },
+              }, 
               active: audioPlayer != null ? true : false, 
               audioPlayer: audioPlayer, 
             ), 

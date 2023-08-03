@@ -16,6 +16,9 @@ class SongTileDraggableScrollSheetButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed, 
+      style: const ButtonStyle(
+        elevation: MaterialStatePropertyAll<double>(0), 
+      ),
       child: Row(
         children: [
           icon, 
