@@ -28,7 +28,6 @@ class PlaylistRenameDialog extends StatelessWidget {
       onYes: () {
         playlist.setName(textEditingController.text); 
         songPlaylistProvider.updateNotifier(); 
-        Navigator.pop(context); 
       }, 
     );
   }

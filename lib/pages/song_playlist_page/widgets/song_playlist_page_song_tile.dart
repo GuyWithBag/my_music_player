@@ -24,26 +24,21 @@ class SongPlaylistPageSongTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final AudioPlayerProvider audioPlayerProvider = context.watch<AudioPlayerProvider>(); 
     final Song currentSong = songs[songIndex]; 
-    return SongBuilder(
-      song: currentSong,
-      builder: (BuildContext context, Metadata? metadata) {
-        return SongTile(
-          details: SongTileDetails(
-            header: currentSong.name, 
-            subHeader: Song.nullSafeArtistNamesToReadable(metadata),
-          ),
-          onPressed: () {
-            audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 
-          }, 
-          thumbnail: getSongAlbumArt(metadata), 
-          thumbnailSize: thumbnailSize, 
-          thumbnailBorderRadius: 8, 
-          containerHeight: 75, 
-        );
-      }
-    );
+    return SongTile(
+        details: SongTileDetails(
+          header: currentSong.name, 
+          subHeader: Song.nullSafeArtistNamesToReadable(currentSong),
+        ),
+        onPressed: () {
+          audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 
+        }, 
+        thumbnail: getSongAlbumArt(currentSong), 
+        thumbnailSize: thumbnailSize, 
+        thumbnailBorderRadius: 8, 
+        containerHeight: 75, 
+      );
+    }
   }
-}
 
 class _Details extends StatelessWidget {
   const _Details({
@@ -62,7 +57,7 @@ class _Details extends StatelessWidget {
       children: [
         SongTileDetails(
           header: song.name, 
-          subHeader: Song.nullSafeArtistNamesToReadable(metadata), 
+          subHeader: Song.nullSafeArtistNamesToReadable(song), 
         ),
         Text(
           song.playlistsIn.toString(), 

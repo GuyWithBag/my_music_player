@@ -29,6 +29,12 @@ class SelectSongsPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text("Choose tracks"), 
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back), 
+                onPressed: () {
+                  Get.back(result: "result"); 
+                },
+              )
             ),
             body: BackgroundContainer(
               child: Stack(

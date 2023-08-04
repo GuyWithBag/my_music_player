@@ -7,3 +7,4 @@ export 'song_queue_page/song_queue_page.dart';
 export 'song_playlist_page/song_playlist_page.dart'; 
 export 'search_results_page/search_results_page.dart'; 
 export 'select_songs_page/select_songs_page.dart'; 
+export 'query_songs_page/query_audio_page.dart'; 

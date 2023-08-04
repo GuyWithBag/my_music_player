@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:my_music_player/pages/song_list_page/widgets/floating_audio_player_button.dart';
+import 'package:my_music_player/widgets/floating_audio_player_button.dart';
 import 'package:my_music_player/widgets/song_tile_draggable_scroll_sheet_options.dart';
 import 'package:my_music_player/widgets/widgets.dart';
 import 'package:provider/provider.dart';

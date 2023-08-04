@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
@@ -13,31 +14,33 @@ import '../widgets/widgets.dart';
 // part 'audio_player.g.dart'; 
 
 @HiveType(typeId: 0)
-class Song extends SongModel {
+class Song extends SongType {
   @HiveField(9)
   final String url; 
-
   @HiveField(11)
   bool favorite = false; 
-
   @HiveField(12)
   List<SongPlaylist> playlistsIn = []; 
-
   @HiveField(7)
   int timesSkipped = 0; 
-
-  @HiveField(8)
+  @HiveField(8) 
   int timesInterruptedWhilePlaying = 0; 
+  @HiveField(13)
+  Duration? duration; 
+  @HiveField(14)
+  late Metadata metadata; 
 
-  Song(this.url) : super(name: basenameWithoutExtension(url)); 
+  Song(this.url) {
+    name = basenameWithoutExtension(url); 
+    fetchMetadata(); 
+  }
 
-  Future<Metadata> getMetadata() async {
+  Future<void> fetchMetadata() async {
     File file = File(url); 
     if (!(await file.exists())) {
       print("File: $url does not exist"); 
     }
-    Metadata metadata = await MetadataRetriever.fromFile(file); 
-    return metadata; 
+    metadata = await MetadataRetriever.fromFile(file); 
   }
 
   static String artistNamesToReadable(List<String>? trackArtistNames) {
@@ -46,8 +49,12 @@ class Song extends SongModel {
     return artistNames; 
   }
 
-  static String nullSafeArtistNamesToReadable(Metadata? metadata) {
-    return metadata != null ? artistNamesToReadable(metadata.trackArtistNames) : "Unknown Artist"; 
+  static String nullSafeArtistNamesToReadable(Song? song) {
+    if (song == null) {
+      return "Unknown Artist"; 
+    }
+    Metadata metadata = song.metadata; 
+    return artistNamesToReadable(metadata.trackArtistNames); 
   }
 
   static String trimTopic(String input) {
@@ -116,7 +123,7 @@ class SongAlbum extends SongList {
 
 // Box songsBox = Hive.box("allSongs"); 
 
-abstract class SongList extends SongModel {
+abstract class SongList extends SongType {
   @HiveField(0)
   List<Song> songs; 
 
@@ -136,7 +143,7 @@ abstract class SongList extends SongModel {
 
 }
 
-abstract class SongModel extends HasNameObject {
+abstract class SongType extends HasNameObject {
 
   @HiveField(4)
   int timesSelected = 0; 
@@ -147,7 +154,7 @@ abstract class SongModel extends HasNameObject {
   @HiveField(6)
   Duration totalDurationPlayed = const Duration(); 
 
-  SongModel({
+  SongType({
     super.name 
   });
 }
@@ -162,3 +169,23 @@ abstract class HasNameObject extends HiveObject {
 
 }
 
+  List<Widget> getFilteredSongAlbumArt(Song? song, {required ImageFilter filter}) {
+    if (song == null || song.metadata.albumArt == null) {
+      return const [SizedBox()]; 
+    }
+    return [
+      Image.memory(
+        song.metadata.albumArt!, 
+        fit: BoxFit.cover, 
+        scale: 0.5, 
+      ), 
+      ClipRRect(
+        child: BackdropFilter(
+          filter: filter, 
+          child: Container(
+            color: Colors.black.withOpacity(0.3),
+          ),
+        ),
+      )
+    ]; 
+  }

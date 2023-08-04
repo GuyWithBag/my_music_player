@@ -20,7 +20,7 @@ class AllSongsProvider extends ItemListProvider<Song> with SearchItem<Song> {
     if (dir == null) { 
       return; 
     }
-    List<Song> newSongs = getSongsFromDirectory(dir); 
+    List<Song> newSongs = await getSongsFromDirectory(dir); 
     // TEST
     sortSongsAlphabetically(newSongs); 
     if (const DeepCollectionEquality.unordered().equals(items, newSongs) == false) {

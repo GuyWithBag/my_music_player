@@ -43,7 +43,7 @@ dependencies:
   just_audio: ^0.9.34
   just_audio_background: any
   just_audio_windows: any
-  on_audio_query: ^2.8.1
+  on_audio_query: ^2.9.0
   path: any
   provider: ^6.0.5
   path_provider: any

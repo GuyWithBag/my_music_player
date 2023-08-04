@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 
 import 'audio_player.dart';
 
@@ -18,9 +19,10 @@ List<FileSystemEntity> getFilesFromDirectory(Directory directory) {
   return files; 
 }
 
-List<Song> getSongsFromDirectory(Directory directory) {
+Future<List<Song>> getSongsFromDirectory(Directory directory) async {
   final List<FileSystemEntity> files = getFilesFromDirectory(directory); 
   List<Song> songs = []; 
+  AudioPlayer audioPlayer = AudioPlayer(); 
   for (FileSystemEntity file in files) {
     String filePath = file.path; 
     String fileName = filePath.split("/").last; 
@@ -28,7 +30,9 @@ List<Song> getSongsFromDirectory(Directory directory) {
       // print("Database: $filePath is not an audio file."); 
       continue; 
     }
-    songs.add(Song(filePath)); 
+    Song song = Song(filePath); 
+    song.duration = await audioPlayer.setUrl(filePath); 
+    songs.add(song); 
     // print("Database: $filePath found as an audio file. "); 
   }
   return songs; 

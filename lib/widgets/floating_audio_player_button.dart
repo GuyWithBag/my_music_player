@@ -26,7 +26,7 @@ class FloatingAudioPlayerButton extends StatelessWidget {
       onTap: onTap, 
       child: AudioPlayerSongBuilder(
         audioPlayer: audioPlayer!, 
-        builder: (BuildContext context, Song? song, Metadata? metadata) {
+        builder: (BuildContext context, Song? song) {
           return _Container(
             // decoration: backgroundDecoration, 
             decoration: BoxDecoration(
@@ -34,14 +34,13 @@ class FloatingAudioPlayerButton extends StatelessWidget {
             ),
             children: [
               SongThumbnail(
-                thumbnail: getSongAlbumArt(metadata), 
+                thumbnail: getSongAlbumArt(song), 
                 borderRadius: 8, 
                 width: 50,
               ), 
               const SizedBox(width: 10), 
               Expanded(
                 child: _Details(
-                  metadata: metadata, 
                   song: song,
                 ),
               ), 
@@ -82,11 +81,9 @@ class FloatingAudioPlayerButton extends StatelessWidget {
 class _Details extends StatelessWidget {
   const _Details({
     Key? key,
-    required this.metadata, 
     required this.song,
   }) : super(key: key);
 
-  final Metadata? metadata; 
   final Song? song; 
 
   @override
@@ -117,7 +114,7 @@ class _Details extends StatelessWidget {
                     textAlign: TextAlign.left,
               ),
               Text(
-                Song.nullSafeArtistNamesToReadable(metadata), 
+                Song.nullSafeArtistNamesToReadable(song), 
                 style: Theme.of(context)
                             .textTheme
                             .labelSmall,

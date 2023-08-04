@@ -20,6 +20,7 @@ import 'providers/providers.dart';
 // ToDo: Implement a proper function for the more button in audio player page 
 // ToDo: Implement functions for more buttons in: SongQueuePage, SongPlaylistPage, SongListPage, AudioPlayerPage
 // ToDo: Implement automatic finding of music page
+// ToDo: Add snackbars for other stuffs 
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/Settings", page: () => const SettingsPage()), 
           GetPage(name: "/Settings/Display", page: () => const DisplaySettingsPage()), 
           GetPage(name: "/Settings/Audio", page: () => const AudioSettingsPage()), 
+          GetPage(name: "/QueryAudioPage", page: () => const QueryAudioPage()), 
         ], 
       ),
     );

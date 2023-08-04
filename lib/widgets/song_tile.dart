@@ -75,7 +75,6 @@ class SongTile extends StatelessWidget {
       ),
       child: Container(
         height: containerHeight, 
-        margin: const EdgeInsets.only(bottom: 10), 
         decoration: _boxDecoration(), 
         child: Row(
           children: [

@@ -38,11 +38,14 @@ class SongTileDetails extends StatelessWidget {
                   : 
                     AutomaticMarqueeText(
                       marquee: Marquee(
-                        text: header
+                        text: header, 
+                        fadingEdgeStartFraction: 0.1, 
+                        fadingEdgeEndFraction: 0.1, 
                       ), 
                       context: context, 
                       text: header, 
                       maxWidth: constraints.maxWidth, 
+                      
                     ),
                 );
               }

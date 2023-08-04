@@ -27,17 +27,14 @@ class _SongPlaylistPageState extends State<SongPlaylistPage> {
   @override
   Widget build(BuildContext context) {
     final AudioPlayerProvider audioPlayerProvider = context.watch<AudioPlayerProvider>();
-    const double actionsButtonSize = 30; 
+    // const double actionsButtonSize = 30; 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          InkwellIcon(
-            onTap: () {
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
 
             },
-            fit: BoxFit.contain, 
-            height: actionsButtonSize,
-            width: actionsButtonSize, 
             icon: const Icon(Icons.search), 
           ), 
           IconButton(
@@ -49,14 +46,10 @@ class _SongPlaylistPageState extends State<SongPlaylistPage> {
             },
             icon: const Icon(Icons.add), 
           ), 
-          const SizedBox(width: 10), 
-          InkwellIcon(
-            onTap: () {
+          IconButton(
+            onPressed: () {
 
             },
-            fit: BoxFit.contain,
-            height: actionsButtonSize,
-            width: actionsButtonSize,
             icon: const Icon(Icons.more_vert), 
           ), 
         ],

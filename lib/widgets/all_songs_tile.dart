@@ -56,10 +56,7 @@ class AllSongsTile extends StatelessWidget {
     AudioPlayerProvider audioPlayerProvider = context.watch<AudioPlayerProvider>(); 
     SongQueueProvider songQueueProvider = context.watch<SongQueueProvider>(); 
     final Song currentSong = songs[songIndex]; 
-    return SongBuilder(
-      song: currentSong,
-      builder: (BuildContext context, Metadata? metadata) {
-        return SongTile(
+    return SongTile(
           onPressed: () {
             audioPlayerProvider.startAndGoToAudioPlayer(context, songs, songIndex); 
           }, 
@@ -72,13 +69,13 @@ class AllSongsTile extends StatelessWidget {
                 return SongTileDraggableScrollSheetOptions(
                   header: SongTile( 
                     onPressed: () {}, 
-                    thumbnail: getSongAlbumArt(metadata), 
+                    thumbnail: getSongAlbumArt(currentSong), 
                     containerHeight: 60, 
                     thumbnailSize: 75, 
                     thumbnailBorderRadius: thumbnailBorderRadius, 
                     details: SongTileDetails(
                       header: Song.getNullSafeName(currentSong),
-                      subHeader: Song.nullSafeArtistNamesToReadable(metadata), 
+                      subHeader: Song.nullSafeArtistNamesToReadable(currentSong), 
                       useMarquee: true, 
                     ), 
                     reOrderable: false, 
@@ -149,10 +146,10 @@ class AllSongsTile extends StatelessWidget {
           },
           details: SongTileDetails(
             header: Song.getNullSafeName(currentSong),
-            subHeader: Song.nullSafeArtistNamesToReadable(metadata), 
+            subHeader: Song.nullSafeArtistNamesToReadable(currentSong), 
             useMarquee: audioPlayerProvider.isPlaying(currentSong), 
           ), 
-          thumbnail: getSongAlbumArt(metadata), 
+          thumbnail: getSongAlbumArt(currentSong), 
           index: songIndex,
           thumbnailSize: thumbnailSize,
           thumbnailBorderRadius: thumbnailBorderRadius,
@@ -162,9 +159,7 @@ class AllSongsTile extends StatelessWidget {
           selected: selected, 
         );
       }
-    );
   }
-}
 
 
 

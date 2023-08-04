@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:my_music_player/widgets/song_builder.dart';
 
 import '../domain/domain.dart';
 
@@ -13,7 +12,7 @@ class AudioPlayerSongBuilder extends StatelessWidget {
   });
 
   final AudioPlayer audioPlayer; 
-  final Widget Function(BuildContext, Song?, Metadata?) builder; 
+  final Widget Function(BuildContext, Song?) builder; 
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +24,14 @@ class AudioPlayerSongBuilder extends StatelessWidget {
         Song? song; 
         if (snapshot.hasData) {
           source = state!.currentSource; 
-          if (source != null) {
-            song = source.tag; 
-          }
+        if (source != null) {
+          song = source.tag; 
         }
-        return SongBuilder(
-          song: song, 
-          builder: (BuildContext context, Metadata? metadata) {
-            return builder(context, song, metadata); 
-          }, 
-        );
       }
+        return builder(context, song); 
+      }, 
     );
   }
 }
+
 

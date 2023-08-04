@@ -25,7 +25,7 @@ class TitleAndButtons extends StatelessWidget {
     ); 
     return AudioPlayerSongBuilder(
       audioPlayer: audioPlayer,
-      builder: (BuildContext context, song, metadata) {
+      builder: (BuildContext context, song) {
         SongFavoritesProvider songFavoritesProvider = context.watch<SongFavoritesProvider>(); 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center, 
@@ -75,7 +75,7 @@ class TitleAndButtons extends StatelessWidget {
                           ),
                           const SizedBox(height: 5), 
                           Text(
-                            Song.nullSafeArtistNamesToReadable(metadata), 
+                            Song.nullSafeArtistNamesToReadable(song), 
                             maxLines: 1, 
                             overflow: TextOverflow.clip, 
                             style: Theme.of(context)

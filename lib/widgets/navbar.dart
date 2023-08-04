@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart'; 
 import 'package:flutter/material.dart'; 
 import 'package:get/get.dart';
 
@@ -22,14 +22,9 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   final NavBarController controller = Get.put(NavBarController()); 
 
-  void printUrl() async {
-    FilePickerResult? file = await pickSongFile(); 
-    print(file?.paths.toString()); 
-  }
-
   @override
   Widget build(BuildContext context) {
-    final AllSongsProvider appState = context.watch<AllSongsProvider>(); 
+    final AllSongsProvider allSongsProvider = context.watch<AllSongsProvider>(); 
     return GetBuilder<NavBarController>(
       builder: (NavBarController navBarController) {
         return Scaffold(
@@ -61,13 +56,13 @@ class _NavBarState extends State<NavBar> {
                       itemBuilder: (context) => const [
                         PopupMenuItem(
                           value: 1, 
-                          child: Text("Open Song"),
+                          child: Text("Scan Songs"),
                         )
                       ],
                       onSelected: (value) {
                         switch (value) {
                           case 1: 
-                            appState.pickFolderAndAddSongs(); 
+                            Get.toNamed("/QueryAudioPage"); 
                         }
                       },
                     ), 

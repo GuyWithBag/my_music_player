@@ -59,7 +59,7 @@ Future<List<SongAlbum>> getSongsSortedByAlbum(List<Song> songs) async {
   }
 
   for (Song song in songs) {
-    Metadata metadata = await song.getMetadata(); 
+    Metadata metadata = song.metadata; 
     List<String> albumNames = []; 
     // This will put all the album names into a list so that we can check if an albumName is inside there. 
     for (SongAlbum album in albums) {
