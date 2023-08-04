@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart'; 
 import 'package:get/get.dart';
-import 'package:my_music_player/controllers/controllers.dart';
 import 'package:my_music_player/widgets/navbar.dart'; 
 import 'pages/pages.dart'; 
 import 'pages/search_results_page/pages/pages.dart';
@@ -11,6 +10,16 @@ import 'package:provider/provider.dart';
 import 'providers/providers.dart'; 
 
 // ThemeManager _themeManager = ThemeManager(); 
+
+// ToDO: Implement the things for the settings page
+// ToDo: Style the select songs page better 
+// ToDo: Add a function to add to playlist 
+// ToDo: Style songs queue page
+// ToDo: Optimize widgets where it shouldn't have to rebuild the whole widget just for one widget
+// ToDo: Fix the scroll controls for the song list page and the playlist page
+// ToDo: Implement a proper function for the more button in audio player page 
+// ToDo: Implement functions for more buttons in: SongQueuePage, SongPlaylistPage, SongListPage, AudioPlayerPage
+// ToDo: Implement automatic finding of music page
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -49,8 +58,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/Settings", page: () => const SettingsPage()), 
           GetPage(name: "/Settings/Display", page: () => const DisplaySettingsPage()), 
           GetPage(name: "/Settings/Audio", page: () => const AudioSettingsPage()), 
-        ],
+        ], 
       ),
     );
   }
 }
+

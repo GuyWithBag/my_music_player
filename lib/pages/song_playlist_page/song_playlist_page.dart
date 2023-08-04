@@ -197,21 +197,7 @@ class _Details extends StatelessWidget {
   }) : super(key: key);
 
   final SongPlaylist playlist; 
-  
 
-  void promptEditPlaylistName(BuildContext context, SongPlaylist playlist) {
-    TextEditingController textEditingController = TextEditingController(); 
-    Widget dialog = _RenameDialog(
-      playlist: playlist,
-      textEditingController: textEditingController, 
-    ); 
-    showDialog(
-      context: context, 
-      builder: (BuildContext context) {
-        return dialog; 
-      }
-    ); 
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +212,7 @@ class _Details extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              promptEditPlaylistName(context, playlist); 
+              playlist.promptEditPlaylistName(context); 
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -253,68 +239,6 @@ class _Details extends StatelessWidget {
                 .labelMedium,
           ), 
         ],
-      ),
-    );
-  }
-}
-
-class _RenameDialog extends StatelessWidget {
-  const _RenameDialog({
-    Key? key, 
-    required this.playlist, 
-    required this.textEditingController, 
-  }) : super(key: key);
-
-  final SongPlaylist playlist; 
-  final TextEditingController textEditingController; 
-
-  @override
-  Widget build(BuildContext context) {
-    final SongPlaylistProvider songPlaylistProvider = context.watch<SongPlaylistProvider>(); 
-    return AlertDialog(
-      title: const Text("Rename Playlist"), 
-      backgroundColor: Theme.of(context).primaryColor,
-      shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(6)
-      ),
-      content: _RenameDialogContent(
-        textEditingController: textEditingController
-      ), 
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context); 
-          }, 
-          child: const Text("Cancel")
-        ), 
-        ElevatedButton(
-          onPressed: () {
-            playlist.setName(textEditingController.text); 
-            songPlaylistProvider.updateNotifier(); 
-            Navigator.pop(context); 
-          }, 
-          child: const Text("Confirm")
-        ), 
-      ], 
-    );
-  }
-}
-
-class _RenameDialogContent extends StatelessWidget {
-  const _RenameDialogContent({
-    Key? key, 
-    required this.textEditingController
-  }) : super(key: key); 
-
-  final TextEditingController textEditingController; 
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        controller: textEditingController,
-        decoration: const InputDecoration(
-        border: UnderlineInputBorder(), 
-        labelText: "Playlist Name: "
       ),
     );
   }

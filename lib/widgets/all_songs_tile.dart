@@ -35,7 +35,7 @@ class AllSongsTile extends StatelessWidget {
     if (audioPlayerProvider.currentSong == null) {
       return null; 
     }
-    if (audioPlayerProvider.currentSong == currentSong) {
+    if (audioPlayerProvider.isPlaying(currentSong)) {
       return BoxDecoration(
         border: Border.all(
           width: 1, 
@@ -78,11 +78,12 @@ class AllSongsTile extends StatelessWidget {
                     thumbnailBorderRadius: thumbnailBorderRadius, 
                     details: SongTileDetails(
                       header: Song.getNullSafeName(currentSong),
-                      subHeader: Song.nullSafeArtistNamesToReadable(metadata),
+                      subHeader: Song.nullSafeArtistNamesToReadable(metadata), 
+                      useMarquee: true, 
                     ), 
                     reOrderable: false, 
                     selectable: false, 
-                    showMoreButton: false,
+                    showMoreButton: false, 
                   ),
                   children: [
                     SongTileDraggableScrollSheetButton(
@@ -148,7 +149,8 @@ class AllSongsTile extends StatelessWidget {
           },
           details: SongTileDetails(
             header: Song.getNullSafeName(currentSong),
-            subHeader: Song.nullSafeArtistNamesToReadable(metadata),
+            subHeader: Song.nullSafeArtistNamesToReadable(metadata), 
+            useMarquee: audioPlayerProvider.isPlaying(currentSong), 
           ), 
           thumbnail: getSongAlbumArt(metadata), 
           index: songIndex,

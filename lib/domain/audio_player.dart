@@ -1,9 +1,14 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:hive/hive.dart';
-import 'package:my_music_player/domain/domain.dart'; 
-import 'package:path/path.dart'; 
+import 'package:my_music_player/domain/domain.dart';
+import 'package:my_music_player/providers/audio_player_provider.dart'; 
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/widgets.dart'; 
 
 // part 'audio_player.g.dart'; 
 
@@ -70,6 +75,20 @@ class SongPlaylist extends SongList  {
     name = value; 
   }
 
+  void promptEditPlaylistName(BuildContext context) {
+    TextEditingController textEditingController = TextEditingController(); 
+    Widget dialog = PlaylistRenameDialog(
+      playlist: this, 
+      textEditingController: textEditingController, 
+    ); 
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) {
+        return dialog; 
+      }
+    ); 
+  } 
+
   // TODO: Implement it so that shit works visually. 
   void pickImageAndSetAsThumbnail() async {
     FilePickerResult? results = await pickImageFile(); 
@@ -104,7 +123,16 @@ abstract class SongList extends SongModel {
   SongList({
     super.name, 
     this.songs = const [], 
-  });
+  }); 
+
+  void play(BuildContext context) {
+    AudioPlayerProvider audioPlayerProvider = context.watch<AudioPlayerProvider>(); 
+    audioPlayerProvider.startAndGoToAudioPlayer(context, songs, 0); 
+  }
+
+  void shuffle() {
+    songs.shuffle(); 
+  }
 
 }
 

@@ -24,3 +24,4 @@ export 'song_tile_draggable_scroll_sheet_options.dart';
 export 'song_tile_draggable_scroll_sheet_button.dart'; 
 export 'skip_next_button.dart'; 
 export 'skip_previous_button.dart'; 
+export 'playlist_rename_dialog.dart'; 

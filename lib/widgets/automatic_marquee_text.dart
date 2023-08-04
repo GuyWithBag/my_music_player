@@ -17,6 +17,7 @@ class AutomaticMarqueeText extends StatelessWidget {
   final Marquee marquee; 
   final BuildContext context; 
   final String text; 
+  /// You can use LayoutBuilder to use constraints.maxWidth to know the maxWidth of this automatically. 
   final double maxWidth; 
   final TextStyle? style; 
   final TextAlign? textAlign; 

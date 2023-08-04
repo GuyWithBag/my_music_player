@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_music_player/domain/domain.dart';
@@ -15,6 +17,11 @@ abstract class ItemListProvider<T> extends ChangeNotifier {
     if (box!.isNotEmpty) {
       items = [...box!.values]; 
     }
+  }
+
+  void shuffle([Random? random]) {
+    items.shuffle(random); 
+    notifyListeners(); 
   }
 
   void setItems(List<T> newItems) {

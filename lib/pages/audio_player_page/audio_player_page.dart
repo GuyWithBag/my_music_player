@@ -17,7 +17,7 @@ class AudioPlayerPage extends StatelessWidget {
   }) : super(key: key);
   
   final double _mainGUIPadding = 30; 
-  final double _appBarSize = 70; 
+  final double _songQueueButtonSize = 70; 
   final double _sheetSafeAreaOffset = 10; 
 
   @override
@@ -60,7 +60,7 @@ class AudioPlayerPage extends StatelessWidget {
                       children: [
                         SafeArea(
                           child: SizedBox(
-                            height: _appBarSize + _sheetSafeAreaOffset,
+                            height: _songQueueButtonSize + _sheetSafeAreaOffset,
                           ),
                         ),
                         _MainGUI(
@@ -72,15 +72,17 @@ class AudioPlayerPage extends StatelessWidget {
                     ),
                   ), 
                   _AudioPlayerAppBar(
-                    height: _appBarSize,
                     audioPlayer: audioPlayer,
                     controller: appBarController.controller, 
-                    sheetContent: const SongQueuePage(), 
+                    sheetContent: SizedBox(
+                      height: MediaQuery.of(context).size.height - (_songQueueButtonSize * 2), 
+                      child: const SongQueuePage(), 
+                    ), 
                     sheetSafeAreaOffset: null,
                     child: _SongsQueueButton(
                       audioPlayer: audioPlayer, 
-                      height: _appBarSize, 
-                      onTap: () {
+                      height: _songQueueButtonSize, 
+                      onPressed: () {
                         final DraggableScrollableController controller = appBarController.controller; 
                         Duration duration = const Duration(milliseconds: 400); 
                         if (controller.size >= 1) {
@@ -113,14 +115,12 @@ class _AudioPlayerAppBar extends StatelessWidget {
   const _AudioPlayerAppBar({
     Key? key, 
     required this.audioPlayer, 
-    required this.height, 
     required this.sheetContent, 
     required this.child,
     this.sheetSafeAreaOffset, 
     required this.controller, 
   }) : super(key: key);
 
-  final double height; 
   final AudioPlayer audioPlayer; 
   final double minChildSize = 0.11; 
   final double? sheetSafeAreaOffset; 
@@ -200,56 +200,65 @@ class _SongsQueueButton extends StatelessWidget {
     Key? key, 
     required this.audioPlayer, 
     required this.height, 
-    this.onTap, 
+    this.onPressed, 
   }) : super(key: key);
 
   final AudioPlayer audioPlayer; 
   final double? height; 
-  final void Function()? onTap; 
+  final void Function()? onPressed; 
 
   @override
   Widget build(BuildContext context) {
     final ConcatenatingAudioSource audioSource = (audioPlayer.audioSource as ConcatenatingAudioSource); 
     final List<AudioSource> songs = audioSource.children; 
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: height,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor, 
-          border: Border.all(
-            color: Theme.of(context).primaryColorLight, 
-          width: 2, 
-          )
-        ),
-        child: StreamBuilder(
-          stream: audioPlayer.sequenceStateStream,
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.hasData) {
-              final SequenceState? state = snapshot.data; 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center, 
-                children: [
-                  Text(
-                    "Now Playing", 
-                    style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(fontWeight: FontWeight.bold), 
-                  ), 
-                  Text(
-                    "${(state!.currentIndex) + 1} / ${songs.length}"
-                  ), 
-                ]
-              ); 
-            }
-            return Text(
-              "${(audioPlayer.currentIndex ?? -1) + 1} / ${songs.length}"
-            ); 
-          }
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double maxWidth = constraints.maxWidth; 
+        return ElevatedButton(
+           style: const ButtonStyle(
+            padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.zero)
+          ),
+          onPressed: onPressed, 
+          child: Container(
+            height: height, 
+            width: maxWidth, 
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor, 
+              border: Border.all(
+                color: Theme.of(context).primaryColorLight, 
+              width: 2, 
+              )
+            ),
+            child: StreamBuilder(
+              stream: audioPlayer.sequenceStateStream,
+              builder: (BuildContext context, snapshot) {
+                if (snapshot.hasData) {
+                  final SequenceState? state = snapshot.data; 
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center, 
+                    children: [
+                      Text(
+                        "Now Playing", 
+                        style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(fontWeight: FontWeight.bold), 
+                      ), 
+                      Text(
+                        "${(state!.currentIndex) + 1} / ${songs.length}"
+                      ), 
+                    ]
+                  ); 
+                }
+                return Text(
+                  "${(audioPlayer.currentIndex ?? -1) + 1} / ${songs.length}"
+                ); 
+              }
+            ),
+          ),
+        );
+      }
     );
   }
 }

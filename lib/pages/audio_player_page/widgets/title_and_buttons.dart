@@ -45,7 +45,7 @@ class TitleAndButtons extends StatelessWidget {
                 }, 
                 child: songFavoritesProvider.items.contains(song) ? 
                   const Icon(CupertinoIcons.heart_fill) 
-                  : 
+                : 
                   const Icon(CupertinoIcons.heart)
               ),
             ), 

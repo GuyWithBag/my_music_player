@@ -34,7 +34,10 @@ class AudioPlayerProvider extends ChangeNotifier {
   } 
 
   void startAudioPlayer(List<Song> songs, int initialIndex) async {
-    audioPlayer ??= AudioPlayer(); 
+    if (audioPlayer == null) {
+      audioPlayer = AudioPlayer(); 
+      audioPlayer!.setLoopMode(LoopMode.all); 
+    }
     await audioPlayer!.setAudioSource(
       ConcatenatingAudioSource(
         children: [
@@ -53,5 +56,15 @@ class AudioPlayerProvider extends ChangeNotifier {
     audioPlayer!.play(); 
     notifyListeners(); 
   }
+
+  bool isPlaying(Song song) {
+    return currentSong == song; 
+  }
+
+  void setLoopMode(LoopMode loopMode) {
+    audioPlayer!.setLoopMode(loopMode); 
+    notifyListeners(); 
+  }
+
 }
 
