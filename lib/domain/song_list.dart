@@ -14,8 +14,8 @@ void onReOrderUpdateList(int oldIndex, int newIndex, Function(int) removeItemAt,
 }
 
 Widget? getSongAlbumArt(Song? song) {
-  if ( song != null) {
-    Uint8List? albumArt = song.metadata.albumArt; 
+  if ( song != null && song.metadata != null) {
+    Uint8List? albumArt = song.metadata!.albumArt; 
     if (albumArt == null) {
       return null; 
     }

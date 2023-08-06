@@ -28,7 +28,7 @@ class Song extends SongType {
   @HiveField(13)
   Duration? duration; 
   @HiveField(14)
-  late Metadata metadata; 
+  Metadata? metadata; 
 
   Song(this.url) {
     name = basenameWithoutExtension(url); 
@@ -41,6 +41,7 @@ class Song extends SongType {
       print("File: $url does not exist"); 
     }
     metadata = await MetadataRetriever.fromFile(file); 
+    duration = Duration(milliseconds: metadata!.trackDuration!); 
   }
 
   static String artistNamesToReadable(List<String>? trackArtistNames) {
@@ -50,10 +51,10 @@ class Song extends SongType {
   }
 
   static String nullSafeArtistNamesToReadable(Song? song) {
-    if (song == null) {
+    if (song == null || song.metadata == null) {
       return "Unknown Artist"; 
     }
-    Metadata metadata = song.metadata; 
+    Metadata metadata = song.metadata!; 
     return artistNamesToReadable(metadata.trackArtistNames); 
   }
 
@@ -63,6 +64,20 @@ class Song extends SongType {
 
   static String getNullSafeName(Song? song) {
     return song != null ? song.name : "Null"; 
+  }
+
+  static Duration getTotalDuration(List<Song> songs) {
+    int totalDuration = 0; 
+    for (Song song in songs) {
+      if (song.metadata == null) {
+        continue; 
+      }
+      if (song.metadata!.trackDuration == null) {
+        continue; 
+      }
+      totalDuration += song.metadata!.trackDuration!; 
+    }
+    return Duration(milliseconds: totalDuration); 
   }
 
 }
@@ -169,23 +184,23 @@ abstract class HasNameObject extends HiveObject {
 
 }
 
-  List<Widget> getFilteredSongAlbumArt(Song? song, {required ImageFilter filter}) {
-    if (song == null || song.metadata.albumArt == null) {
-      return const [SizedBox()]; 
-    }
-    return [
-      Image.memory(
-        song.metadata.albumArt!, 
-        fit: BoxFit.cover, 
-        scale: 0.5, 
-      ), 
-      ClipRRect(
-        child: BackdropFilter(
-          filter: filter, 
-          child: Container(
-            color: Colors.black.withOpacity(0.3),
-          ),
-        ),
-      )
-    ]; 
+List<Widget> getFilteredSongAlbumArt(Song? song, {required ImageFilter filter}) {
+  if (song == null || song.metadata == null || song.metadata!.albumArt == null) {
+    return const [SizedBox()]; 
   }
+  return [
+    Image.memory(
+      song.metadata!.albumArt!, 
+      fit: BoxFit.cover, 
+      scale: 0.5, 
+    ), 
+    ClipRRect(
+      child: BackdropFilter(
+        filter: filter, 
+        child: Container(
+          color: Colors.black.withOpacity(0.3),
+        ),
+      ),
+    )
+  ]; 
+}

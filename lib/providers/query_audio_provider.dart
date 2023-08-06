@@ -17,7 +17,6 @@ class QueryAudioProvider extends ItemListProvider<Song> {
     for (SongModel queriedSong in queriedSongs) { 
       // print(queriedSong.data); 
       Song song = Song(queriedSong.data); 
-      song.duration = Duration(milliseconds: queriedSong.duration!); 
       songs.add(song); 
     } 
     items.addAll(songs); 

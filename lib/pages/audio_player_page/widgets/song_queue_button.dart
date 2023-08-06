@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../../../domain/domain.dart';
+
 class SongsQueueButton extends StatelessWidget {
   const SongsQueueButton({
     Key? key, 
     required this.audioPlayer, 
     required this.height, 
+    required this.songs, 
     this.onPressed, 
     this.color, 
   }) : super(key: key);
@@ -14,11 +17,10 @@ class SongsQueueButton extends StatelessWidget {
   final double? height; 
   final void Function()? onPressed; 
   final Color? color; 
+  final List<Song> songs; 
 
   @override
   Widget build(BuildContext context) {
-    final ConcatenatingAudioSource audioSource = (audioPlayer.audioSource as ConcatenatingAudioSource); 
-    final List<AudioSource> songs = audioSource.children; 
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -55,11 +57,13 @@ class SongsQueueButton extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold), 
                       ), 
                       Text(
-                        "${(state!.currentIndex) + 1} / ${songs.length}"
+                        "${(state!.currentIndex) + 1} / ${songs.length} \n 00:00:00 / ${Song.getTotalDuration(songs).toString().split(".")[0]}", 
+                        textAlign: TextAlign.center, 
                       ), 
                     ]
                   ); 
                 }
+                // If it does not have data 
                 return Text(
                   "${(audioPlayer.currentIndex ?? -1) + 1} / ${songs.length}"
                 ); 

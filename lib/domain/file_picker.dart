@@ -22,7 +22,6 @@ List<FileSystemEntity> getFilesFromDirectory(Directory directory) {
 Future<List<Song>> getSongsFromDirectory(Directory directory) async {
   final List<FileSystemEntity> files = getFilesFromDirectory(directory); 
   List<Song> songs = []; 
-  AudioPlayer audioPlayer = AudioPlayer(); 
   for (FileSystemEntity file in files) {
     String filePath = file.path; 
     String fileName = filePath.split("/").last; 
@@ -31,7 +30,6 @@ Future<List<Song>> getSongsFromDirectory(Directory directory) async {
       continue; 
     }
     Song song = Song(filePath); 
-    song.duration = await audioPlayer.setUrl(filePath); 
     songs.add(song); 
     // print("Database: $filePath found as an audio file. "); 
   }

@@ -83,7 +83,7 @@ class AudioPlayerPage extends StatelessWidget {
                       AudioPlayerAppBar(
                         audioPlayer: audioPlayer,
                         controller: appBarController.controller, 
-                        color: song == null || song.metadata.albumArt == null ? null : Colors.transparent, 
+                        color: song == null || song.metadata == null || song.metadata!.albumArt == null ? null : Colors.transparent, 
                         sheetContent: SizedBox(
                           height: MediaQuery.of(context).size.height - (_songQueueButtonSize * 2), 
                           child: const SongQueuePage(), 
@@ -92,7 +92,8 @@ class AudioPlayerPage extends StatelessWidget {
                         child: SongsQueueButton(
                           audioPlayer: audioPlayer, 
                           height: _songQueueButtonSize, 
-                          color: song == null || song.metadata.albumArt == null ? null : Colors.transparent, 
+                          songs: songs, 
+                          color: song == null || song.metadata == null || song.metadata!.albumArt == null ? null : Colors.transparent, 
                           onPressed: () {
                             final DraggableScrollableController controller = appBarController.controller; 
                             Duration duration = const Duration(milliseconds: 400); 
@@ -144,13 +145,13 @@ class _MainGUI extends StatelessWidget {
         AudioPlayerSongBuilder(
           audioPlayer: audioPlayer,
           builder: (BuildContext context, Song? song) {
-            if (song != null) {
-              return AlbumArt(
-                    imageData: song.metadata.albumArt, 
-                    height: 300,
-                  ); 
-            } else {
+            if (song == null || song.metadata == null) {
               return const AlbumArt(imageData: null,); 
+            } else {
+              return AlbumArt(
+                imageData: song.metadata!.albumArt, 
+                height: 300,
+              ); 
             }
           }
         ), 
